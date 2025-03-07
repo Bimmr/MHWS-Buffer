@@ -148,7 +148,11 @@
         "max_eagle_shot_charge": "最大鷹擊充能"
     },
     "heavy_bowgun": {
-        "title": "重弩"
+        "title": "重弩",
+        "max_special_ammo": "最大特殊彈藥",
+        "max_wyvern_howl": "最大龍吼",
+        "max_gatling_hits": "最大加特林命中",
+        "max_gatling_hits_tooltip": "僅影響龍心點火"
     },
 
     "charge_blade": {

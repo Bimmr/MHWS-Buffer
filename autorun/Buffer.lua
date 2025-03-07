@@ -25,7 +25,7 @@ local chargeBlade = require("Buffer.Modules.ChargeBlade")
 local insectGlaive = require("Buffer.Modules.InsectGlaive")
 local bow = require("Buffer.Modules.Bow")
 local lightBowgun = require("Buffer.Modules.LightBowgun")
--- local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
+local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
 
 local modules = {
     character,
@@ -42,7 +42,7 @@ local modules = {
     insectGlaive,
     bow,
     lightBowgun,
-    -- heavyBowgun
+    heavyBowgun
 }
 
 -- Load the languages

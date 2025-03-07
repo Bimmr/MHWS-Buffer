@@ -143,7 +143,11 @@
         "max_eagle_shot_charge": "Max eagle shot charge"
     },
     "heavy_bowgun": {
-        "title": "重弩"
+        "title": "重弩",
+        "max_special_ammo": "Max special ammo",
+        "max_wyvern_howl": "Max wyvern howl",
+        "max_gatling_hits": "Max gatling hits",
+        "max_gatling_hits_tooltip": "Only affects Wyvernheart Ignition"
     },
     "charge_blade": {
         "title": "充能斧",
