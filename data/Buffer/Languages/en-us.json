@@ -135,7 +135,11 @@
     },
 
     "bow": {
-        "title": "Bow"
+        "title": "Bow",
+        "charge_level": "Charge level",
+        "all_arrow_types": "All arrow types",
+        "unlimited_bottles": "Unlimited bottles",
+        "max_trick_arrow_gauge": "Max trick arrow gauge"
     },
     "light_bowgun": {
         "title": "Light Bowgun"

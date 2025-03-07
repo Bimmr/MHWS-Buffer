@@ -23,7 +23,7 @@ local gunlance = require("Buffer.Modules.Gunlance")
 local switchAxe = require("Buffer.Modules.SwitchAxe")
 local chargeBlade = require("Buffer.Modules.ChargeBlade")
 local insectGlaive = require("Buffer.Modules.InsectGlaive")
--- local bow = require("Buffer.Modules.Bow")
+local bow = require("Buffer.Modules.Bow")
 -- local lightBowgun = require("Buffer.Modules.LightBowgun")
 -- local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
 
@@ -40,7 +40,7 @@ local modules = {
     switchAxe,
     chargeBlade,
     insectGlaive,
-    -- bow,
+    bow,
     -- lightBowgun,
     -- heavyBowgun
 }

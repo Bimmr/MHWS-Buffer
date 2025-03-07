@@ -2,8 +2,12 @@ local utils, config, language
 local Module = {
     title = "bow",
     data = {
-       
-    }
+        charge_level = -1,
+        all_arrow_types = false,
+        unlimited_bottles = false,
+        max_trick_arrow_gauge = false
+    },
+    old = {}
 }
 
 function Module.init()
@@ -21,9 +25,34 @@ function Module.init_hooks()
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterWp11Handling") then return end
 
-        -- Max Charge, use one of the below
-        -- <ChargeLv>k__BackingField = 1 - 3
-        -- _ChargeTimer  = 2.2
+        -- Charge Level
+        if Module.data.charge_level ~= -1 then
+            managed:set_field("<ChargeLv>k__BackingField", Module.data.charge_level)
+            -- Could also use charge time, but does skills change this?
+            -- managed:set_field("_ChargeTimer", 2) -- 2 = level 3
+        end
+
+        -- All arrow types
+        if Module.data.all_arrow_types and not Module.old.arrow_types then
+            if not Module.old.arrow_types then
+                Module.old.arrow_types = {}
+                for i = 1, 8 do
+                    local bottle_info = managed:get_field("<BottleInfos>k__BackingField")[i]
+                    if bottle_info then
+                        Module.old.arrow_types[i] = bottle_info:get_field("<CanLoading>k__BackingField")
+                        bottle_info:set_field("<CanLoading>k__BackingField", true)
+                    end
+                end
+            end
+        elseif not Module.data.all_arrow_types and Module.old.arrow_types then
+            for i = 1, 8 do
+                local bottle_info = managed:get_field("<BottleInfos>k__BackingField")[i]
+                if bottle_info then
+                    bottle_info:set_field("<CanLoading>k__BackingField", Module.old.arrow_types[i])
+                end
+            end
+            Module.old.arrow_types = nil
+        end
 
         -- Manually set type of arrow
         -- <BottleType>k__BackingField
@@ -36,17 +65,16 @@ function Module.init_hooks()
             -- 7 = Blast
             -- 8 = Exhaust
 
-            -- Could loop through and set all to true for all arrow types
-            -- <BottleInfos>k__BackingField[]
-                --  <CanLoading>k__BackingField = true/false
-            -- If using above, make a backup of the original to reset if disabled
+        -- Unlimited bottles
+        if Module.data.unlimited_bottles then
+            managed:set_field("<BottleNum>k__BackingField", 10)
+            managed:set_field("<BottleShotCount>k__BackingField", 0)
+        end
 
-
-        -- <BottleNum>k__BackingField = 1 - 10 (If unlimited set to 10)
-        -- If setting above, also set <BottleShotCount>k__BackingField to 10 - above
-
-
-        -- <ArrowGauge>k__BackingField = 0 - 100 (Trick Arrow Gauge)
+        -- Trick Arrow Gauge 
+        if Module.data.max_trick_arrow_gauge then
+            managed:get_field("<ArrowGauge>k__BackingField"):set_field("_Value", 100)
+        end
 
     end, function(retval) end)
 end
@@ -58,6 +86,17 @@ function Module.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
+        changed, Module.data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level == -1 and language.get("base.disabled") or "%d")
+        any_changed = any_changed or changed
+
+        changed, Module.data.all_arrow_types = imgui.checkbox(language.get(languagePrefix .. "all_arrow_types"), Module.data.all_arrow_types)
+        any_changed = any_changed or changed
+
+        changed, Module.data.unlimited_bottles = imgui.checkbox(language.get(languagePrefix .. "unlimited_bottles"), Module.data.unlimited_bottles)
+        any_changed = any_changed or changed
+
+        changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
+        any_changed = any_changed or changed
 
         if any_changed then config.save_section(Module.create_config_section()) end
         imgui.unindent(10)

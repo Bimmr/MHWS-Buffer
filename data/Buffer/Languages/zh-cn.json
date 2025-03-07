@@ -130,7 +130,11 @@
         "free_charge_shot": "免蓄力射击"
     },
     "bow": {
-        "title": "弓"
+        "title": "弓",
+        "charge_level": "Charge level",
+        "all_arrow_types": "All arrow types",
+        "unlimited_bottles": "Unlimited bottles",
+        "max_trick_arrow_gauge": "Max trick arrow gauge"
     },
     "light_bowgun": {
         "title": "轻弩"

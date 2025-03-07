@@ -135,7 +135,11 @@
     },
 
     "bow": {
-        "title": "弓"
+        "title": "弓",
+        "charge_level": "充能等級",
+        "all_arrow_types": "所有箭類型",
+        "unlimited_bottles": "無限瓶",
+        "max_trick_arrow_gauge": "最大技巧箭計量表"
     },
     "light_bowgun": {
         "title": "輕弩"
