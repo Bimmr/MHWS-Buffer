@@ -2,8 +2,8 @@ local utils, config, language
 local Module = {
     title = "light_bowgun",
     data = {
-        instant_special_ammo = false,
-        instant_rapid_shot = false,
+        max_special_ammo = false,
+        max_rapid_shot = false,
         max_eagle_shot_charge = false,
         -- all_ammo = false
     },
@@ -25,17 +25,17 @@ function Module.init_hooks()
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterWp13Handling") then return end
 
-        -- Special Ammo
-        if Module.data.instant_special_ammo and Module.old.special_ammo_heal_rate == nil then
+        -- Special Ammo -- TODO: Check for a charge time/timer like heavy bowgun
+        if Module.data.max_special_ammo and Module.old.special_ammo_heal_rate == nil then
             Module.old.special_ammo_heal_rate = managed:get_field("_SpecialAmmoHealRate")
             managed:set_field("_SpecialAmmoHealRate", 100)
-        elseif not Module.data.instant_special_ammo and Module.old.special_ammo_heal_rate ~= nil then
+        elseif not Module.data.max_special_ammo and Module.old.special_ammo_heal_rate ~= nil then
             managed:set_field("_SpecialAmmoHealRate", Module.old.special_ammo_heal_rate)
             Module.old.special_ammo_heal_rate = nil
         end
         
         -- Rapid Shot
-        if Module.data.instant_rapid_shot then
+        if Module.data.max_rapid_shot then
             managed:get_field("_RapidShotBoostInfo"):set_field("_ModeTime", 100)
         end
        
@@ -102,10 +102,10 @@ function Module.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
-        changed, Module.data.instant_special_ammo = imgui.checkbox(language.get(languagePrefix .. "instant_special_ammo"), Module.data.instant_special_ammo)
+        changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
         any_changed = any_changed or changed
 
-        changed, Module.data.instant_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "instant_rapid_shot"), Module.data.instant_rapid_shot)
+        changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
         any_changed = any_changed or changed
 
         changed, Module.data.max_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot_charge"), Module.data.max_eagle_shot_charge)
