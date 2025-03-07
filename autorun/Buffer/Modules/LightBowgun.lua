@@ -25,7 +25,7 @@ function Module.init_hooks()
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterWp13Handling") then return end
 
-        -- Special Ammo -- TODO: Check for a charge time/timer like heavy bowgun
+        -- Special Ammo
         if Module.data.max_special_ammo and Module.old.special_ammo_heal_rate == nil then
             Module.old.special_ammo_heal_rate = managed:get_field("_SpecialAmmoHealRate")
             managed:set_field("_SpecialAmmoHealRate", 100)
