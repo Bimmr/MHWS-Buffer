@@ -2,7 +2,12 @@ local utils, config, language
 local Module = {
     title = "light_bowgun",
     data = {
-    }
+        instant_special_ammo = false,
+        instant_rapid_shot = false,
+        max_eagle_shot_charge = false,
+        -- all_ammo = false
+    },
+    old = {}
 }
 
 function Module.init()
@@ -20,6 +25,72 @@ function Module.init_hooks()
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterWp13Handling") then return end
 
+        -- Special Ammo
+        if Module.data.instant_special_ammo and Module.old.special_ammo_heal_rate == nil then
+            Module.old.special_ammo_heal_rate = managed:get_field("_SpecialAmmoHealRate")
+            managed:set_field("_SpecialAmmoHealRate", 100)
+        elseif not Module.data.instant_special_ammo and Module.old.special_ammo_heal_rate ~= nil then
+            managed:set_field("_SpecialAmmoHealRate", Module.old.special_ammo_heal_rate)
+            Module.old.special_ammo_heal_rate = nil
+        end
+        
+        -- Rapid Shot
+        if Module.data.instant_rapid_shot then
+            managed:get_field("_RapidShotBoostInfo"):set_field("_ModeTime", 100)
+        end
+       
+
+        -- Weak Ammo (Also known in game as Eagle Shot)
+        if Module.data.max_eagle_shot_charge then
+            local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
+            if weak_ammo_info then
+                weak_ammo_info:set_field("_Ammo", weak_ammo_info:get_field("_MaxAmmo"))
+                weak_ammo_info:set_field("_CurrentLevel", 3)
+                weak_ammo_info:set_field("_CurrentChargeTime", 1.5)
+            end
+        end
+
+
+        
+        -- if Module.data.all_ammo then
+        --     local ammos = managed:get_field("_Ammos")
+        --     for i = 1, #ammos do
+        --         local ammo = ammos[i]
+        --         if ammo then
+        --             local limitAmmo = ammo:get_field("_LimitAmmo")
+        --             limitAmmo:set_field("v", 20*limitAmmo:get_field("m"))
+        --             local loadedAmmo = ammo:get_field("_LoadedAmmo")
+        --             loadedAmmo:set_field("v", 10*loadedAmmo:get_field("m"))
+        --             local backupAmmo = ammo:get_field("_BackupAmmo")
+        --             backupAmmo:set_field("v", 20*backupAmmo:get_field("m"))
+        --         end
+        --     end
+        -- end
+
+        -- Maybe convert this into setting max ammo and level for all currently equipable ammo types 
+        -- if Module.data.all_ammo and not Module.old.ammo then
+        --     Module.old.ammo = {}
+        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
+        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
+        --         if ammo_info then
+        --             Module.old.ammo[i] = {
+        --                 num = ammo_info:get_field("<Num>k__BackingField"),
+        --                 level = ammo_info:get_field("_ShellLv")
+        --             }
+        --             ammo_info:set_field("<Num>k__BackingField", 10)
+        --             ammo_info:set_field("_ShellLv", 10)
+        --         end
+        --     end
+        -- elseif not Module.data.all_ammo and Module.old.ammo then
+        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
+        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
+        --         if ammo_info then
+        --             ammo_info:set_field("<Num>k__BackingField", Module.old.ammo[i].num)
+        --             ammo_info:set_field("_ShellLv", Module.old.ammo[i].level)
+        --         end
+        --     end
+        --     Module.old.ammo = nil
+        -- end
 
     end, function(retval) end)
 end
@@ -30,20 +101,18 @@ function Module.draw()
 
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
-       
 
-        -- _SpecialAmmoHealRate = 100 (Need to save backup of original)
-        -- _RapidShotBoostInfo:_ModeTime 100 (Need to save backup of original)
+        changed, Module.data.instant_special_ammo = imgui.checkbox(language.get(languagePrefix .. "instant_special_ammo"), Module.data.instant_special_ammo)
+        any_changed = any_changed or changed
 
-        -- _WeakAmmoInfo:_Ammo = _WeakAmmoInfo:_MaxAmmo
-        -- _WeakAmmoInfo:_CurrentLevel = 0-3
-        -- _WeakAmmoInfo:_CurrentChargeTime = 1.5
+        changed, Module.data.instant_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "instant_rapid_shot"), Module.data.instant_rapid_shot)
+        any_changed = any_changed or changed
 
+        changed, Module.data.max_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot_charge"), Module.data.max_eagle_shot_charge)
+        any_changed = any_changed or changed
 
-
-        -- <EquipShellInfo>k__BackingField[]:<Num>k__BackingField (Amount of ammo)
-        -- <EquipShellInfo>k__BackingField[]:_ShellLv (Level of ammo, -1 if not alllowed (Setting to a value doesn't make it allowed....))
-        
+        -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
+        -- any_changed = any_changed or changed
 
         if any_changed then config.save_section(Module.create_config_section()) end
         imgui.unindent(10)

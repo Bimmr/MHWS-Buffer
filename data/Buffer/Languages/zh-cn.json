@@ -137,7 +137,10 @@
         "max_trick_arrow_gauge": "Max trick arrow gauge"
     },
     "light_bowgun": {
-        "title": "轻弩"
+        "title": "轻弩",
+        "instant_special_ammo": "Instant special ammo",
+        "instant_rapid_shot": "Instant rapid shot",
+        "max_eagle_shot_charge": "Max eagle shot charge"
     },
     "heavy_bowgun": {
         "title": "重弩"

@@ -142,7 +142,10 @@
         "max_trick_arrow_gauge": "最大技巧箭計量表"
     },
     "light_bowgun": {
-        "title": "輕弩"
+        "title": "輕弩",
+        "instant_special_ammo": "瞬間特殊彈藥",
+        "instant_rapid_shot": "瞬間速射",
+        "max_eagle_shot_charge": "最大鷹擊充能"
     },
     "heavy_bowgun": {
         "title": "重弩"
