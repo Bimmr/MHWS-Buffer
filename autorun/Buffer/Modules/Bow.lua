@@ -36,7 +36,7 @@ function Module.init_hooks()
         if Module.data.all_arrow_types and not Module.old.arrow_types then
             if not Module.old.arrow_types then
                 Module.old.arrow_types = {}
-                for i = 1, 8 do
+                for i = 1, #managed:get_field("<BottleInfos>k__BackingField") do
                     local bottle_info = managed:get_field("<BottleInfos>k__BackingField")[i]
                     if bottle_info then
                         Module.old.arrow_types[i] = bottle_info:get_field("<CanLoading>k__BackingField")
@@ -45,7 +45,7 @@ function Module.init_hooks()
                 end
             end
         elseif not Module.data.all_arrow_types and Module.old.arrow_types then
-            for i = 1, 8 do
+            for i = 1, #managed:get_field("<BottleInfos>k__BackingField") do
                 local bottle_info = managed:get_field("<BottleInfos>k__BackingField")[i]
                 if bottle_info then
                     bottle_info:set_field("<CanLoading>k__BackingField", Module.old.arrow_types[i])
