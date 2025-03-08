@@ -102,11 +102,11 @@
             "recovery": "恢复",
             "unlimited_stamina": "无限耐力"
         },
-        "red": "红色精华",
-        "orange": "橙色精华",
-        "white": "白色精华",
+        "red": "红灯",
+        "orange": "橙灯",
+        "white": "白灯",
         "infinite_air_dashes": "无限空中冲刺",
-        "max_charge": "Max charge"
+        "max_charge": "最大充能"
     },
     "hammer": {
         "title": "锤子",
@@ -132,26 +132,26 @@
     },
     "bow": {
         "title": "弓",
-        "charge_level": "最大蓄力等级",
-        "all_arrow_types": "全箭种解锁",
+        "charge_level": "锁定蓄力等级",
+        "all_arrow_types": "全强化瓶解锁",
         "unlimited_bottles": "强化瓶无限使用",
         "max_trick_arrow_gauge": "技巧箭最大充能"
     },
     "light_bowgun": {
         "title": "轻弩",
-        "max_special_ammo": "特殊弹药最大装填量",
+        "max_special_ammo": "无限特殊弹药",
         "max_rapid_shot": "速射最大连发数", 
-        "max_eagle_shot_charge": "鹰击射击最大蓄力"
+        "max_eagle_shot_charge": "无限特殊射击"
     },
     "heavy_bowgun": {
         "title": "重弩",
-        "max_special_ammo": "特殊弹药最大装填量",
-        "max_wyvern_howl": "龙吼反击最大充能",
+        "max_special_ammo": "无限特殊弹药",
+        "max_wyvern_howl": "无限龙热机关龙弹",
         "max_gatling_hits": "机关枪最大命中数",
-        "max_gatling_hits_tooltip": "仅对龙击炮生效" 
+        "max_gatling_hits_tooltip": "仅对龙击炮生效(直译 没搞懂)" 
     },
     "charge_blade": {
-        "title": "充能斧",
+        "title": "盾斧",
         "max_phials": "最大瓶数",
         "overcharge_phials": "超量装瓶",
         "shield_enhanced": "强化盾牌",
