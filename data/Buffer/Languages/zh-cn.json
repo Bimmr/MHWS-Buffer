@@ -132,23 +132,23 @@
     },
     "bow": {
         "title": "弓",
-        "charge_level": "Charge level",
-        "all_arrow_types": "All arrow types",
-        "unlimited_bottles": "Unlimited bottles",
-        "max_trick_arrow_gauge": "Max trick arrow gauge"
+        "charge_level": "最大蓄力等级",
+        "all_arrow_types": "全箭种解锁",
+        "unlimited_bottles": "强化瓶无限使用",
+        "max_trick_arrow_gauge": "技巧箭最大充能"
     },
     "light_bowgun": {
         "title": "轻弩",
-        "max_special_ammo": "Max special ammo",
-        "max_rapid_shot": "Max rapid shot",
-        "max_eagle_shot_charge": "Max eagle shot charge"
+        "max_special_ammo": "特殊弹药最大装填量",
+        "max_rapid_shot": "速射最大连发数", 
+        "max_eagle_shot_charge": "鹰击射击最大蓄力"
     },
     "heavy_bowgun": {
         "title": "重弩",
-        "max_special_ammo": "Max special ammo",
-        "max_wyvern_howl": "Max wyvern howl",
-        "max_gatling_hits": "Max gatling hits",
-        "max_gatling_hits_tooltip": "Only affects Wyvernheart Ignition"
+        "max_special_ammo": "特殊弹药最大装填量",
+        "max_wyvern_howl": "龙吼反击最大充能",
+        "max_gatling_hits": "机关枪最大命中数",
+        "max_gatling_hits_tooltip": "仅对龙击炮生效" 
     },
     "charge_blade": {
         "title": "充能斧",
