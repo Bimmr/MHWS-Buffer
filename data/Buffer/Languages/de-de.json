@@ -1,0 +1,173 @@
+{
+    "_IMPORTANT_NOTE": "Wenn mehrere Elemente denselben Wert haben, aber unterschiedliche Dinge steuern, müssen Sie sie durch Leerzeichen unterscheiden",
+    "_TRANSLATOR": "SlikerDev",
+    
+    "window":{
+        "toggle_button": "Umschalten Buffer GUI",
+        "title": "Modifizierer & Einstellungen",
+        "settings": "Einstellungen",
+        "language": "Sprache",
+        "font_size": "Schriftgröße",
+        "font_size_apply": "Anwenden",
+        "about": "Über",
+        "author": "Autor",
+        "translator": "Übersetzer",
+        "version": "Version"
+    },
+    "base": {
+        "disabled": "Deaktiviert"        
+    },
+    
+    "character": {
+        "title": "Charakter",
+        "stamina": {
+            "title": "Ausdauer",
+            "max": "Max. Ausdauer",
+            "unlimited": "Unendliche Ausdauer"
+        },
+        "health": {
+            "title": "Gesundheit",
+            "max": "Max. Gesundheit",
+            "unlimited": "Unendliche Gesundheit",
+            "healing": "Heilung",
+            "healing_tooltip": "Fehlende Gesundheit wird wiederhergestellt."
+        },
+        "blights_and_conditions":{
+            "title": "Krankheiten und Zustände",
+            "tooltip": "Vorbeugung gegen Krankheiten und Zustände",
+            "blights": {
+                "title": "Krankheiten",
+                "fire": "Feuer",
+                "water": "Wasser",
+                "ice": "Eis",
+                "thunder": "Blitz",
+                "dragon": "Drachen",
+                "all": "Alle"
+            },
+            "conditions":{
+                "title": "Zustände",
+                "poison": "Gift",
+                "sleep": "Schlaf",
+                "paralyze": "Lähmung",
+                "blast": "Explosion",
+                "stun": "Betäubung",
+                "defense_down": "Verteidigung unten",
+                "bleed": "Bluten",
+                "stench": "Gestank",
+                "sticky": "Klebrig",
+                "frenzy": "Wahnsinn",
+                "frozen": "Gefroren",
+                "all": "Alle "
+            }            
+        },
+        "item_buffs": {
+            "title": "Gegenstandsbuffs",
+            "might_pill": "Macht Pille",
+            "adamant_pill": "Adamant Pille",
+            "demon_powder": "Dämonenpulver",
+            "hardshell_powder": "Hartschalenpulver",
+            "cool_drink": "Kühlendes Getränk",
+            "hot_drink": "Heißes Getränk",
+            "dash_juice": "Dash Saft",
+            "imunizer": "Imunizierer"
+        },
+        "unlimited_sharpness": "Unbegrenzte Schärfe"
+    },
+
+    "great_sword": {
+        "title": "Großschwert",
+        "true_charge_boost": "Echter Ladungsboost",
+        "true_charge_boost_tooltip": "Anfänglicher Bonus für echte Aufladung",
+        "instant_charge": "Sofortige Aufladung"
+    },
+    "sword_and_shield": {
+        "title": "Schwert & Schild"
+    },
+    "dual_blades": {
+        "title": "Doppelklingen",
+        "demon_gauge": "Volle Dämonenverstärkung",
+        "demon_boost": "Dämonenverstärkung aktivieren"
+    },
+    "long_sword": {
+        "title": "Langschwert",
+        "aura_level": "Aura level",
+        "aura_level_tooltip": "Wenn Sie den Wert von 0 auf 1 setzen, müssen Sie das Schwert füllen, um die Aura zu aktivieren.",
+        "max_aura_gauge": "Maximale Auraanzeige",
+        "max_spirit_gauge": "Max spirituelle Pegel"
+    },
+    "insect_glaive": {
+        "title": "Insektenklinge",
+        "kinsect": {
+            "title": "Kinsekt",
+            "power": "Kraft",
+            "speed": "Geschwindigkeit",
+            "recovery": "Erholung",
+            "unlimited_stamina": "Unendliche Ausdauer"
+        },
+        "red": "Rot",
+        "orange": "Orange",
+        "white": "Weiss",
+        "infinite_air_attacks": "Unbegrenzte Luftangriffe",
+        "max_charge": "Maximale Aufladung"
+    },
+
+    "hammer": {
+        "title": "Hammer",
+        "instant_charge": "Sofortige Aufladung"
+    },
+    "hunting_horn": {
+        "title": "Jagdhorn"
+    },
+    
+    "lance": {
+        "title": "Lanze",
+        "counter_charge_level": "Konter angriff level",
+        "rush_level": "Eiltempo",
+        "infinite_backstep": "Unendlicher Rückwärtsschritt"
+    },
+    "gunlance": {
+        "title": "Waffenlanze",
+        "shell_level": "Gehäuse Level",
+        "infinite_wyvern_fire": "Unendliches Wyvernfeuer",
+        "infinite_backstep": "Unendlicher Rückwärtsschritt",
+        "instant_charge": "Sofortige Aufladung", 
+        "instant_charge_tooltip": "Man muss sie einen Moment lang festhalten und dann loslassen, um zu feuern.",
+        "free_charge_shot": "Kostenloser Schuss"
+    },
+
+    "bow": {
+        "title": "Bogen",
+        "charge_level": "Stufe der Aufladung",
+        "all_arrow_types": "Alle Pfeilarten",
+        "unlimited_bottles": "Unbegrenzte Flaschen",
+        "max_trick_arrow_gauge": "Max Trick Pfeilstärke"
+    },
+    "light_bowgun": {
+        "title": "Leichtes Bogengewehr",
+        "max_special_ammo": "Maximale Spezialmunition",
+        "max_rapid_shot": "Maximaler Schnellschuss",
+        "max_eagle_shot_charge": "Maximale Adlerschussladung"
+    },
+    "heavy_bowgun": {
+        "title": "Schweres Bogengewehr",
+        "max_special_ammo": "Maximale Spezialmunition",
+        "max_wyvern_howl": "Max Wyvern heulen",
+        "max_gatling_hits": "Maximale Gattertreffer",
+        "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zündung"
+    },
+
+    "charge_blade": {
+        "title": "Ladeklinge",
+        "max_phials": "Max Fläschchen",
+        "overcharge_phials": "Überladene Fläschchen",
+        "shield_enhanced": "Schutzschild verbessert",
+        "sword_enhanced": "Schwert verbessert",
+        "axe_enhanced": "Axt verbessert"
+    },
+    "switch_axe": {
+        "title": "Streitaxt",
+        "max_charge": "Maximale Aufladung",
+        "max_sword_charge": "Maximale Schwertladung",
+        "powered_axe": "Kraftvolle Axt"
+    }
+}
