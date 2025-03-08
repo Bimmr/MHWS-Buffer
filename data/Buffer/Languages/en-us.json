@@ -146,6 +146,7 @@
         "title": "Light Bowgun",
         "max_special_ammo": "Max special ammo",
         "max_rapid_shot": "Max rapid shot",
+        "max_eagle_shot": "Max eagle shot",
         "max_eagle_shot_charge": "Max eagle shot charge"
     },
     "heavy_bowgun": {

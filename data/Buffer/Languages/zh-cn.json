@@ -140,7 +140,8 @@
     "light_bowgun": {
         "title": "轻弩",
         "max_special_ammo": "无限特殊弹药",
-        "max_rapid_shot": "速射最大连发数", 
+        "max_rapid_shot": "速射最大连发数",
+        "max_eagle_shot": "Max eagle shot charge",
         "max_eagle_shot_charge": "无限特殊射击"
     },
     "heavy_bowgun": {

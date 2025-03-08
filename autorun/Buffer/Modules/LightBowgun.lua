@@ -4,6 +4,7 @@ local Module = {
     data = {
         max_special_ammo = false,
         max_rapid_shot = false,
+        max_eagle_shot = false,
         max_eagle_shot_charge = false,
         -- all_ammo = false
     },
@@ -43,12 +44,20 @@ function Module.init_hooks()
        
 
         -- Weak Ammo (Also known in game as Eagle Shot)
-        if Module.data.max_eagle_shot_charge then
+        if Module.data.max_eagle_shot then
             local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
             if weak_ammo_info then
                 weak_ammo_info:set_field("_Ammo", weak_ammo_info:get_field("_MaxAmmo"))
-                weak_ammo_info:set_field("_CurrentLevel", 3)
-                weak_ammo_info:set_field("_CurrentChargeTime", 1.5)
+            end
+        end
+
+        if Module.data.max_eagle_shot_charge then
+            local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
+            if weak_ammo_info then
+                if weak_ammo_info:get_field("_CurrentChargeTime") > 0 then
+                    weak_ammo_info:set_field("_CurrentLevel", 3)
+                    weak_ammo_info:set_field("_CurrentChargeTime", 1.5)
+                end
             end
         end
 
@@ -110,9 +119,21 @@ function Module.draw()
         changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
         any_changed = any_changed or changed
 
+
+        imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
+        imgui.table_next_row()
+        imgui.table_next_column()
+
+        changed, Module.data.max_eagle_shot = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot"), Module.data.max_eagle_shot)
+        any_changed = any_changed or changed
+
+        imgui.table_next_column()
+
         changed, Module.data.max_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot_charge"), Module.data.max_eagle_shot_charge)
         any_changed = any_changed or changed
 
+        imgui.end_table()
+        
         -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
         -- any_changed = any_changed or changed
 
