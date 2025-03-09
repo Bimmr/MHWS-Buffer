@@ -105,7 +105,7 @@
         "red": "红灯",
         "orange": "橙灯",
         "white": "白灯",
-        "infinite_air_attacks": "无限空中冲刺",
+        "infinite_air_attacks": "无限空中攻击",
         "max_charge": "最大充能"
     },
     "hammer": {
@@ -135,21 +135,21 @@
         "charge_level": "锁定蓄力等级",
         "all_arrow_types": "全强化瓶解锁",
         "unlimited_bottles": "强化瓶无限使用",
-        "max_trick_arrow_gauge": "技巧箭最大充能"
+        "max_trick_arrow_gauge": "特殊箭计量槽全满"
     },
     "light_bowgun": {
         "title": "轻弩",
         "max_special_ammo": "无限特殊弹药",
         "max_rapid_shot": "速射最大连发数",
-        "max_eagle_shot": "Max eagle shot charge",
-        "max_eagle_shot_charge": "无限特殊射击"
+        "max_eagle_shot": "无限特殊射击",
+        "max_eagle_shot_charge": "特殊射击无需蓄力"
     },
     "heavy_bowgun": {
         "title": "重弩",
         "max_special_ammo": "无限特殊弹药",
         "max_wyvern_howl": "无限龙热机关龙弹",
-        "max_gatling_hits": "机关枪最大命中数",
-        "max_gatling_hits_tooltip": "仅对龙击炮生效(直译 没搞懂)" 
+        "max_gatling_hits": "最大命中数",
+        "max_gatling_hits_tooltip": "仅对龙热穿甲弹生效" 
     },
     "charge_blade": {
         "title": "盾斧",
