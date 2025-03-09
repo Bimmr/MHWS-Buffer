@@ -146,6 +146,7 @@
         "title": "Leichtes Bogengewehr",
         "max_special_ammo": "Maximale Spezialmunition",
         "max_rapid_shot": "Maximaler Schnellschuss",
+        "max_eagle_shot": "Max Adler Schuss",
         "max_eagle_shot_charge": "Maximale Adlerschussladung"
     },
     "heavy_bowgun": {
