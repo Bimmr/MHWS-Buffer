@@ -98,7 +98,25 @@
         },
         "unlimited_sharpness": "Unlimited Sharpness",
         "unlimited_consumables": "Unlimited Consumables",
-        "unlimited_slingers": "Unlimited Slinger Ammo"
+        "unlimited_slingers": "Unlimited Slinger Ammo",
+        "stats": {
+            "title": "Stats",
+            "bonus_attack": "Bonus attack",
+            "bonus_defence": "Bonus defence",
+            "element": {
+                "title": "Element",
+                "none": "None",
+                "fire": "Fire",
+                "water": "Water",
+                "ice": "Ice",
+                "electric": "Electric",
+                "dragon": "Dragon",
+                "poison": "Poison",
+                "paralyse": "Paralyse",
+                "sleep": "Sleep",
+                "blast": "Blast"
+            }
+        }
     },
 
     "great_sword": {
