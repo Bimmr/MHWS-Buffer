@@ -61,7 +61,7 @@ local Module = {
             instant_cooldown = false,
             unlimited_duration = false
         },
-        
+
         unlimited_sharpness = false,
         unlimited_consumables = false,
         unlimited_slingers = false,
@@ -712,7 +712,7 @@ function Module.draw()
         any_changed = any_changed or changed
             
         if any_changed then config.save_section(Module.create_config_section()) end
-        
+
         imgui.unindent(10)
         imgui.separator()
         imgui.spacing()
