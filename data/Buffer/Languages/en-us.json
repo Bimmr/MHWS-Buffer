@@ -96,9 +96,6 @@
             "instant_cooldown": "Instant cooldown",
             "unlimited_duration": "Unlimited duration"
         },
-        "unlimited_sharpness": "Unlimited Sharpness",
-        "unlimited_consumables": "Unlimited Consumables",
-        "unlimited_slingers": "Unlimited Slinger Ammo",
         "stats": {
             "title": "Stats",
             "bonus_attack": "Bonus attack",
@@ -116,7 +113,10 @@
                 "sleep": "Sleep",
                 "blast": "Blast"
             }
-        }
+        },
+        "unlimited_sharpness": "Unlimited Sharpness",
+        "unlimited_consumables": "Unlimited Consumables",
+        "unlimited_slingers": "Unlimited Slinger Ammo"
     },
 
     "great_sword": {
