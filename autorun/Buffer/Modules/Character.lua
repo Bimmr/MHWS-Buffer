@@ -63,6 +63,7 @@ local Module = {
             bonus_defence = -1,
             element = -1,
         },
+
         invincible = false,
         unlimited_sharpness = false,
         unlimited_consumables = false,
@@ -720,7 +721,7 @@ function Module.draw()
 
             imgui.tree_pop()
         end
-    
+  
         languagePrefix = Module.title .. "."
 
         changed, Module.data.invincible = imgui.checkbox(language.get(languagePrefix .. "invincible"), Module.data.invincible)
