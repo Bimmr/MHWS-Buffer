@@ -58,10 +58,18 @@ local Module = {
             instant_cooldown = false,
             unlimited_duration = false
         },
+        stats = {
+            bonus_attack = -1,
+            bonus_defence = -1,
+            element = -1,
+        },
         invincible = false,
         unlimited_sharpness = false,
         unlimited_consumables = false,
         unlimited_slingers = false,
+    },
+    old = {
+        stats = {}
     }
 }
 
@@ -310,6 +318,37 @@ function Module.init_hooks()
             if dragon:get_field("_DurationTimer") > 0 then
                 dragon:set_field("_DurationTimer", 0)
             end
+        end
+
+        
+        if Module.data.stats.bonus_attack >= 0 then
+            if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
+                hunter_meal_effect:set_field("_IsEffectActive", true)
+            end
+
+            if meal_effect ~= nil then
+                meal_effect:set_field("_AttackAdd", Module.data.stats.bonus_attack)
+            end
+        end
+        if Module.data.stats.bonus_defence >= 0 then
+            if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
+                hunter_meal_effect:set_field("_IsEffectActive", true)
+            end
+            if meal_effect ~= nil then
+                meal_effect:set_field("_DefenceAdd", Module.data.stats.bonus_defence)
+            end
+        end
+
+        if Module.data.stats.element ~= -1 then
+            local attack_power = managed:get_field("_AttackPower")
+            if Module.old.stats.element == nil then
+                Module.old.stats.element = attack_power:get_field("_WeaponAttrType")
+            end
+            attack_power:set_field("_WeaponAttrType", Module.data.stats.element)
+        elseif Module.old.stats.element ~= nil then
+            local attack_power = managed:get_field("_AttackPower")
+            attack_power:set_field("_WeaponAttrType", Module.old.stats.element)
+            Module.old.stats.element = nil
         end
 
     end, function(retval)
@@ -619,7 +658,68 @@ function Module.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
-  
+   languagePrefix = Module.title .. ".stats."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+
+            changed, Module.data.stats.bonus_attack = imgui.slider_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, -1, 400, Module.data.stats.bonus_attack == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            changed, Module.data.stats.bonus_defence = imgui.slider_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, -1, 1000, Module.data.stats.bonus_defence == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            languagePrefix = languagePrefix .. "element."
+            local attr_type = {
+                language.get("base.disabled"),
+                language.get(languagePrefix .. "none"),
+                language.get(languagePrefix .. "fire"),
+                language.get(languagePrefix .. "water"),
+                language.get(languagePrefix .. "ice"),
+                language.get(languagePrefix .. "electric"),
+                language.get(languagePrefix .. "dragon"),
+                language.get(languagePrefix .. "poison"),
+                language.get(languagePrefix .. "paralyse"),
+                language.get(languagePrefix .. "sleep"),
+                language.get(languagePrefix .. "blast")
+            }
+            local attr_index = Module.data.stats.element + 2
+            changed, attr_index = imgui.combo(language.get(languagePrefix .. "title"), attr_index, attr_type)
+            Module.data.stats.element = attr_index - 2
+            any_changed = any_changed or changed
+
+            imgui.tree_pop()
+        end
+
+        languagePrefix = Module.title .. ".stats."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+
+            changed, Module.data.stats.bonus_attack = imgui.slider_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, -1, 400, Module.data.stats.bonus_attack == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            changed, Module.data.stats.bonus_defence = imgui.slider_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, -1, 1000, Module.data.stats.bonus_defence == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            languagePrefix = languagePrefix .. "element."
+            local attr_type = {
+                language.get("base.disabled"),
+                language.get(languagePrefix .. "none"),
+                language.get(languagePrefix .. "fire"),
+                language.get(languagePrefix .. "water"),
+                language.get(languagePrefix .. "ice"),
+                language.get(languagePrefix .. "electric"),
+                language.get(languagePrefix .. "dragon"),
+                language.get(languagePrefix .. "poison"),
+                language.get(languagePrefix .. "paralyse"),
+                language.get(languagePrefix .. "sleep"),
+                language.get(languagePrefix .. "blast")
+            }
+            local attr_index = Module.data.stats.element + 2
+            changed, attr_index = imgui.combo(language.get(languagePrefix .. "title"), attr_index, attr_type)
+            Module.data.stats.element = attr_index - 2
+            any_changed = any_changed or changed
+
+            imgui.tree_pop()
+        end
+        
         languagePrefix = Module.title .. "."
 
         changed, Module.data.invincible = imgui.checkbox(language.get(languagePrefix .. "invincible"), Module.data.invincible)
