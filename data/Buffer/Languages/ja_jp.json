@@ -72,21 +72,21 @@
                 "sticky": "粘着",
                 "frenzy": "狂竜症",
                 "frozen": "氷結",
-                "bubble": "Bubble (*)",
+                "bubble": "泡",
                 "all": "すべて"
             }
         },
         "item_buffs": {
             "title": "アイテム強化",
-            "might_seed": "Might seed (TN)",
-            "might_pill": "怪力の種",
-            "adamant_seed": "Adamant seed (TN)",
-            "adamant_pill": "忍耐の種",
-            "demon_drug": "Demon drug (TN)",
+            "might_seed": "怪力の種",
+            "might_pill": "怪力の丸薬",
+            "adamant_seed": "忍耐の種",
+            "adamant_pill": "忍耐の丸薬",
+            "demon_drug": "鬼人薬",
             "demon_powder": "鬼人の粉塵",
             "hardshell_powder": "硬化の粉塵",
-            "mega_demondrug": "強走薬グレート",
-            "armor_skin": "Armor skin (TN)",
+            "mega_demondrug": "鬼人薬グレート",
+            "armor_skin": "硬化薬",
             "mega_armorskin": "硬化薬グレート",
             "cool_drink": "クーラードリンク",
             "hot_drink": "ホットドリンク",
@@ -94,9 +94,9 @@
             "imunizer": "活力剤"
         },
         "mantles": {
-            "title": "Mantles(TN)",
-            "instant_cooldown": "Instant cooldown(TN)",
-            "unlimited_duration": "Unlimited duration(TN)"
+            "title": "装衣",
+            "instant_cooldown": "即時クールダウン",
+            "unlimited_duration": "持続時間無制限"
         },
         "unlimited_sharpness": "斬れ味無限",
         "unlimited_consumables": "消費アイテム無限",
@@ -139,6 +139,9 @@
         "orange": "橙エキス",
         "white": "白エキス",
         "infinite_air_attacks": "空中攻撃無限",
+        "fast_charge": "高速チャージ",
+        "charge_time": "チャージ時間 %",
+        "charge_time_tooltip": "「チャージ時間 %」は、最大チャージに必要な時間を元の時間の割合として設定します。\n値が小さいほど高速チャージになります。",
         "unrestricted_charge": "制限なしのチャージ",
         "unrestricted_charge_tooltip": "通常チャージできない場面（溜め攻撃中、納刀時など）でもチャージ可能にする"
     },
@@ -160,7 +163,9 @@
         "title": "ガンランス",
         "shell_level": "砲撃レベル",
         "infinite_wyvern_fire": "竜撃砲無限",
+        "infinite_backstep": "無限バックステップ",
         "instant_charge": "即時溜め",
+        "instant_charge_tooltip": "少し溜める必要があります",
         "free_charge_shot": "チャージショット自由"
     },
     "bow": {
@@ -174,6 +179,9 @@
     "light_bowgun": {
         "title": "ライトボウガン",
         "max_special_ammo": "特殊弾最大",
+        "max_rapid_shot": "速射最大",
+        "max_eagle_shot": "集中特攻弾【射鵰】最大",
+        "instant_eagle_shot_charge": "集中特攻弾【射鵰】即時溜め",
         "unlimited_ammo": "弾無限",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
@@ -181,6 +189,9 @@
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
         "max_special_ammo": "特殊弾最大",
+        "max_wyvern_howl": "ワイバーンの遠吠え最大",
+        "max_gatling_hits": "ガトリングヒット数最大",
+        "max_gatling_hits_tooltip": "竜熱機関竜弾にのみ影響",
         "unlimited_ammo": "弾無限",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
