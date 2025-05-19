@@ -54,13 +54,16 @@ local Module = {
                 all = false
             }
         },
-        -- super_armor = false,
-        -- hyper_armor = false,
         mantles = {
             instant_cooldown = false,
             unlimited_duration = false
         },
-
+        stats = {
+            bonus_attack = -1,
+            bonus_defence = -1,
+            element = -1,
+        },
+        invincible = false,
         unlimited_sharpness = false,
         unlimited_consumables = false,
         unlimited_slingers = false,
@@ -363,19 +366,16 @@ function Module.init_hooks()
 
 
     -- Hyper and Super Armor either don't work or I don't know what they do
-    -- sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
-    --     local managed = sdk.to_managed_object(args[2])
-    --     if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
-    --     if not managed:get_IsMaster() then return end
+    sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
+        if not managed:get_IsMaster() then return end
 
-    --     if Module.data.super_armor then
-    --         managed:startSuperArmorTimer(1)
-    --     end
+        if Module.data.invincible then
+            managed:makeInvincible()
+        end
 
-    --     if Module.data.hyper_armor then
-    --         managed:startHyperArmorTimer(1)
-    --     end
-    -- end, function(retval) end)
+    end, function(retval) end)
 
 
     -- Unlimited Consumables
@@ -689,11 +689,6 @@ function Module.draw()
 
             imgui.tree_pop()
         end
-        
-        -- changed, Module.data.super_armor = imgui.checkbox(language.get(languagePrefix .. "super_armor"), Module.data.super_armor)
-        -- any_changed = any_changed or changed
-        -- changed, Module.data.hyper_armor = imgui.checkbox(language.get(languagePrefix .. "hyper_armor"), Module.data.hyper_armor)
-        -- any_changed = any_changed or changed
 
         languagePrefix = Module.title .. ".stats."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
@@ -725,8 +720,13 @@ function Module.draw()
 
             imgui.tree_pop()
         end
-
+    
         languagePrefix = Module.title .. "."
+
+        changed, Module.data.invincible = imgui.checkbox(language.get(languagePrefix .. "invincible"), Module.data.invincible)
+        utils.tooltip(language.get(languagePrefix .. "invincible_tooltip"))
+        any_changed = any_changed or changed
+
         changed, Module.data.unlimited_sharpness = imgui.checkbox(language.get(languagePrefix .. "unlimited_sharpness"), Module.data.unlimited_sharpness)
         any_changed = any_changed or changed
 

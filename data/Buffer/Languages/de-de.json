@@ -99,6 +99,8 @@
             "instant_cooldown": "Sofortige Abklingzeit",
             "unlimited_duration": "Unbegrenzte Dauer"
         },
+        "invincible": "Invincible(*)",
+        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
         "unlimited_slingers": "Unbegrenzte Schleudermunition"
