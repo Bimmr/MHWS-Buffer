@@ -91,10 +91,46 @@
             "dash_juice": "Dash juice",
             "imunizer": "Imunizer"
         },
+        "stats": {
+            "title": "Stats",
+            "bonus_attack": "Bonus attack",
+            "bonus_defence": "Bonus defence",
+            "element": {
+                "title": "Element",
+                "none": "None",
+                "fire": "Fire",
+                "water": "Water",
+                "ice": "Ice",
+                "electric": "Electric",
+                "dragon": "Dragon",
+                "poison": "Poison",
+                "paralyse": "Paralyse",
+                "sleep": "Sleep",
+                "blast": "Blast"
+            }
+        },
         "mantles": {
             "title": "Mantles",
             "instant_cooldown": "Instant cooldown",
             "unlimited_duration": "Unlimited duration"
+        },
+        "stats": {
+            "title": "Stats",
+            "bonus_attack": "Bonus attack",
+            "bonus_defence": "Bonus defence",
+            "element": {
+                "title": "Element",
+                "none": "None",
+                "fire": "Fire",
+                "water": "Water",
+                "ice": "Ice",
+                "electric": "Electric",
+                "dragon": "Dragon",
+                "poison": "Poison",
+                "paralyse": "Paralyse",
+                "sleep": "Sleep",
+                "blast": "Blast"
+            }
         },
         "invincible": "Invincible",
         "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",
