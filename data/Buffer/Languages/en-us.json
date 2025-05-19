@@ -72,7 +72,7 @@
                 "frozen": "Frozen",
                 "bubble": "Bubble",
                 "all": "All "
-            }            
+            }
         },
         "item_buffs": {
             "title": "Item Buffs",
@@ -134,7 +134,7 @@
             "unlimited_stamina": "Unlimited Stamina",
             "fast_charge": "Fast charge",
             "charge_time": "Charge time %",
-            "charge_time_tooltip": "\"Charge time %\" sets the required time to get the max charge in percentage to the original charge time.\n The smaller the value, the faster the charging."    
+            "charge_time_tooltip": "\"Charge time %\" sets the required time to get the max charge in percentage to the original charge time.\n The smaller the value, the faster the charging."
         },
         "red": "Red Extract",
         "orange": "Orange Extract",
@@ -155,7 +155,7 @@
         "title": "Hunting Horn",
         "unlimited_echo_bubbles": "Unlimited echo bubbles"
     },
-    
+
     "lance": {
         "title": "Lance",
         "counter_charge_level": "Counter charge level",
@@ -167,7 +167,7 @@
         "shell_level": "Shell level",
         "infinite_wyvern_fire": "Infinite wyvern fire",
         "infinite_backstep": "Infinite backstep",
-        "instant_charge": "Instant charge", 
+        "instant_charge": "Instant charge",
         "instant_charge_tooltip": "Will require being held for a moment, then letting go to fire",
         "free_charge_shot": "Free charge shot"
     },

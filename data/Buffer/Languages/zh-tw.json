@@ -33,7 +33,7 @@
     "base": {
         "disabled": "禁用"
     },
-    
+
     "character": {
         "title": "角色",
         "stamina": {
@@ -158,7 +158,7 @@
         "title": "狩獵笛",
         "unlimited_echo_bubbles": "Unlimited echo bubbles"
     },
-    
+
     "lance": {
         "title": "長槍",
         "counter_charge_level": "反擊續力等級",

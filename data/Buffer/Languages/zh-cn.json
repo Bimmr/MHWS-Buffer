@@ -31,7 +31,7 @@
         }
     },
     "base": {
-        "disabled": "禁用"        
+        "disabled": "禁用"
     },
     "character": {
         "title": "角色",
@@ -74,7 +74,7 @@
                 "frozen": "冻结",
                 "bubble": "Bubble (*)",
                 "all": "全部 "
-            }            
+            }
         },
         "item_buffs": {
             "title": "道具增益",

@@ -1,6 +1,6 @@
 {
     "_TRANSLATOR": "SlikerDev",
-    
+
     "window": {
         "toggle_button": "Umschalten Buffer GUI",
         "title": "Modifizierer & Einstellungen",
@@ -31,9 +31,9 @@
         }
     },
     "base": {
-        "disabled": "Deaktiviert"        
+        "disabled": "Deaktiviert"
     },
-    
+
     "character": {
         "title": "Charakter",
         "stamina": {
@@ -75,7 +75,7 @@
                 "frozen": "Gefroren",
                 "bubble": "Blase",
                 "all": "Alle "
-            }            
+            }
         },
         "item_buffs": {
             "title": "Gegenstandsbuffs",
@@ -147,7 +147,7 @@
         "charge_time": "Aufladezeit %",
         "charge_time_tooltip": "\"Aufladezeit %\" gibt an, wie viel Prozent der ursprünglichen Ladezeit für die maximale Ladung benötigt werden. Je kleiner der Wert, desto schneller das Aufladen.",
         "unrestricted_charge": "Unbeschränkte Aufladen",
-        "unrestricted_charge_tooltip": "Ermöglicht Aufladen bei Aktionen, die es normalerweise nicht erlauben (z. B. während aufgeladener Angriffe oder mit weggesteckter Waffe)."    
+        "unrestricted_charge_tooltip": "Ermöglicht Aufladen bei Aktionen, die es normalerweise nicht erlauben (z. B. während aufgeladener Angriffe oder mit weggesteckter Waffe)."
     },
 
     "hammer": {
@@ -158,7 +158,7 @@
         "title": "Jagdhorn",
         "unlimited_echo_bubbles": "Unbegrenzte Echoblasen"
     },
-    
+
     "lance": {
         "title": "Lanze",
         "counter_charge_level": "Konter angriff level",
@@ -170,7 +170,7 @@
         "shell_level": "Gehaeuse Level",
         "infinite_wyvern_fire": "Unendliches Wyvernfeuer",
         "infinite_backstep": "Unendlicher Rueckwaertsschritt",
-        "instant_charge": "Sofortige Aufladung", 
+        "instant_charge": "Sofortige Aufladung",
         "instant_charge_tooltip": "Man muss sie einen Moment lang festhalten und dann loslassen, um zu feuern.",
         "free_charge_shot": "Kostenloser Schuss"
     },

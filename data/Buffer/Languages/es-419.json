@@ -1,0 +1,219 @@
+{
+    "_TRANSLATOR": "KingStormhold",
+
+    "window": {
+        "toggle_button": "Mostrar/Ocultar Interfaz de Buffer",
+        "title": "Modificadores y Configuraciones",
+        "settings": "Configuraciones",
+        "language": "Idioma",
+        "font_size": "Tamaño de Fuente",
+        "font_size_apply": "Aplicar",
+        "about": "Acerca de",
+        "author": "Autor",
+        "translator": "Traductor",
+        "version": "Versión",
+        "bindings": {
+            "title": "Asignaciones",
+            "keyboard": "Teclado",
+            "gamepad": "Controlador",
+            "remove": "Eliminar",
+            "add_keyboard": "Agregar una nueva asignación de teclado",
+            "add_gamepad": "Agregar una nueva asignación de controlador",
+            "choose_modification": "Elegir una modificación",
+            "on_value": "En valor",
+            "to_listen": "Comenzar a escuchar entradas",
+            "listening": "Escuchando entradas",
+            "save": "Guardar",
+            "cancel": "Cancelar",
+            "enabled": "ha sido activado.",
+            "disabled": "ha sido desactivado.",
+            "set_to": "ha sido establecido a %d."
+        }
+    },
+    "base": {
+        "disabled": "Desactivado"
+    },
+    "character": {
+        "title": "Personaje",
+        "stamina": {
+            "title": "Resistencia",
+            "max": "Resistencia máxima",
+            "unlimited": "Resistencia ilimitada"
+        },
+        "health": {
+            "title": "Salud",
+            "max": "Salud máxima",
+            "unlimited": "Salud ilimitada",
+            "healing": "Curación",
+            "healing_tooltip": "Cualquier salud faltante será recuperable."
+        },
+        "blights_and_conditions": {
+            "title": "Plagas y Estados",
+            "tooltip": "Prevenir plagas y estados",
+            "blights": {
+                "title": "Plagas",
+                "fire": "Fuego",
+                "water": "Agua",
+                "ice": "Hielo",
+                "thunder": "Rayo",
+                "dragon": "Draco",
+                "all": "Todas"
+            },
+            "conditions": {
+                "title": "Estados",
+                "poison": "Veneno",
+                "sleep": "Sueño",
+                "paralyze": "Parálisis",
+                "blast": "Nitro",
+                "stun": "Aturdimiento",
+                "defense_down": "Defensa reducida",
+                "bleed": "Sangrado",
+                "stench": "Hedor",
+                "sticky": "Pegajoso",
+                "frenzy": "Frenesí",
+                "frozen": "Congelado",
+                "bubble": "Burbuja",
+                "all": "Todas"
+            }
+        },
+        "item_buffs": {
+            "title": "Mejoras de Objetos",
+            "might_seed": "Semilla de poder",
+            "might_pill": "Píldora de poder",
+            "adamant_seed": "Semilla armadura",
+            "adamant_pill": "Píldora armadura",
+            "demon_drug": "Droga demoníaca",
+            "demon_powder": "Polvo demoníaco",
+            "hardshell_powder": "Polvo endurecedor",
+            "mega_demondrug": "Megadroga demoníaca",
+            "armor_skin": "Piel de armadura",
+            "mega_armorskin": "Piel de armadura +",
+            "cool_drink": "Bebida fría",
+            "hot_drink": "Bebida caliente",
+            "dash_juice": "Jugo de poder",
+            "imunizer": "Inmunizador"
+        },
+        "mantles": {
+            "title": "Mantos",
+            "instant_cooldown": "Enfriamiento instantánea",
+            "unlimited_duration": "Duración ilimitada"
+        },
+        "invincible": "Invencible",
+        "invincible_tooltip": "No recibirás ningún daño, ni sufrirás retroceso, ni te estremecerás, ni serás afectado por ningún estado alterado.",
+        "unlimited_sharpness": "Filo ilimitado",
+        "unlimited_consumables": "Consumibles ilimitados",
+        "unlimited_slingers": "Munición de eslinga ilimitada"
+    },
+
+    "great_sword": {
+        "title": "Gran Espada",
+        "true_charge_boost": "Impulso de carga verdadera",
+        "true_charge_boost_tooltip": "Golpe inicial con bonificación de carga verdadera",
+        "instant_charge": "Carga instantánea"
+    },
+    "sword_and_shield": {
+        "title": "Espada y Escudo"
+    },
+    "dual_blades": {
+        "title": "Espadas Dobles",
+        "demon_gauge": "Medidor de modo demoníaco lleno",
+        "demon_boost": "Modo demoníaco ilimitado"
+    },
+    "long_sword": {
+        "title": "Espada Larga",
+        "aura_level": "Nivel de aura",
+        "aura_level_tooltip": "Si lo configuras de 0 a 1, deberás llenar el medidor para activar el aura",
+        "max_aura_gauge": "Medidor de aura máximo",
+        "max_spirit_gauge": "Medidor espiritual máximo"
+    },
+    "insect_glaive": {
+        "title": "Glaive Insecto",
+        "kinsect": {
+            "title": "Kinsecto",
+            "power": "Poder",
+            "speed": "Velocidad",
+            "recovery": "Recuperación",
+            "unlimited_stamina": "Resistencia ilimitada",
+            "fast_charge": "Carga rápida",
+            "charge_time": "Tiempo de carga %",
+            "charge_time_tooltip": "\"Tiempo de carga %\" establece el tiempo necesario para carga máxima en porcentaje respecto al tiempo original.\n Cuanto menor el valor, más rápida la carga."
+        },
+        "red": "Extracto Rojo",
+        "orange": "Extracto Naranja",
+        "white": "Extracto Blanco",
+        "infinite_air_attacks": "Ataques aéreos infinitos",
+        "fast_charge": "Carga rápida",
+        "charge_time": "Tiempo de carga %",
+        "charge_time_tooltip": "\"Tiempo de carga %\" establece el tiempo necesario para carga máxima en porcentaje respecto al tiempo original.\n Cuanto menor el valor, más rápida la carga.",
+        "unrestricted_charge": "Carga sin restricciones",
+        "unrestricted_charge_tooltip": "Permite cargar en movimientos que normalmente no lo permiten (por ejemplo, durante ataques cargados o con el arma envainada)."
+    },
+
+    "hammer": {
+        "title": "Martillo",
+        "instant_charge": "Carga instantánea"
+    },
+    "hunting_horn": {
+        "title": "Cornamusa",
+        "unlimited_echo_bubbles": "Burbujas de eco ilimitadas"
+    },
+    "lance": {
+        "title": "Lanza",
+        "counter_charge_level": "Nivel de carga contrataque",
+        "rush_level": "Nivel de embestida",
+        "infinite_backstep": "Retroceso infinito"
+    },
+    "gunlance": {
+        "title": "Lanza Pistola",
+        "shell_level": "Nivel de proyectil",
+        "infinite_wyvern_fire": "Fuego wyvern infinito",
+        "infinite_backstep": "Retroceso infinito",
+        "instant_charge": "Carga instantánea",
+        "instant_charge_tooltip": "Requiere mantener presionado un momento y luego soltar para disparar",
+        "free_charge_shot": "Disparo cargado liberado"
+    },
+
+    "bow": {
+        "title": "Arco",
+        "charge_level": "Nivel de carga",
+        "all_arrow_types": "Todos los tipos de flechas",
+        "unlimited_bottles": "Frascos ilimitados",
+        "tetrad_shot_active": "Disparo Tétrado activo",
+        "max_trick_arrow_gauge": "Medidor de flecha truco al máximo"
+    },
+    "light_bowgun": {
+        "title": "Ballesta Ligera",
+        "max_special_ammo": "Munición especial al máximo",
+        "max_rapid_shot": "Fuego rápido al máximo",
+        "max_eagle_shot": "Ataque de águila al máximo",
+        "instant_eagle_shot_charge": "Carga instantánea del disparo de águila",
+        "unlimited_ammo": "Munición ilimitada",
+        "no_reload": "Sin recarga",
+        "no_recoil": "Sin retroceso"
+    },
+    "heavy_bowgun": {
+        "title": "Ballesta Pesada",
+        "max_special_ammo": "Munición especial al máximo",
+        "max_wyvern_howl": "Nitro enfocado: Aullido wyvern al máximo",
+        "max_gatling_hits": "Ignición coraje wyvern al máximo",
+        "max_gatling_hits_tooltip": "Solo afecta a Ignición coraje wyvern",
+        "unlimited_ammo": "Munición ilimitada",
+        "no_reload": "Sin recarga",
+        "no_recoil": "Sin retroceso"
+    },
+
+    "charge_blade": {
+        "title": "Hacha Cargada",
+        "max_phials": "Frascos al máximo",
+        "overcharge_phials": "Frascos sobrecargados",
+        "shield_enhanced": "Escudo mejorado",
+        "sword_enhanced": "Espada mejorada",
+        "axe_enhanced": "Hacha mejorada"
+    },
+    "switch_axe": {
+        "title": "Hacha Espada",
+        "max_charge": "Carga al máximo",
+        "max_sword_charge": "Carga de espada al máximo",
+        "powered_axe": "Hacha potenciada"
+    }
+}
