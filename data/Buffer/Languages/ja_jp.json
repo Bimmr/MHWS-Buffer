@@ -98,6 +98,8 @@
             "instant_cooldown": "即時クールダウン",
             "unlimited_duration": "持続時間無制限"
         },
+        "invincible": "Invincible(*)",
+        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
         "unlimited_sharpness": "斬れ味無限",
         "unlimited_consumables": "消費アイテム無限",
         "unlimited_slingers": "スリンガー弾無限"

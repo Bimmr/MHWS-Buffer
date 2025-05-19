@@ -96,6 +96,8 @@
             "instant_cooldown": "Instant cooldown",
             "unlimited_duration": "Unlimited duration"
         },
+        "invincible": "Invincible",
+        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",
         "unlimited_sharpness": "Unlimited Sharpness",
         "unlimited_consumables": "Unlimited Consumables",
         "unlimited_slingers": "Unlimited Slinger Ammo"

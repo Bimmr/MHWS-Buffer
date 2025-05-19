@@ -98,6 +98,8 @@
             "instant_cooldown": "Instant cooldown(TN)",
             "unlimited_duration": "Unlimited duration(TN)"
         },
+        "invincible": "Invincible(*)",
+        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
         "unlimited_sharpness": "无限锋利度",
         "unlimited_consumables": "无限消耗品",
         "unlimited_slingers": "无限弹药"
