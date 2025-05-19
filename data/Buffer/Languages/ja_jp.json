@@ -189,7 +189,7 @@
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
         "max_special_ammo": "特殊弾最大",
-        "max_wyvern_howl": "ワイバーンの遠吠え最大",
+        "max_wyvern_howl": "集中特攻弾【竜吼】最大",
         "max_gatling_hits": "ガトリングヒット数最大",
         "max_gatling_hits_tooltip": "竜熱機関竜弾にのみ影響",
         "unlimited_ammo": "弾無限",
