@@ -98,6 +98,8 @@
       "instant_cooldown": "Enfriamiento instantánea",
       "unlimited_duration": "Duración ilimitada"
     },
+    "invincible": "Invincible(*)",
+    "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
     "unlimited_sharpness": "Filo ilimitado",
     "unlimited_consumables": "Consumibles ilimitados",
     "unlimited_slingers": "Munición de eslinga ilimitada"
