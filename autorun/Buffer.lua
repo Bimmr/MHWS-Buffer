@@ -6,7 +6,7 @@ local isWindowOpen, wasOpen = false, false
 local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 local language = require("Buffer.Misc.Language")
-local bindings = require("Buffer.Misc.Bindings") 
+local bindings = require("Buffer.Misc.BindingsHelper")
 
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
