@@ -1,86 +1,119 @@
 -- BindingsHelper module - extends the Bindings module with additional functionality
 local bindings = require("Buffer.Misc.Bindings")
 local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
 local file_path = "Buffer/Bindings.json"
-local enabled_text = language.get("window.bindings.enabled")
-local disabled_text = language.get("window.bindings.disabled")
+local enabled_text
+local disabled_text
+
+local modules
 
 -- Create a new table that inherits all of the original bindings functionality
 local helper = {}
-helper.popup = {}  -- Store popup state in helper
+helper.popup = {} -- Store popup state in helper
 
 setmetatable(helper, {
     __index = bindings
 })
 
--- Preserve the constants from the original bindings
-helper.DEVICE_TYPES = {
-    NONE = 0,
-    CONTROLLER = 1,
-    KEYBOARD = 2
-}
+function helper.convert_old_format()
+    local file = json.load_file(file_path)
+    if file then
 
-helper.CONTROLLER_TYPES = {
-    NONE = 0,
-    PLAYSTATION = 1,
-    XBOX = 2
-}
+    end
+end
 
-function helper.load()
+-- Loads the bindings and initializes the helper
+function helper.load(mods)
+    modules = mods
+    enabled_text = language.get("window.bindings.enabled")
+    disabled_text = language.get("window.bindings.disabled")
+
+    -- REMOVE AT A LATER DATE
+    helper.convert_old_format() -- Convert old bindings format to new one
+
     local file = json.load_file(file_path)
     if file then
         for _, bind in pairs(file) do
-            helper.add(bind.device, bind.input, function()
-
-                local path = utils.split(bind.path, ".")
-                local value = bind.value
-
-                if type(value) == "number" then
-                    enabled_text = string.gsub(language.get("window.bindings.set_to"), "%%d", value)
-                end
-
-                local module_index
-                for key, value in pairs(buffer.modules) do
-                    if buffer.modules[key].title == path[1] then
-                        module_index = key
-                    end
-                end
-
-                table.remove(path, 1) -- Remove Module name
-                table.remove(path, 1) -- Remove "data" from path
-
-                local target = buffer.modules[module_index].data
-                for i = 1, #path - 1 do
-                    target = target[path[i]]
-                end
-                target[path[#path]] = not target[path[#path]]
-                utils.send_message(helper.get_formatted_title(bind.path) .. " " ..
-                                       (target[path[#path]] and enabled_text or disabled_text))
-            end)
+            helper.add(bind.device, bind.input, bind.path, bind.value)
         end
     end
 end
 
+-- Saves the current bindings to the file
 function helper.save()
     local file = {}
-    for _, bind in pairs(helper.bindings) do
-        local data = {
-            device = bind.device,
-            input = bind.input,
-            path = bind.path,
-            value = bind.value
-        }
-        table.insert(file, data)
+
+    -- Iterate through both devices (1 for controller, 2 for keyboard)
+    for i = 1, 2 do
+        local bindings_list = bindings.get_bindings(i)
+        for _, bind in pairs(bindings_list) do
+            local data = {
+                device = i,
+                input = bind.input,
+                path = bind.path,
+                value = bind.value
+            }
+            table.insert(file, data)
+        end
     end
-    json.save_file(file_path, file)
+
+    json.dump_file(file_path, file)
+end
+
+-- Override the original add function to include custom functionality
+helper.original_add = bindings.add
+function helper.add(device, input, path, value)
+    helper.original_add(device, input, function()
+        local path_parts = utils.split(path, ".")
+        local module_name = path_parts[1]
+        local value_text = enabled_text
+
+        if type(value) == "number" then
+            value_text = string.gsub(language.get("window.bindings.set_to"), "%%d", value)
+        end
+
+        -- Find the module by title
+        local module_index
+        for key, mod in pairs(modules) do
+            if mod.title == module_name then
+                module_index = key
+                break
+            end
+        end
+        if not module_index then return end
+
+        -- Traverse to the target value
+        table.remove(path_parts, 1)
+        local target = modules[module_index].data
+        for i = 1, #path_parts - 1 do
+            target = target[path_parts[i]]
+        end
+
+        -- Toggle or set the value
+        if type(target[path_parts[#path_parts]]) == "boolean" then
+            target[path_parts[#path_parts]] = not target[path_parts[#path_parts]]
+        else
+            target[path_parts[#path_parts]] = value
+        end
+
+        local setting_name = helper.get_setting_name_from_path(module_name .. "." .. table.concat(path_parts, "."))
+        local msg = setting_name .. " " .. (target[path_parts[#path_parts]] and value_text or disabled_text)
+        utils.send_message(msg)
+    end)
+
+    -- Apply additional data to the bindings
+    bindings.apply_data(device, input, {
+        path = path,
+        value = value
+    })
 end
 
 --- Returns the name of the setting based on the provided path.
---- @param path string The path to the setting (e.g., "data.character.health").
+--- @param path string The path to the setting (e.g., "character.health").
 --- @return string The formatted name of the setting.
 function helper.get_setting_name_from_path(path)
-    path = string.gsub(path, "data%.", "")
     path = utils.split(path, ".")
     local currentPath = path[1]
     local title = language.get(currentPath .. ".title")
@@ -95,11 +128,7 @@ function helper.get_setting_name_from_path(path)
     return title
 end
 
-helper.original_update = bindings.update
-function helper.update()
-    helper.original_update()
-end
-
+-- Draws the popup for adding a new binding
 function helper.draw()
     local listener = helper.listener:create("Buffer Popup")
     if helper.popup.open then
@@ -116,7 +145,7 @@ function helper.draw()
         imgui.spacing()
 
         -- Change title depending on device
-        if helper.popup.device == 1 then
+        if helper.popup.device == bindings.DEVICE_TYPES.CONTROLLER then
             imgui.text(language.get("window.bindings.add_gamepad"))
         else
             imgui.text(language.get("window.bindings.add_keyboard"))
@@ -126,73 +155,37 @@ function helper.draw()
         imgui.spacing()
 
         -- Draw the path menu selector
-         local binding_path = language.get("window.bindings.choose_modification")
+        local binding_path = language.get("window.bindings.choose_modification")
         if helper.popup.path ~= nil then
             binding_path = helper.get_setting_name_from_path(helper.popup.path)
         end
 
-
         if imgui.begin_menu(binding_path) then
-            for module_key, module in pairs(buffer.modules) do
+            for module_key, module in pairs(modules) do
                 if imgui.begin_menu(language.get(module.title .. ".title")) then
+
                     local function draw_menu(data, path)
                         for key, value in pairs(data) do
                             local current_path = path .. "." .. key
                             if type(value) == "table" then
-                                if imgui.begin_menu(language.get(module.title .. ".title") .. "/" .. key) then
+                                if imgui.begin_menu(language.get(current_path .. ".title")) then
                                     draw_menu(value, current_path)
                                     imgui.end_menu()
                                 end
                             else
-                                if imgui.menu_item(language.get(module.title .. ".title") .. "/" .. key) then
-                                    helper.popup.path = module.title .. ".data." .. current_path:match("^.+%.(.+)$")
+                                if imgui.menu_item(language.get(current_path)) then
+                                    helper.popup.path = current_path
                                     helper.popup.value = value
                                 end
                             end
                         end
                     end
-                    draw_menu(module.data, "")
+                    draw_menu(module.data, module.title)
                     imgui.end_menu()
                 end
             end
             imgui.end_menu()
         end
-
-
-        -- Get the default hotkey text based on the device type
-        local binding_hotkey = listener:get_device() == bindings.DEVICE_TYPES.KEYBOARD and
-                              language.get("window.bindings.add_keyboard") or
-                              language.get("window.bindings.add_gamepad")
-
-        -- Popup listening
-        if listener:is_listening() then
-            helper.popup.device = listener:get_device()
-
-            -- If listener is listening, display the current binding hotkey
-            if #listener:get_inputs() ~= 0 then
-                binding_hotkey = ""
-                local inputs = listener:get_inputs()
-                inputs = bindings.get_names(listener:get_device(), inputs)
-                for _, input in ipairs(inputs) do
-                    binding_hotkey = binding_hotkey .. input.name .. " + "
-                end
-            end
-        
-            -- Popup not listening, display hotkeys
-        else
-             for i, input in ipairs(listener:get_inputs()) do
-                binding_hotkey = binding_hotkey .. input.name
-                if i < #listener:get_inputs() then
-                    binding_hotkey = binding_hotkey .. " + "
-                end
-            end
-        end
-
-        -- Draw the hotkey button
-        if imgui.button(binding_hotkey) then
-            listener:start()
-        end
-        
 
         -- Draw the value input field
         if helper.popup.value ~= nil then
@@ -210,35 +203,78 @@ function helper.draw()
                 end
             end
         end
+
+        imgui.spacing()
+
+        -- Get the default hotkey text based on the device type
+        local binding_hotkey = ""
+
+        -- Popup listening
+        if listener:is_listening() then
+            helper.popup.device = listener:get_device()
+
+            -- If listener is listening, display the current binding hotkey
+            if #listener:get_inputs() ~= 0 then
+                binding_hotkey = ""
+                local inputs = listener:get_inputs()
+                inputs = bindings.get_names(listener:get_device(), inputs)
+                for _, input in ipairs(inputs) do
+                    binding_hotkey = binding_hotkey .. input.name .. " + "
+                end
+            else
+                binding_hotkey = language.get("window.bindings.listening")
+            end
+
+            -- If not listening, and inputs are available, display the inputs
+        elseif #listener:get_inputs() ~= 0 then
+            local inputs = listener:get_inputs()
+            inputs = bindings.get_names(listener:get_device(), inputs)
+            for i, input in ipairs(inputs) do
+                binding_hotkey = binding_hotkey .. input.name
+                if i < #listener:get_inputs() then
+                    binding_hotkey = binding_hotkey .. " + "
+                end
+            end
+        else
+            binding_hotkey = language.get("window.bindings.to_listen")
+        end
+
+        -- Draw the hotkey button
+        if imgui.button(binding_hotkey) then
+            listener:start()
+        end
+
         imgui.spacing()
         imgui.spacing()
         imgui.separator()
         imgui.spacing()
 
-        
         if imgui.button(language.get("window.bindings.cancel")) then
             bindings.popup_close()
         end
-        if helper.popup.path and helper.popup.binding then
+        if helper.popup.path and #listener:get_inputs() > 0 then
             imgui.same_line()
             if imgui.button(language.get("window.bindings.save")) then
-                bindings.add(helper.popup.device, helper.popup.binding, helper.popup.path, helper.popup.on)
-                bindings.popup_close()
+                helper.add(helper.popup.device, listener:get_inputs(), helper.popup.path, helper.popup.value)
+                helper.save()
+                helper.popup_close()
+                listener:stop()
+                listener:clear()
+                helper.popup.open = false
             end
         end
         imgui.unindent(10)
         imgui.end_window()
-        
 
-    -- Somehow the popup is closed, but still listening
+        -- In case the popup is closed but still listening
     elseif listener:is_listening() then
         helper.popup_close()
         listener:stop()
-        listener:reset()
+        listener:clear()
     end
 end
 
--- Implement proper popup open function
+-- Opens the popup
 function helper.popup_open(device)
     helper.popup.open = true
     helper.popup.device = device
@@ -247,7 +283,7 @@ function helper.popup_open(device)
     helper.popup.value = nil
 end
 
--- Implement proper popup close function
+-- Closes the popup
 function helper.popup_close()
     helper.popup.open = false
 end

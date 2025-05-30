@@ -19,6 +19,8 @@ local CONTROLLER_TYPES = {
     XBOX = 2
 }
 
+bindings.DEVICE_TYPES = DEVICE_TYPES
+bindings.CONTROLLER_TYPES = CONTROLLER_TYPES
 
 --- Generate the enums for the bindings
 --- @param typename The name of the type to generate the enum for
@@ -700,6 +702,62 @@ function bindings.add(device, input, callback)
     end
     return false
 end
+
+--- Get the bindings for the keyboard
+--- @return An array of the keyboard bindings in {input, callback} format
+function bindings.get_keyboard_bindings()
+    return keyboard_bindings.bindings
+end
+
+--- Get the bindings for the controller
+--- @return An array of the controller bindings in {input, callback} format
+function bindings.get_controller_bindings()
+    return controller_bindings.bindings
+end
+
+--- Get the bindings depending on the device
+--- @param device The device to get the bindings for (1 = Controller, 2 = Keyboard)
+--- @return An array of the bindings in {input, callback} format
+function bindings.get_bindings(device)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return bindings.get_controller_bindings()
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return bindings.get_keyboard_bindings()
+    end
+    return {}
+end
+
+--- Get the binding depending on the device
+--- @param device The device to get the binding for (1 = Controller, 2 = Keyboard)
+--- @param input The input to get the binding for
+--- @return The binding in {input, callback} format
+function bindings.get_binding(device, input)
+    local bindings_list = bindings.get_bindings(device)
+    for _, binding in pairs(bindings_list) do
+        if binding.input == input then
+            return binding
+        end
+    end
+    return nil
+end
+
+--- Apply data to the binding
+--- @param device The device to apply the data to (1 = Controller, 2 = Keyboard)
+--- @param input The input to apply the data to
+--- @param data The data to apply to the binding
+--- @return true if the binding was found and data was applied, false otherwise
+function bindings.apply_data(device, input, data)
+   local binding = bindings.get_binding(device, input)
+    
+   if binding then
+        for k, v in pairs(data) do
+            binding[k] = v
+        end
+        return true
+    end
+    return false
+end
+
 
 --- Remove the keyboard binding
 --- @param keys The keys to unbind
