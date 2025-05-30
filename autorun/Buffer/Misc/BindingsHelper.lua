@@ -20,7 +20,24 @@ setmetatable(helper, {
 function helper.convert_old_format()
     local file = json.load_file(file_path)
     if file then
+        local controller = file.btns
+        local keyboard = file.keys
+        if controller then
+            for _, data in pairs(controller) do
+                local inputs = type(data.input) == "table" and data.input or { data.input }
+                local path = string.gsub(data.data.path, "%.data", "")
+                helper.add(bindings.DEVICE_TYPES.CONTROLLER, inputs, path, data.data.on)
+            end
+        end
+        if keyboard then
+            for _, data in pairs(keyboard) do
+                local inputs = type(data.input) == "table" and data.input or { data.input }
+                local path = string.gsub(data.data.path, "%.data", "")
+                helper.add(bindings.DEVICE_TYPES.KEYBOARD, inputs, path, data.data.on)
+            end
+        end
 
+        if controller or keyboard then return true end
     end
 end
 
@@ -31,7 +48,12 @@ function helper.load(mods)
     disabled_text = language.get("window.bindings.disabled")
 
     -- REMOVE AT A LATER DATE
-    helper.convert_old_format() -- Convert old bindings format to new one
+    local hasOldFormat = helper.convert_old_format() -- Convert old bindings format to new one
+    if hasOldFormat then
+        helper.save()
+        log.debug("Converted old bindings format to new one.")
+        return
+    end
 
     local file = json.load_file(file_path)
     if file then
@@ -108,6 +130,16 @@ function helper.add(device, input, path, value)
         path = path,
         value = value
     })
+end
+
+-- Override the original remove function to include custom functionality
+helper.original_remove = bindings.remove
+function helper.remove(device, number)
+    -- Find the binding to remove
+    local bindings = bindings.get_bindings(device)
+    local binding = bindings[number]
+    helper.original_remove(device, binding.input)
+    helper.save()
 end
 
 --- Returns the name of the setting based on the provided path.
@@ -250,7 +282,7 @@ function helper.draw()
         imgui.spacing()
 
         if imgui.button(language.get("window.bindings.cancel")) then
-            bindings.popup_close()
+            helper.popup_close()
         end
         if helper.popup.path and #listener:get_inputs() > 0 then
             imgui.same_line()
