@@ -31,6 +31,14 @@
     "base": {
         "disabled": "Disabled"
     },
+    "miscellaneous": {
+        "title": "Miscellaneous",
+        "akuma": {
+            "title": "Akuma",
+            "instant_drive_gauge": "Instant Drive Gauge",
+            "gou_hadoken_max_level": "Gou Hadoken Max Level"
+        }
+    },
     "character": {
         "title": "Character",
         "stamina": {

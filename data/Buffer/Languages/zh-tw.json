@@ -33,7 +33,14 @@
     "base": {
         "disabled": "禁用"
     },
-
+    "miscellaneous": {
+        "title": "雜項",
+        "akuma": {
+            "title": "豪鬼",
+            "instant_drive_gauge": "最大豪鬼計量表",
+            "gou_hadoken_max_level": "豪波動拳傷害最大化"
+        }
+    },
     "character": {
         "title": "角色",
         "stamina": {
@@ -79,15 +86,15 @@
         },
         "item_buffs": {
             "title": "物品增益",
-            "might_seed": "Might seed (TN)",
+            "might_seed": "怪力種子",
             "might_pill": "怪力藥丸",
-            "adamant_seed": "Adamant seed (TN)",
+            "adamant_seed": "忍耐種子",
             "adamant_pill": "忍耐藥丸",
-            "demon_drug": "Demon drug (TN)",
+            "demon_drug": "鬼人藥",
             "demon_powder": "鬼人粉塵",
             "hardshell_powder": "硬化粉塵",
             "mega_demondrug": "鬼人藥·大",
-            "armor_skin": "Armor skin (TN)",
+            "armor_skin": "硬化藥",
             "mega_armorskin": "硬化藥·大",
             "cool_drink": "冷飲",
             "hot_drink": "熱飲",
@@ -95,12 +102,12 @@
             "imunizer": "活力劑"
         },
         "mantles": {
-            "title": "Mantles(TN)",
-            "instant_cooldown": "Instant cooldown(TN)",
-            "unlimited_duration": "Unlimited duration(TN)"
+            "title": "衣裝",
+            "instant_cooldown": "衣裝無冷卻",
+            "unlimited_duration": "衣裝無限持續時間"
         },
-        "invincible": "Invincible(*)",
-        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
+        "invincible": "無敵",
+        "invincible_tooltip": "你不會受到任何傷害、擊退、畏縮，或被任何異常狀態影響",
         "unlimited_sharpness": "無限鋒利度",
         "unlimited_consumables": "無限消耗品",
         "unlimited_slingers": "無限彈藥"
@@ -156,7 +163,7 @@
     },
     "hunting_horn": {
         "title": "狩獵笛",
-        "unlimited_echo_bubbles": "Unlimited echo bubbles"
+        "unlimited_echo_bubbles": "無限響玉"
     },
 
     "lance": {

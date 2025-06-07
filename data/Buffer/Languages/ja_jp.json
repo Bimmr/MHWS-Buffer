@@ -33,6 +33,14 @@
     "base": {
         "disabled": "無効"
     },
+    "miscellaneous": {
+        "title": "その他",
+        "akuma": {
+            "title": "豪鬼",
+            "instant_drive_gauge": "瞬間ドライブゲージ",
+            "gou_hadoken_max_level": "豪波動拳最大レベル"
+        }
+    },
     "character": {
         "title": "キャラクター",
         "stamina": {

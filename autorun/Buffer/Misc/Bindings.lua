@@ -1,218 +1,471 @@
-local utils = require("Buffer.Misc.Utils")
-local language
+local controller_bindings = {}
+local keyboard_bindings = {}
+local bindings = {}
 
-local file_path = "Buffer/Bindings.json"
+-- The delay to wait before checking the bindings again
+bindings.delay = 0.05
 
-local pad_manager, main_pad
-local mouse_keyboard_manager, main_mouse_keyboard
-local key_bindings, btn_bindings
-local modules = {}
 
-local bindings = {
-    btns = {},
-    keys = {}
+-- Just helper variables to make device numbers easier
+local DEVICE_TYPES = {
+    NONE = 0,
+    CONTROLLER = 1,
+    KEYBOARD = 2
 }
 
-local popup = {}
+local CONTROLLER_TYPES = {
+    NONE = 0,
+    PLAYSTATION = 1,
+    XBOX = 2
+}
 
--- Init the bindings module
-function bindings.init(module_list)
-    modules = module_list
+bindings.DEVICE_TYPES = DEVICE_TYPES
+bindings.CONTROLLER_TYPES = CONTROLLER_TYPES
 
-    language = require("Buffer.Misc.Language")
-
-    bindings.load_from_file()
-
-    key_bindings = utils.generate_enum("ace.ACE_MKB_KEY.INDEX")
-    btn_bindings = utils.generate_enum("ace.ACE_PAD_KEY.BITS")
-
-    -- Testing
-    -- bindings.add(1, {8192, 1024}, "miscellaneous.data.ammo_and_coatings.unlimited_ammo", true) -- R3 + R1
-    -- bindings.add(1, {4096}, "great_sword.data.charge_level", 3) -- R3
-
-    -- bindings.add(2, {8, 80}, "miscellaneous.data.ammo_and_coatings.unlimited_ammo", true) -- BACKSPACE + P
-end
-
--- Add a new binding
--- If device is gamepad(1)
--- If device is a keyboard(2)
-function bindings.add(device, input, path, on)
-    local binding_table = nil
-    if device == 1 then
-        binding_table = bindings.btns
-        if binding_table then
-            table.insert(binding_table, {
-                ["input"] = bindings.get_button_code(input),
-                ["data"] = {
-                    path = path,
-                    on = on
-                }
-            })
+--- Generate the enums for the bindings
+--- @param typename The name of the type to generate the enum for
+--- @return A table with the enum values
+local function generate_enum(typename)
+    local t = sdk.find_type_definition(typename)
+    if not t then
+        return {}
+    end
+    local fields = t:get_fields()
+    local enum = {}
+    for i, field in ipairs(fields) do
+        if field:is_static() then
+            local name = field:get_name()
+            local raw_value = field:get_data(nil)
+            enum[name] = raw_value
         end
-    elseif device == 2 then
-        binding_table = bindings.keys
-        table.insert(binding_table, {
-            ["input"] = bindings.get_key_codes_from_code_with_name(input),
-            ["data"] = {
-                path = path,
-                on = on
-            }
-        })
     end
-
-    bindings.save_to_file()
+    return enum
 end
 
--- Remove a binding from the device's table (Sometimes doesn't work... will need to debug)
-function bindings.remove(device, index)
-    local binding_table = nil
-    if device == 1 then
-        binding_table = bindings.btns
-    elseif device == 2 then
-        binding_table = bindings.keys
-    end
-    if binding_table then
-        table.remove(binding_table, index)
-        bindings.save_to_file()
-    end
-end
+-- Generate the enums for the bindings
 
--- ======== File Stuff ===========
-function bindings.load_from_file()
-    local file = json.load_file(file_path)
-    if file then
-        bindings.btns = file.btns or {}
-        bindings.keys = file.keys or {}
-    end
-end
+-- ======= Listeners ==========
+local listeners = {}
 
--- Save the bindings to a file
-function bindings.save_to_file()
-    json.dump_file(file_path, {
-        ['keys'] = bindings.keys,
-        ['btns'] = bindings.btns
+-- ========== Example usage ============
+-- local listener = bindings.listener:create("hotkey")
+
+-- listener:on_complete(function()
+--     print("Complete")
+-- end)
+
+-- if imgui.button("Listen") then
+--     listener:start()
+-- end
+
+local listener = {}
+
+--- Create a new listener
+--- Will return an existing listener if it already exists by id
+--- @param id The id of the listener
+--- @param [options] The options for the listener
+--- timeout_timer: The timeout for the listener in seconds
+--- cached_current_timer: How long to keep the current input check cached
+--- @return The listener object
+function listener:create(id, options)
+
+    if listeners[id] then
+        return listeners[id]
+    end
+
+    local self = {}
+    self.id = id
+    self.listening = false
+    self.device = 0
+
+    -- Last input tracker
+    self.cached_current = nil
+    self.cached_current_timer = 0.1
+    self.cached_current_time = 0
+    
+    self.inputs = {}
+    self.complete = function() end
+    
+    self.timeout_timer = nil
+    self.timeout_start_time = 0
+    self.timeout = function() end
+
+    -- iterate through options and set them
+    if options then
+        for key, value in pairs(options) do
+            self[key] = value
+        end
+    end
+
+    setmetatable(self, {
+        __index = listener
     })
+    
+    listeners[id] = self
+    return self
+
 end
--- ======= Misc ===========
-function bindings.get_formatted_title(path)
-    path = string.gsub(path, "data%.", "")
-    path = utils.split(path, ".")
-    local currentPath = path[1]
-    local title = language.get(currentPath .. ".title")
-    for i = 2, #path, 1 do
-        currentPath = currentPath .. "." .. path[i]
-        if i == #path then
-            title = title .. "/" .. language.get(currentPath)
-        else
-            title = title .. "/" .. language.get(currentPath .. ".title")
+
+--- Create a new listener with a timeout
+--- @param id The id of the listener
+--- @param timeout The timeout for the listener in seconds
+--- @return The listener object
+--- @see listener:create
+function listener:create_with_timeout(id, timeout)
+    local self = self:create(id)
+    self.timeout_timer = timeout
+    return self
+end
+
+--- Start the listener
+--- Sets the listening flag to true, and clears the inputs
+function listener:start()
+    self.listening = true
+    self.inputs = {}
+    if self.timeout_timer then
+        self.timeout_start_time = os.clock()
+    end
+end
+
+--- Stop the listener
+function listener:stop()
+    self.listening = false
+end
+
+--- Clear the listener's inputs
+function listener:clear()
+    self.inputs = {}
+end
+
+--- Check if the listener is listening
+--- @return true/false if the listener is listening
+function listener:is_listening()
+    return self.listening
+end
+
+--- Call back when listener is complete
+--- @param callback The function to call when the listener is complete
+function listener:on_complete(callback)
+    self.complete = callback
+end
+
+--- Call back when listener times out
+--- @param callback The function to call when the listener times out
+function listener:on_timeout(callback)
+    self.timeout = callback
+end
+
+--- Get the inputs
+--- @return The inputs the listener has received
+function listener:get_inputs()
+    return self.inputs
+end
+
+--- Get the device
+--- @return The device the listener is listening to (1 = Controller, 2 = Keyboard)
+function listener:get_device()
+    return self.device
+end
+
+--- Update the listener
+--- Called by the bindings update
+function listener:update()
+
+    if not self.listening then
+        return
+    end
+
+    -- Cache the current input for the delay - allows for easier setting/reading of binds
+    local current = self.cached_current
+    if self.cached_current_time + self.cached_current_timer < os.clock() then
+        current = bindings.get_current()
+        self.cached_current = current
+        self.cached_current_time = os.clock()
+    end
+
+    if not current then
+        return
+    end
+
+    if #current > 0 then
+        self.inputs = current
+        if bindings.get_current_device() ~= DEVICE_TYPES.NONE then
+            self.device = bindings.get_current_device()
+        end
+
+    elseif #current == 0 and self.inputs and #self.inputs > 0 then
+        self.listening = false
+        self.complete()
+    end
+
+    -- Check if the timeout time has passed
+    if self.timeout_timer and self.timeout_start_time + self.timeout_timer < os.clock() then
+        self.listening = false
+        self.timeout()
+    end
+end
+
+--- Get the time left in the timeout
+--- @param decimals The number of decimals to return
+--- @return The time left in the timeout
+--- Returns -1 if no timeout is set
+function listener:get_timeout_remaining(decimals)
+    if self.timeout_timer then
+        if not decimals then
+            decimals = 2
+        end
+        local time_left = (self.timeout_start_time + self.timeout_timer) - os.clock()
+        if time_left < 0 then
+            return 0
+        end
+        local time_left = math.floor(time_left * 10 ^ decimals) / 10 ^ decimals
+        return time_left
+    end
+    return -1
+end
+
+
+bindings.listeners = listeners
+bindings.listener = listener
+
+
+
+-- ======= Keyboard Manager ==========
+local keyboard_enum = generate_enum("via.hid.KeyboardKey")
+local native_keyboard = sdk.get_native_singleton("via.hid.Keyboard")
+local type_keyboard = sdk.find_type_definition("via.hid.Keyboard")
+
+keyboard_bindings.current = {}
+keyboard_bindings.current_last_check = nil
+keyboard_bindings.previous = {}
+
+keyboard_bindings.bindings = {}
+
+--- Check if the keyboard is currently in use
+--- @return true/false if the keyboard is currently in use
+function keyboard_bindings.is_currently_in_use()
+    return #keyboard_bindings.get_current() > 0
+end
+
+--- Get the previous keys
+--- @return An array of the previous keys
+function keyboard_bindings.get_previous()
+    return keyboard_bindings.previous
+end
+
+--- Get the current keys in an array with the codes
+--- Will return the current_table table if not enough time has passed since the last check
+--- @return An array of the current keys
+function keyboard_bindings.get_current()
+
+    local keyboard = sdk.call_native_func(native_keyboard, type_keyboard, "get_Device")
+
+    -- Cache the keys for the delay - allows for easier setting/reading of binds
+    if keyboard_bindings.current ~= nil and keyboard_bindings.current_last_check ~= nil and
+        keyboard_bindings.current_last_check + bindings.delay > os.clock() then
+        return keyboard_bindings.current
+    end
+
+    local current = {}
+    for key_name, key_code in pairs(keyboard_enum) do
+        if keyboard:isDown(key_code) then
+            table.insert(current, key_code)
         end
     end
-    return title
-end
--- ======= Gamepad ==========
 
-
-local current_buttons = nil
-local current_buttons_last_check = nil
-local previous_buttons = 0
-local triggered_buttons = {}
-
--- Check if the controller is being used
-function bindings.is_controller()
-    return bindings.get_current_button_code() > 0
-end
-
--- Get the previous buttons
-function bindings.get_previous_button_code()
-    return previous_buttons
-end
--- Get current buttons pressed
-function bindings.get_current_button_code()
-    if pad_manager == nil then
-        pad_manager = sdk.get_managed_singleton("ace.PadManager")
-    end
-    if main_pad == nil then
-        main_pad = pad_manager:get_MainPad()
-    end
-
-    -- Cache the buttons for 0.1 seconds - allows for easier setting/reading of binds
-    if current_buttons ~= nil and current_buttons_last_check ~= nil and current_buttons_last_check + 0.1 > os.clock() then
-        return current_buttons
-    end
-
-    local current = main_pad:get_KeyOn()
-
-    if current == 0 then
-        current = -1
-    end
-
-    current_buttons = current
-    current_buttons_last_check = os.clock()
+    keyboard_bindings.current = current
+    keyboard_bindings.current_last_check = os.clock()
     return current
 end
 
--- Get current buttons as a list of array {name, code}
-function bindings.get_current_buttons()
-    return bindings.get_button_names(bindings.get_current_button_code())
-end
+--- Check if the items in the passed table were just triggered
+--- @param data The table of keys to check
+--- @return true/false if the keys were just triggered
+function keyboard_bindings.is_triggered(data)
 
--- Convert the list of buttons back to a code
-function bindings.get_button_code(arr_btns)
-    local code = 0
-    for _, btn in pairs(arr_btns) do
-        code = code + btn.code
-    end
-    return code
-end
+    local current = keyboard_bindings.get_current()
+    local previous = keyboard_bindings.get_previous()
 
--- Is the code being triggered
-function bindings.is_button_code_triggered(code)
-    local current = bindings.get_current_button_code()
-    local previous = bindings.get_previous_button_code()
-    return current ~= previous and current == code
-end
-
--- Is the buttons being triggered
-function bindings.is_buttons_triggered(arr_btns)
-    local current = bindings.get_current_button_code()
-    local previous = bindings.get_previous_button_code()
-
-    -- if current has all buttons needed, and old has all but one, then return true
+    -- Check if in current all keys are pressed, and in previous either none or all but one
     local matches = 0
-    for _, required_code in pairs(arr_btns) do
-        local found = false
+    local previous_matches = 0
+    for _, code in pairs(data) do
         for _, current_code in pairs(current) do
-            if current_code == required_code then
-                found = true
+            if current_code == code then
+                matches = matches + 1
             end
         end
         for _, previous_code in pairs(previous) do
-            if previous_code == required_code then
+            if previous_code == code then
+                previous_matches = previous_matches + 1
+            end
+        end
+    end
+
+    -- If not all current keys match the trigger
+    if matches ~= #data then
+        return false
+    end
+
+    -- If no previous keys were found
+    if #keyboard_bindings.previous == 0 then
+        return true
+    end
+
+    -- Previous has less matches than the current
+    return previous_matches < #data
+end
+
+--- Check if the items in the passed table are currently pressed
+--- @param data The table of keys to check
+--- @return true/false if the keys are currently pressed
+function keyboard_bindings.is_down(data)
+    local current = bindings.get_current()
+    for _, code in pairs(data) do
+        local found = false
+        for _, current_code in pairs(current) do
+            if current_code == code then
                 found = true
-                matches = matches + 1
             end
         end
         if not found then
             return false
         end
     end
-
-    return matches + 1 == #arr_btns
+    return true
 end
 
--- Is the button being pressed
-function bindings.is_button_down(code)
-    local current = bindings.get_current_buttons()
-    for _, btn in pairs(current) do
-        if btn.code == code then
-            return true
+--- Get the name of the key from the code
+--- Returns "Unknown" if not found
+--- @param code The code of the key
+--- @return The name of the key
+function keyboard_bindings.get_name(code)
+    for key_name, key_code in pairs(keyboard_enum) do
+        if key_code == code then
+            return key_name
         end
     end
-    return false
+    return "Unknown"
 end
 
--- This function will return an array of {name, code} for each button
-function bindings.get_button_names(code)
+--- Get an array of the keys from the code
+--- @param codes The array of codes to get the names for
+--- @return An array of the keys in {name, code} format
+function keyboard_bindings.get_names(codes)
+    local names = {}
+    for _, code in pairs(codes) do
+        table.insert(names, {
+            name = keyboard_bindings.get_name(code),
+            code = code
+        })
+    end
+    return names
+end
+
+--- Get the code from the name
+--- Returns -1 if not found
+--- @param name The name of the key
+--- @return The code of the key
+function keyboard_bindings.get_code_from_name(name)
+    for key_name, key_code in pairs(keyboard_enum) do
+        if key_name == name then
+            return key_code
+        end
+    end
+    return -1
+end
+
+
+
+-- ======= Controller ==========
+local controller_enum = generate_enum("via.hid.GamePadButton")
+
+local controller_types = generate_enum("via.hid.DeviceKindDetails")
+local controller_type = 0
+
+local native_controller = sdk.get_native_singleton("via.hid.GamePad")
+local type_controller = sdk.find_type_definition("via.hid.GamePad")
+
+controller_bindings.current = {}
+controller_bindings.current_last_check = nil
+controller_bindings.previous = {}
+
+controller_bindings.bindings = {}
+
+-- Buttons to ignore, can't remove from enum as the code would be wrong then
+local ignore_buttons = {"Cancel", "Decide"}
+
+-- Button names to replace [DefaultName] = {"Playstation", "Xbox"}
+local to_replace_buttons = {
+    ["RRight"] = {"Circle", "B"},
+    ["RDown"] = {"X", "A"},
+    ["RLeft"] = {"Square", "X"},
+    ["RUp"] = {"Triangle", "Y"},
+    ["CLeft"] = {"Share", "Back"},
+    ["CRight"] = {"Start", "Start"},
+    ["CCenter"] = {"Touchpad", "Guide"},
+    ["LTrigBottom"] = {"L2", "LT"},
+    ["RTrigBottom"] = {"R2", "RT"},
+    ["LTrigTop"] = {"L1", "LB"},
+    ["RTrigTop"] = {"R1", "RB"},
+    ["LStickPush"] = {"L3", "LS"},
+    ["RStickPush"] = {"R3", "RS"}
+}
+
+--- Get the controller type
+--- Caches the controller type for a short time to avoid constant calls to the native function
+--- @return The controller type
+local function get_controller_type()
+    if controller_type ~= 0 and controller_bindings.current_last_check ~= nil and
+        controller_bindings.current_last_check + bindings.delay > os.clock() then
+        return controller_type
+    end
+
+    local manager = sdk.get_managed_singleton("ace.PadManager")
+    if not manager then
+        return 0
+    end
+    local controller = manager:get_MainPad()
+    if not controller then
+        return 0
+    end
+    local type_id = controller:get_DeviceKindDetails()
+    local type = {}
+    for name, id in pairs(controller_types) do
+        if id == type_id then
+            type = {
+                name = name,
+                id = type_id
+            }
+            break
+        end
+    end
+
+    if string.find(type.name, "Dual") then
+        controller_type = CONTROLLER_TYPES.PLAYSTATION
+    elseif string.find(type.name, "Xbox") then
+        controller_type = CONTROLLER_TYPES.XBOX
+    else
+        controller_type = CONTROLLER_TYPES.NONE
+    end
+    return controller_type
+end
+
+--- Check if the controller is currently in use
+--- @return true/false if the controller is currently in use
+function controller_bindings.is_currently_in_use()
+    return #controller_bindings.get_current() > 0
+end
+
+--- Get the previous buttons
+--- @return An array of the previous buttons
+function controller_bindings.get_previous()
+    return controller_bindings.previous
+end
+
+--- Get an array of the buttons
+--- @return An array of the buttons in {name, code} format
+local function transform_code_into_codes(code)
     local init_code = code
 
     -- If the code is a single btn
@@ -222,7 +475,7 @@ function bindings.get_button_names(code)
             code = 0
         }
 
-        for btn_name, btn_code in pairs(btn_bindings) do
+        for btn_name, btn_code in pairs(controller_enum) do
             if btn_code <= code and btn_code > largest.code then
                 largest = {
                     name = btn_name,
@@ -236,12 +489,17 @@ function bindings.get_button_names(code)
             break
         end
 
-        -- Remove the largest and add it to the list of btns
+        -- Remove the largest and add it to the list of btns as long as it's not in the ignore list
         code = code - largest.code
-        table.insert(btns, {
-            name = largest.name,
-            code = largest.code
-        })
+        local ignore = false
+        for _, ignore_name in pairs(ignore_buttons) do
+            if largest.name == ignore_name then
+                ignore = true
+            end
+        end
+        if not ignore then
+            table.insert(btns, largest)
+        end
     end
     if #btns > 0 then
         return btns
@@ -256,460 +514,431 @@ function bindings.get_button_names(code)
     end
 end
 
--- ======= Keyboard ==========
-
--- Keys currently being pressed
-local current_keys = nil
-local current_keys_last_check = nil
-local previous_keys = {}
-
--- Check if the keyboard is being used
-function bindings.is_keyboard()
-    return #bindings.get_current_keys() > 0
+--- Get a list of button codes from the buttons
+--- @param btns The array of buttons to get the codes in {name, code} format
+--- @return An array of the codes in {code} format
+local function get_codes(btns)
+    local codes = {}
+    for _, btn in pairs(btns) do
+        table.insert(codes, btn.code)
+    end
+    return codes
 end
 
--- Get the previous keys
-function bindings.get_previous_keys()
-    return previous_keys
-end
+--- Update the controller type
+--- Update the controller_enum if the controller type has changed to not NONE
+--- @return The controller type
+local function update_controller_type()
 
--- Get current keys as an array of {name, code}
-function bindings.get_current_keys_with_name()
-    if mouse_keyboard_manager == nil then
-        mouse_keyboard_manager = sdk.get_managed_singleton("ace.MouseKeyboardManager")
-    end
-    if main_mouse_keyboard == nil then
-        main_mouse_keyboard = mouse_keyboard_manager:get_MainMouseKeyboard()
-    end
+    local previous_type = controller_type
 
-    -- Cache the keys for 0.1 seconds - allows for easier setting/reading of binds
-    if current_keys ~= nil and current_keys_last_check ~= nil and current_keys_last_check + 0.1 > os.clock() then
-        return current_keys
-    end
+    -- Ensure controller type gotten actually matters (not 0)
+    controller_type = get_controller_type()
+    if previous_type == 0 and controller_type ~= 0 then
 
-    local key_list = main_mouse_keyboard:get_field("_Keys")
-    local keys = {}
-    for key_name, key_code in pairs(key_bindings) do
-        key_list:get_Item(key_code)
-        if key_list:get_Item(key_code):get_field("_On") then
-            if not string.match(key_name, "CLICK") then
-                table.insert(keys, {
-                    name = key_name,
-                    code = key_code
-                })
+        -- Replace controller_enum keys with the first value from to_replace
+        for key, values in pairs(to_replace_buttons) do
+            if values[controller_type] ~= nil then
+                controller_enum[values[controller_type]] = controller_enum[key]
+                controller_enum[key] = nil
             end
         end
     end
-
-    current_keys = keys
-    current_keys_last_check = os.clock()
-    return keys
 end
 
--- Get current keys as an array of code
-function bindings.get_current_keys()
+--- Get current buttons pressed as code
+--- Returns the current_table table if not enough time has passed since the last check
+--- @return An array of the buttons in {name, code} format
+function controller_bindings.get_current()
 
-    local keys = bindings.get_current_keys_with_name()
-    local key_codes = {}
-    for _, key in pairs(keys) do
-        table.insert(key_codes, key.code)
+    -- If current controller type hasn't been set, try to get it
+    if controller_type == 0 then
+        update_controller_type()
     end
-    return key_codes
+
+    local controller = sdk.call_native_func(native_controller, type_controller, "get_MergedDevice")
+
+    -- Cache the buttons for the delay - allows for easier setting/reading of binds
+    if controller_bindings.current ~= nil and controller_bindings.current_last_check ~= nil and
+        controller_bindings.current_last_check + bindings.delay > os.clock() then
+        return controller_bindings.current
+    end
+
+    local current_code = controller:get_Button()
+
+    if current_code == 0 then
+        current_code = -1
+    end
+
+    local current = transform_code_into_codes(current_code)
+    current = get_codes(current)
+
+    controller_bindings.current = current
+    controller_bindings.current_last_check = os.clock()
+    return current
 end
 
--- Is the keys being triggered
-function bindings.is_key_codes_triggered(arr_key)
-    local current = bindings.get_current_keys()
-    local previous = bindings.get_previous_keys()
+--- Check if the items in the passed table were just triggered
+--- @param data The table of buttons to check
+--- @return true/false if the buttons were just triggered
+function controller_bindings.is_triggered(data)
+    local current = controller_bindings.get_current()
+    local previous = controller_bindings.get_previous()
 
     -- Check if in current all keys are pressed, and in previous either none or all but one
     local matches = 0
     local previous_matches = 0
-    for _, key in pairs(arr_key) do
-        for _, current_key in pairs(current) do
-            if current_key == key then
+    for _, code in pairs(data) do
+        for _, current_code in pairs(current) do
+            if current_code == code then
                 matches = matches + 1
             end
         end
-        for _, previous_key in pairs(previous) do
-            if previous_key == key then
+        for _, previous_code in pairs(previous) do
+            if previous_code == code then
                 previous_matches = previous_matches + 1
             end
         end
     end
 
     -- If not all current keys match the trigger
-    if matches ~= #arr_key then
+    if matches ~= #data then
         return false
     end
 
     -- If no previous keys were found
-    if #previous_keys == 0 then
+    if #controller_bindings.get_previous() == 0 then
         return true
     end
 
-    -- If all but one key is the same
-    return previous_matches + 1 == #arr_key
-   
-end
-function bindings.is_key_code_triggered(code)
-    local keys = {}
-    table.insert(keys, code)
-    return bindings.is_key_codes_triggered(keys)
+    -- Previous has less matches than the current
+    return previous_matches < #data
 end
 
--- Get the key names
-function bindings.get_keys_with_name(arr_key)
-    local keys = {}
-    for _, key in pairs(arr_key) do
-        table.insert(keys, {
-            name = bindings.get_key_name(key),
-            code = key
-        })
+--- Get the name of the button from the code
+--- Returns "Unknown" if not found
+--- @param code The code of the button
+--- @return The name of the button
+function controller_bindings.get_name(code)
+    if controller_type == 0 then
+        update_controller_type()
     end
-    return keys
-end
-
--- Is the key being pressed
-function bindings.is_key_down(code)
-    local current = bindings.get_current_keys()
-    for _, key in pairs(current) do
-        if key == code then
-            return true
-        end
-    end
-    return false
-end
-
--- This function will return an array of {name, code} for each key
-function bindings.get_key_name(code)
-    for key_name, key_code in pairs(key_bindings) do
-        if key_code == code then
-            return key_name
+    for button_name, button_code in pairs(controller_enum) do
+        if button_code == code then
+            return button_name
         end
     end
     return "Unknown"
 end
 
--- Get an array of key codes
-function bindings.get_key_codes_from_code_with_name(keys)
-    local key_codes = {}
-    for _, key in pairs(keys) do
-        table.insert(key_codes, key.code)
+--- Get an array of the buttons from the code
+--- @param codes The array of codes to get the names for
+--- @return An array of the buttons in {name, code} format
+function controller_bindings.get_names(codes)
+
+    if controller_type == 0 then
+        update_controller_type()
     end
-    return key_codes
+
+    local names = {}
+    for _, code in pairs(codes) do
+        table.insert(names, {
+            name = controller_bindings.get_name(code),
+            code = code
+        })
+    end
+    return names
+end
+
+--- Get the code from the name
+--- Returns -1 if not found
+--- @param name The name of the button
+--- @return The code of the button
+function controller_bindings.get_code_from_name(name)
+    if controller_type == 0 then
+        update_controller_type()
+    end
+    for button_name, button_code in pairs(controller_enum) do
+        if button_name == name then
+            return button_code
+        end
+    end
+    return -1
 end
 
 -- =========================================
 
--- Checks the bindings
-function bindings.update()
-    if bindings.is_controller() then
-        for _, input_data in pairs(bindings.btns) do
-            if bindings.is_button_code_triggered(input_data.input) and not triggered_buttons[input_data.input] then
-                bindings.perform(input_data.data)
-                triggered_buttons[input_data.input] = true
-            end
-        end
-    end
-
-    if bindings.is_keyboard() then
-        for _, input_data in pairs(bindings.keys) do
-            if bindings.is_key_codes_triggered(input_data.input) then
-                bindings.perform(input_data.data)
-            end
-        end
-    end
-
-    bindings.popup_update()
-
-    if not bindings.is_controller() then
-        triggered_buttons = {}
-    else
-        for code, _ in pairs(triggered_buttons) do
-            local btns_in_trigger = bindings.get_button_names(code)
-            local found_unpressed = false
-            for _, btn in pairs(btns_in_trigger) do
-                if not bindings.is_button_down(btn.code) then
-                    found_unpressed = true
-                end
-            end
-            if found_unpressed then
-                triggered_buttons[code] = nil
-            end
-        end
-    end
-    
-    -- Update previous data
-    previous_buttons = bindings.get_current_button_code()
-    previous_keys = bindings.get_current_keys()
-end
-
--- Draw anything the bindings need
-function bindings.draw()
-    bindings.popup_draw()
-end
-
--- Perform the changes
-function bindings.perform(data)
-    local path = utils.split(data.path, ".")
-    local on_value = data.on
-    local enabled_text = "<COL YEL>" .. language.get("window.bindings.enabled") .. "</COL>"
-    local disabled_text = "<COL RED>" .. language.get("window.bindings.disabled") .. "</COL>"
-    if type(on_value) == "number" then
-        enabled_text = "<COL YEL>" .. string.gsub(language.get("window.bindings.set_to"), "%%d", on_value) .. "</COL>"
-    end
-
-    -- Find module
-    local module_index
-    for key, value in pairs(modules) do
-        if modules[key].title == path[1] then
-            module_index = key
-        end
-    end
-    table.remove(path, 1) -- Remove Module name
-    table.remove(path, 1) -- Remove "data" from path
-
-    local function toggle_boolean(module_data, path, on_value)
-        local target = module_data
-        for i = 1, #path - 1 do
-            target = target[path[i]]
-        end
-        target[path[#path]] = not target[path[#path]]
-        utils.send_message(bindings.get_formatted_title(data.path) .. " " .. (target[path[#path]] and enabled_text or disabled_text))
-    end
-
-    local function toggle_number(module_data, path, on_value)
-        local target = module_data
-        for i = 1, #path - 1 do
-            target = target[path[i]]
-        end
-        if target[path[#path]] == -1 then
-            target[path[#path]] = on_value
-            utils.send_message(bindings.get_formatted_title(data.path) .. " " .. enabled_text)
-        else
-            target[path[#path]] = -1
-            utils.send_message(bindings.get_formatted_title(data.path) .. " " .. disabled_text)
-        end
-    end
-
-    if type(on_value) == "boolean" then
-        toggle_boolean(modules[module_index].data, path, on_value)
-    elseif type(on_value) == "number" then
-        toggle_number(modules[module_index].data, path, on_value)
-    end
-
-end
--- ================= Popup =====================
-
--- Popup updating function
-function bindings.popup_update()
-    if popup.open then
-        if popup.listening then
-            -- Get Currently pressed
-            local current = popup.device == 1 and bindings.get_current_buttons() or bindings.get_current_keys_with_name()
-
-            -- If currently pressing buttons
-            if #current > 0 then
-                if not popup.binding then
-                    popup.binding = {}
-                end
-
-                popup.binding = current
-
-                -- Add the new inputs to the binding list
-                -- for _, input in pairs(current) do
-                --     local in_list = false
-                --     for _, binding in pairs(popup.binding) do
-                --         if binding.code == input.code then
-                --             in_list = true
-                --         end
-                --     end
-                --     if not in_list then
-                --         table.insert(popup.binding, input)
-                --     end
-                -- end
-            elseif #current == 0 and popup.binding and #popup.binding > 0 then
-                popup.listening = false
-            end
-        end
-    end
-end
-
--- Open the popup for the given device (1 = Gamepad, 2 = Keyboard)
-function bindings.popup_open(device)
-    bindings.popup_reset()
-    popup.open = true
-    popup.device = device
-end
-
--- Close the popup and reset fields
-function bindings.popup_close()
-    imgui.close_current_popup()
-    bindings.popup_reset()
-end
-
--- Reset the popup fields
-function bindings.popup_reset()
-    popup = {
-        open = false,
-        device = 0,
-        listening = false,
-        path = nil,
-        on = true,
-        binding = {}
+--- Add the keyboard bindings
+--- @param keys The keys to bind
+--- @param callback The function to call when the keys are pressed
+function bindings.add_keyboard(keys, callback)
+    local data = {
+        input = keys,
+        callback = callback
     }
+    table.insert(keyboard_bindings.bindings, data)
 end
 
--- Draw the popup
-function bindings.popup_draw()
-    if popup.open then
-        local popup_size = Vector2f.new(350, 145)
-        -- If a path has been chosen, make the window taller
-        if popup.path ~= nil then
-            popup_size.y = 190
+--- Add the controller bindings
+--- @param buttons The buttons to bind
+--- @param callback The function to call when the buttons are pressed
+function bindings.add_controller(buttons, callback)
+    local data = {
+        input = buttons,
+        callback = callback
+    }
+    table.insert(controller_bindings.bindings, data)
+end
+
+--- Add the bindings depending on the device
+--- @param device The device to bind to (1 = Controller, 2 = Keyboard)
+--- @param input The input to bind
+--- @param callback The function to call when the input is pressed
+function bindings.add(device, input, callback)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return bindings.add_controller(input, callback)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return bindings.add_keyboard(input, callback)
+    end
+    return false
+end
+
+--- Get the bindings for the keyboard
+--- @return An array of the keyboard bindings in {input, callback} format
+function bindings.get_keyboard_bindings()
+    return keyboard_bindings.bindings
+end
+
+--- Get the bindings for the controller
+--- @return An array of the controller bindings in {input, callback} format
+function bindings.get_controller_bindings()
+    return controller_bindings.bindings
+end
+
+--- Get the bindings depending on the device
+--- @param device The device to get the bindings for (1 = Controller, 2 = Keyboard)
+--- @return An array of the bindings in {input, callback} format
+function bindings.get_bindings(device)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return bindings.get_controller_bindings()
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return bindings.get_keyboard_bindings()
+    end
+    return {}
+end
+
+--- Get the binding depending on the device
+--- @param device The device to get the binding for (1 = Controller, 2 = Keyboard)
+--- @param input The input to get the binding for
+--- @return The binding in {input, callback} format
+function bindings.get_binding(device, input)
+    local bindings_list = bindings.get_bindings(device)
+    for _, binding in pairs(bindings_list) do
+        if binding.input == input then
+            return binding
         end
-        imgui.set_next_window_size(popup_size, 1 + 256)
-        imgui.begin_window("buffer_bindings", nil, 1)
-        imgui.indent(10)
-        imgui.spacing()
-        imgui.spacing()
+    end
+    return nil
+end
 
-        -- Change title depending on device
-        if popup.device == 1 then
-            imgui.text(language.get("window.bindings.add_gamepad"))
-        else
-            imgui.text(language.get("window.bindings.add_keyboard"))
+--- Apply data to the binding
+--- @param device The device to apply the data to (1 = Controller, 2 = Keyboard)
+--- @param input The input to apply the data to
+--- @param data The data to apply to the binding
+--- @return true if the binding was found and data was applied, false otherwise
+function bindings.apply_data(device, input, data)
+   local binding = bindings.get_binding(device, input)
+    
+   if binding then
+        for k, v in pairs(data) do
+            binding[k] = v
         end
-        imgui.separator()
-        imgui.spacing()
-        imgui.spacing()
+        return true
+    end
+    return false
+end
 
-        -- If no path has been chosen use the default text from the language file, otherwise display the path selected
-        local bindings_text = language.get("window.bindings.choose_modification")
-        if popup.path ~= nil then
-            bindings_text = bindings.get_formatted_title(popup.path)
+
+--- Remove the keyboard binding
+--- @param keys The keys to unbind
+function bindings.remove_keyboard(keys)
+    for i, data in pairs(keyboard_bindings.bindings) do
+        if data.input == keys then
+            table.remove(keyboard_bindings.bindings, i)
         end
-        if imgui.begin_menu(bindings_text) then
-            for _, module in pairs(modules) do
-                if imgui.begin_menu(language.get(module.title .. ".title")) then
-                    bindings.popup_draw_menu(module, module.title)
-                    imgui.end_menu()
-                end
-            end
-            imgui.end_menu()
-        end
-        imgui.same_line()
-        imgui.text("          ")
-        imgui.spacing()
-
-        -- If a path has been chosen show the option for the on value
-        if popup.path ~= nil then
-            imgui.spacing()
-
-            -- On value for numbers - only allow numbers
-            if type(popup.on) == "number" then
-                imgui.text(language.get("window.bindings.on_value") .. ": ")
-                imgui.same_line()
-                local changed, on_value = imgui.input_text("     ", popup.on, 1)
-                if changed and on_value ~= "" and tonumber(on_value) then
-                    popup.on = tonumber(on_value)
-                end
-
-                -- On value for booleans, read only
-            elseif type(popup.on) == "boolean" then
-                imgui.text(language.get("window.bindings.on_value") .. ": ")
-                imgui.same_line()
-                imgui.begin_disabled()
-                imgui.input_text("   ", "true/false", 16384)
-                imgui.end_disabled()
-            end
-            imgui.spacing()
-            imgui.spacing()
-            imgui.separator()
-        end
-        imgui.spacing()
-
-        -- If not listening for inputs display default to listen from language file
-        local listening_button_text = language.get("window.bindings.to_listen")
-
-        -- If some inputs have been pressed, display them in a readable format
-        if popup.binding and utils.getLength(popup.binding) > 0 then
-            listening_button_text = ""
-
-            for i, binding in pairs(popup.binding) do
-                listening_button_text = listening_button_text .. binding.name
-                if i < #popup.binding then
-                    listening_button_text = listening_button_text .. " + "
-                end
-            end
-
-            if popup.listening then
-                listening_button_text = listening_button_text .. " + ..."
-            end
-
-            -- If no inputs pressed use default listening from language file
-        elseif popup.listening then
-            listening_button_text = language.get("window.bindings.listening")
-        end
-
-        if imgui.button(listening_button_text) then
-            popup.listening = true
-            popup.binding = nil
-        end
-        imgui.spacing()
-        imgui.separator()
-        imgui.spacing()
-
-        if imgui.button(language.get("window.bindings.cancel")) then
-            bindings.popup_close()
-        end
-        if popup.path and popup.binding then
-            imgui.same_line()
-            if imgui.button(language.get("window.bindings.save")) then
-                local path = popup.path
-                -- add .data after the fist . in the path
-                path = string.gsub(path, "%.", ".data.", 1)
-                bindings.add(popup.device, popup.binding, path, popup.on)
-                bindings.popup_close()
-            end
-        end
-        imgui.unindent(10)
-        imgui.end_window()
     end
 end
 
-function bindings.popup_draw_menu(menu, language_path)
-    menu = menu or modules
-    language_path = string.gsub(language_path, "%.data", "") or ""
+--- Remove the controller binding
+--- @param buttons The buttons to unbind
+function bindings.remove_controller(buttons)
+    for i, data in pairs(controller_bindings.bindings) do
+        if data.input == buttons then
+            table.remove(controller_bindings.bindings, i)
+        end
+    end
+end
 
-    for key, value in pairs(menu) do
+--- Remove the bindings depending on the device
+--- @param device The device to unbind from (1 = Controller, 2 = Keyboard)
+--- @param input The input to unbind
+function bindings.remove(device, input)
+    if device == DEVICE_TYPES.CONTROLLER then
+        bindings.remove_controller(input)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        bindings.remove_keyboard(input)
+    end
+end
 
-        -- If value is a table, then go deeper in the menu
-        if type(value) == "table" then
-            if key ~= "old" and key ~= "hidden" then
-                if key == "data" then
-                    bindings.popup_draw_menu(value, language_path .. "." .. key)
-                elseif imgui.begin_menu(language.get(language_path .. "." .. key .. ".title")) then
-                    bindings.popup_draw_menu(value, language_path .. "." .. key)
-                    imgui.end_menu()
-                end
+--- Check if the device is a keyboard
+--- @return true/false if the keyboard is currently in use
+function bindings.is_keyboard()
+    return keyboard_bindings.is_currently_in_use()
+end
 
-            end
+--- Check if the device is a controller
+--- @return true/false if the controller is currently in use
+function bindings.is_controller()
+    return controller_bindings.is_currently_in_use()
+end
 
-            -- If the value is a boolean or number, display the key
-        elseif type(value) == "boolean" or type(value) == "number" then
-            if imgui.menu_item(language.get(language_path .. "." .. key), nil, false, true) then
-                popup.path = language_path .. "." .. key
-                if type(value) == "number" then
-                    popup.on = tonumber(1)
-                end
-                if type(value) == "boolean" then
-                    popup.on = true
-                end
+--- Get the current device type
+--- @return The device type (0 = None, 1 = Controller, 2 = Keyboard)
+function bindings.get_current_device()
+    if bindings.is_keyboard() then
+        return DEVICE_TYPES.KEYBOARD
+    end
+    if bindings.is_controller() then
+        return DEVICE_TYPES.CONTROLLER
+    end
+    return DEVICE_TYPES.NONE
+end
+
+--- Get the current bindings
+--- @return The current bindings in an array of {name, code} depending on the current device
+--- Returns an empty array if no bindings are found
+function bindings.get_current()
+    if bindings.is_keyboard() then
+        return keyboard_bindings.get_current()
+    end
+    if bindings.is_controller() then
+        return controller_bindings.get_current()
+    end
+    return {}
+end
+
+--- Get the controller type
+--- @return The controller type (0 = None, 1 = Playstation, 2 = Xbox)
+function bindings.get_controller_type()
+    return controller_type
+end
+
+--- Get the name of the key or button from the codes
+--- @param device The device type (1 = Controller, 2 = Keyboard)
+--- @param code The code of the key or button
+--- @return The name of the key or button in {name, code} format
+--- Returns "Unknown" if not found
+function bindings.get_name(device, code)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return controller_bindings.get_name(code)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return keyboard_bindings.get_name(code)
+    end
+end
+
+--- Get the names of the keys or buttons from the codes in an array of {name, code}
+-- @param device The device type (1 = Controller, 2 = Keyboard)
+--- @param codes The array of codes to get the names for
+--- @return An array of the keys or buttons in {name, code} format
+--- Returns "Unknown" if not found
+function bindings.get_names(device, codes)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return controller_bindings.get_names(codes)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return keyboard_bindings.get_names(codes)
+    end
+end
+
+--- Get the code from the name
+--- @param device The device type (1 = Controller, 2 = Keyboard)
+--- @param name The name of the key or button
+--- @return The code of the key or button
+--- Returns -1 if not found
+function bindings.get_code_from_name(device, name)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return controller_bindings.get_code_from_name(name)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return keyboard_bindings.get_code_from_name(name)
+    end
+end
+
+--- Get the callback for the keyboard input
+--- @param input The input to get the callback for
+--- @return The callback function for the input
+--- Returns nil if not found
+function bindings.get_keyboard_callback(input)
+    for _, data in pairs(keyboard_bindings.bindings) do
+        if data.input == input then
+            return data.data
+        end
+    end
+    return nil
+end
+
+--- Get the callback for the controller input
+--- @param input The input to get the callback for
+--- @return The callback function for the input
+--- Returns nil if not found
+function bindings.get_controller_callback(input)
+    for _, data in pairs(controller_bindings.bindings) do
+        if data.input == input then
+            return data.data
+        end
+    end
+    return nil
+end
+
+--- Get the callback for the input
+--- @param device The device type (1 = Controller, 2 = Keyboard)
+--- @param input The input to get the callback for
+--- @return The callback function for the input
+--- Returns nil if not found
+function bindings.get_callback(device, input)
+    if device == DEVICE_TYPES.CONTROLLER then
+        return bindings.get_controller_callback(input)
+    elseif device == DEVICE_TYPES.KEYBOARD then
+        return bindings.get_keyboard_callback(input)
+    else
+        return nil
+    end
+end
+
+--- Update the bindings and run the callback if the input is triggered
+--- Run this function in re.on_frame
+function bindings.update()
+    if bindings.is_keyboard() then
+        for _, data in pairs(keyboard_bindings.bindings) do
+            if keyboard_bindings.is_triggered(data.input) then
+                data.callback()
             end
         end
     end
+
+    if bindings.is_controller() then
+        for _, data in pairs(controller_bindings.bindings) do
+            if controller_bindings.is_triggered(data.input) then
+                data.callback()
+            end
+        end
+    end
+
+    for _, listener in pairs(bindings.listeners) do
+        listener:update()
+    end
+
+    -- Update previous data
+    controller_bindings.previous = controller_bindings.get_current()
+    keyboard_bindings.previous = keyboard_bindings.get_current()
 end
 
 return bindings

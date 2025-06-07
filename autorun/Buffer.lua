@@ -1,4 +1,4 @@
-local version = "0.1.0"
+local version = "0.1.2"
 
 local isWindowOpen, wasOpen = false, false
 
@@ -6,10 +6,11 @@ local isWindowOpen, wasOpen = false, false
 local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 local language = require("Buffer.Misc.Language")
-local bindings = require("Buffer.Misc.Bindings") 
+local bindings = require("Buffer.Misc.BindingsHelper")
 
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
+local miscellaneous = require("Buffer.Modules.Miscellaneous")
 
 -- Weapon Modules
 local greatSword = require("Buffer.Modules.GreatSword")
@@ -29,6 +30,7 @@ local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
 
 local modules = {
     character,
+    miscellaneous,
     greatSword,
     -- swordAndShield,
     dualBlades,
@@ -48,8 +50,9 @@ local modules = {
 -- Load the languages
 language.init()
 
--- Init the key and button binds
-bindings.init(modules)
+-- Load the bindings
+bindings.load(modules)
+
 
 -- Init the modules, and load their config sections
 for i, module in pairs(modules) do
@@ -91,16 +94,18 @@ re.on_draw_ui(function()
                 imgui.spacing()
                 if imgui.begin_menu("   " .. language.get(languagePrefix .. "keyboard")) then
                     imgui.spacing()
-                    if #bindings.keys > 0 then
+                    local device = bindings.DEVICE_TYPES.KEYBOARD
+                    local keyboardBindings = bindings.get_bindings(device)
+                    log.debug(json.dump_string(keyboardBindings))
+                    if #keyboardBindings > 0 then
                         imgui.begin_table("bindings_keyboard", 3, nil, nil, nil)
 
-                        for k, v in pairs(bindings.keys) do
+                        for i, bind in pairs(keyboardBindings) do
                             imgui.table_next_row()
                             imgui.table_next_column()
-                            local btns = bindings.get_keys_with_name(v.input)
-                            local data = v.data
+                            local btns = bindings.get_names(device, bind.input)
                             
-                            local title = bindings.get_formatted_title(data.path)
+                            local title = bindings.get_setting_name_from_path(bind.path)
                             imgui.text("   " .. title)
                             imgui.table_next_column()
                             local bind_string = ""
@@ -112,8 +117,8 @@ re.on_draw_ui(function()
 
                             imgui.text("   [ " .. bind_string .. " ]     ")
                             imgui.table_next_column()
-                            if imgui.button(language.get(languagePrefix .. "remove").. " "..tostring(k)) then 
-                                bindings.remove(2, k) end
+                            if imgui.button(language.get(languagePrefix .. "remove").. " ".. tostring(i)) then 
+                                bindings.remove(device, i) end
                             imgui.same_line()
                             imgui.text("  ")
                         end
@@ -121,27 +126,27 @@ re.on_draw_ui(function()
                         imgui.end_table()
                         imgui.separator()
                     end
-
                     if imgui.button("   " .. language.get(languagePrefix .. "add_keyboard"), "", false) then bindings.popup_open(2) end
                     imgui.spacing()
                     imgui.end_menu()
                 end
                 if imgui.begin_menu("   " .. language.get(languagePrefix .. "gamepad")) then
                     imgui.spacing()
-                    if #bindings.btns > 0 then
+                    local device = bindings.DEVICE_TYPES.CONTROLLER
+                    local gamepadBindings = bindings.get_bindings(device)
+                    if #gamepadBindings > 0 then
                         imgui.begin_table("bindings_gamepad", 3, nil, nil, nil)
 
-                        for k, v in pairs(bindings.btns) do
+                        for i, bind in pairs(gamepadBindings) do
                             imgui.table_next_row()
                             imgui.table_next_column()
-                            local btns = bindings.get_button_names(v.input)
-                            local data = v.data
-                            
-                            local title = bindings.get_formatted_title(data.path)
+                            local btns = bindings.get_names(device, bind.input)
+
+                            local title = bindings.get_setting_name_from_path(bind.path)
                             imgui.text("   " .. title)
                             imgui.table_next_column()
                             local bind_string = ""
-                            
+
                             for i, bind in pairs(btns) do
                                 bind_string = bind_string .. bind.name
                                 if i < #btns then bind_string = bind_string .. " + " end
@@ -149,8 +154,8 @@ re.on_draw_ui(function()
 
                             imgui.text("   [ " .. bind_string .. " ]     ")
                             imgui.table_next_column()
-                            if imgui.button(language.get(languagePrefix .. "remove").. " ".. tostring(k)) then 
-                                bindings.remove(1, k) end
+                            if imgui.button(language.get(languagePrefix .. "remove").. " ".. tostring(i)) then 
+                                bindings.remove(device, i) end
                             imgui.same_line()
                             imgui.text("  ")
                         end
@@ -158,10 +163,11 @@ re.on_draw_ui(function()
                         imgui.end_table()
                         imgui.separator()
                     end
-                    if imgui.button("   " .. language.get(languagePrefix .. "add_gamepad")) then bindings.popup_open(1) end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add_gamepad"), "", false) then bindings.popup_open(1) end
                     imgui.spacing()
                     imgui.end_menu()
                 end
+                
 
                 imgui.spacing()
                 imgui.end_menu()

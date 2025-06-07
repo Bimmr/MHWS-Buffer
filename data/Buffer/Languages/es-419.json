@@ -33,6 +33,14 @@
     "base": {
         "disabled": "Desactivado"
     },
+    "miscellaneous": {
+        "title": "Misceláneos",
+        "akuma": {
+            "title": "Akuma",
+            "instant_drive_gauge": "Indicador Drive Instantáneo",
+            "gou_hadoken_max_level": "Gou Hadoken Nivel Máximo"
+        }
+    },
     "character": {
         "title": "Personaje",
         "stamina": {

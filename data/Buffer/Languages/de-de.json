@@ -33,7 +33,14 @@
     "base": {
         "disabled": "Deaktiviert"
     },
-
+    "miscellaneous": {
+        "title": "Verschiedenes",
+        "akuma": {
+            "title": "Akuma",
+            "instant_drive_gauge": "Sofortiges Drive-Messgerät",
+            "gou_hadoken_max_level": "Gou Hadoken Max Stufe"
+        }
+    },
     "character": {
         "title": "Charakter",
         "stamina": {
