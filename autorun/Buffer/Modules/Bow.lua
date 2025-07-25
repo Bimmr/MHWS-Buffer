@@ -5,7 +5,8 @@ local Module = {
         charge_level = -1,
         all_arrow_types = false,
         unlimited_bottles = false,
-        max_trick_arrow_gauge = false
+        max_trick_arrow_gauge = false,
+        unlimited_bladescale = false
     },
     old = {}
 }
@@ -108,7 +109,7 @@ function Module.init_hooks()
         -- Unlimited bottles
         if Module.data.unlimited_bottles then
             local tetrad_shot_active = false
-            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
+            local skills = managed:get_Hunter():get_HunterSkill():get_SkillSyncInfos():get_field("_items")
 
             for i = 0, skills:get_Length() - 1 do
                 local skill = skills:get_Item(i)
@@ -129,6 +130,19 @@ function Module.init_hooks()
         -- Trick Arrow Gauge 
         if Module.data.max_trick_arrow_gauge then
             managed:get_field("<ArrowGauge>k__BackingField"):set_field("_Value", 100)
+        end
+
+        -- Bladescale Loading
+        if Module.data.unlimited_bladescale then
+            local skills = managed:get_Hunter():get_HunterSkill():get_field("_items")
+
+            for i = 0, skills:get_Length() - 1 do
+                local skill = skills:get_Item(i)
+                if skill and skill:get_field("SkillType") == 218 then -- Bladescale Loading
+                    managed:set_field("<Skill218BottleNum>k__BackingField>", 3)
+                    break
+                end
+            end
         end
 
     end, function(retval) end)
@@ -153,9 +167,11 @@ function Module.draw()
             imgui.same_line()
             utils.tooltip(language.get(languagePrefix .. "tetrad_shot_active"))
         end
-        any_changed = any_changed or changed
 
         changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
+        any_changed = any_changed or changed
+
+        changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
         any_changed = any_changed or changed
 
         if any_changed then config.save_section(Module.create_config_section()) end
