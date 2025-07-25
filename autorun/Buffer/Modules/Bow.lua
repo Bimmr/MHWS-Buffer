@@ -161,16 +161,24 @@ function Module.draw()
         changed, Module.data.all_arrow_types = imgui.checkbox(language.get(languagePrefix .. "all_arrow_types"), Module.data.all_arrow_types)
         any_changed = any_changed or changed
 
+        imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
+        imgui.table_next_row()
+        imgui.table_next_column()
+
         changed, Module.data.unlimited_bottles = imgui.checkbox(language.get(languagePrefix .. "unlimited_bottles"), Module.data.unlimited_bottles)
         if tetrad_shot_active then
             imgui.same_line()
             utils.tooltip(language.get(languagePrefix .. "tetrad_shot_active"))
         end
 
-        changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
-        any_changed = any_changed or changed
+        imgui.table_next_column()
 
         changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
+        any_changed = any_changed or changed
+
+        imgui.end_table()
+
+        changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
         any_changed = any_changed or changed
 
         if any_changed then config.save_section(Module.create_config_section()) end
