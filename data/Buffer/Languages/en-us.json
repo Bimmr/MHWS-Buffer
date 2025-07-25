@@ -186,6 +186,7 @@
         "all_arrow_types": "All arrow types",
         "unlimited_bottles": "Unlimited bottles",
         "tetrad_shot_active": "Tetrad shot support active",
+        "unlimited_bladescale": "Unlimited bladescale bottles",
         "max_trick_arrow_gauge": "Max trick arrow gauge"
     },
     "light_bowgun": {
@@ -195,6 +196,7 @@
         "max_eagle_shot": "Max eagle shot",
         "instant_eagle_shot_charge": "Instant eagle shot charge",
         "unlimited_ammo": "Unlimited ammo",
+        "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
         "no_recoil": "No recoil"
     },
@@ -205,6 +207,7 @@
         "max_gatling_hits": "Max gatling hits",
         "max_gatling_hits_tooltip": "Only affects Wyvernheart Ignition",
         "unlimited_ammo": "Unlimited ammo",
+        "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
         "no_recoil": "No recoil"
     },

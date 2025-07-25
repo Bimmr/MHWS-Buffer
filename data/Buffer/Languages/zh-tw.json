@@ -188,6 +188,7 @@
         "all_arrow_types": "可填充所有瓶",
         "unlimited_bottles": "無限瓶",
         "tetrad_shot_active": "啟用第四射擊",
+        "unlimited_bladescale": "Unlimited bladescale bottles",
         "max_trick_arrow_gauge": "無限特殊箭計量表"
     },
     "light_bowgun": {
@@ -197,6 +198,7 @@
         "max_eagle_shot": "無限集中特效彈",
         "instant_eagle_shot_charge": "最大集中特效彈續力",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },
@@ -207,6 +209,7 @@
         "max_gatling_hits": "最大龍熱機關龍累積傷害",
         "max_gatling_hits_tooltip": "僅影響龍熱機關龍彈",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },

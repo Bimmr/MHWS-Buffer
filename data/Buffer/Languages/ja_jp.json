@@ -184,6 +184,7 @@
         "all_arrow_types": "全ての矢タイプ",
         "unlimited_bottles": "ビン無限",
         "tetrad_shot_active": "四連射サポート有効",
+        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
         "max_trick_arrow_gauge": "トリックアローゲージ最大"
     },
     "light_bowgun": {
@@ -193,6 +194,7 @@
         "max_eagle_shot": "集中特攻弾【射鵰】最大",
         "instant_eagle_shot_charge": "集中特攻弾【射鵰】即時溜め",
         "unlimited_ammo": "弾無限",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },
@@ -203,6 +205,7 @@
         "max_gatling_hits": "ガトリングヒット数最大",
         "max_gatling_hits_tooltip": "竜熱機関竜弾にのみ影響",
         "unlimited_ammo": "弾無限",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },

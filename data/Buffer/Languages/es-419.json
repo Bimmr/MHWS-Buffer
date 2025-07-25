@@ -187,6 +187,7 @@
         "all_arrow_types": "Todos los tipos de flechas",
         "unlimited_bottles": "Frascos ilimitados",
         "tetrad_shot_active": "Disparo Tétrado activo",
+        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
         "max_trick_arrow_gauge": "Medidor de flecha truco al máximo"
     },
     "light_bowgun": {
@@ -196,6 +197,7 @@
         "max_eagle_shot": "Ataque de águila al máximo",
         "instant_eagle_shot_charge": "Carga instantánea del disparo de águila",
         "unlimited_ammo": "Munición ilimitada",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso"
     },
@@ -206,6 +208,7 @@
         "max_gatling_hits": "Ignición coraje wyvern al máximo",
         "max_gatling_hits_tooltip": "Solo afecta a Ignición coraje wyvern",
         "unlimited_ammo": "Munición ilimitada",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso"
     },

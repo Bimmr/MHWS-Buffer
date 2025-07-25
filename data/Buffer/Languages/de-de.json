@@ -188,6 +188,7 @@
         "all_arrow_types": "Alle Pfeilarten",
         "unlimited_bottles": "Unbegrenzte Flaschen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
+        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
         "max_trick_arrow_gauge": "Max Trick Pfeilstaerke"
     },
     "light_bowgun": {
@@ -197,6 +198,7 @@
         "max_eagle_shot": "Max Adler Schuss",
         "instant_eagle_shot_charge": "Maximale Adlerschussladung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
@@ -207,6 +209,7 @@
         "max_gatling_hits": "Maximale Gattertreffer",
         "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zuendung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
