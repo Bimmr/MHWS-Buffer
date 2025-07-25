@@ -109,7 +109,7 @@ function Module.init_hooks()
         -- Unlimited bottles
         if Module.data.unlimited_bottles then
             local tetrad_shot_active = false
-            local skills = managed:get_Hunter():get_HunterSkill():get_SkillSyncInfos():get_field("_items")
+            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
 
             for i = 0, skills:get_Length() - 1 do
                 local skill = skills:get_Item(i)
@@ -134,12 +134,11 @@ function Module.init_hooks()
 
         -- Bladescale Loading
         if Module.data.unlimited_bladescale then
-            local skills = managed:get_Hunter():get_HunterSkill():get_field("_items")
-
+            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
             for i = 0, skills:get_Length() - 1 do
                 local skill = skills:get_Item(i)
-                if skill and skill:get_field("SkillType") == 218 then -- Bladescale Loading
-                    managed:set_field("<Skill218BottleNum>k__BackingField>", 3)
+                if skill and skill:get_SkillData():get_Index() == 201 then -- Bladescale Loading
+                    managed:set_field("<Skill218BottleNum>k__BackingField", 3)
                     break
                 end
             end
