@@ -8,6 +8,9 @@ local Module = {
         max_trick_arrow_gauge = false,
         unlimited_bladescale = false
     },
+    hidden={
+        tetrad_shot_active = false
+    },
     old = {}
 }
 
@@ -108,19 +111,18 @@ function Module.init_hooks()
 
         -- Unlimited bottles
         if Module.data.unlimited_bottles then
-            local tetrad_shot_active = false
+            Module.hidden.tetrad_shot_active = false
             local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
 
             for i = 0, skills:get_Length() - 1 do
                 local skill = skills:get_Item(i)
                 if skill and skill:get_SkillData():get_Index() == 38 then -- Tetrad Shot
-                    tetrad_shot_active = true
+                     Module.hidden.tetrad_shot_active = true
                     break
                 end
             end
 
-            local max_bottle_num = tetrad_shot_active and 4 or 10
-            tetrad_shot_active = tetrad_shot_active
+            local max_bottle_num =  Module.hidden.tetrad_shot_active and 4 or 10
 
             managed:set_field("<BottleNum>k__BackingField", max_bottle_num)
             managed:set_field("<BottleShotCount>k__BackingField", 10 - max_bottle_num)
@@ -166,7 +168,7 @@ function Module.draw()
         imgui.table_next_column()
 
         changed, Module.data.unlimited_bottles = imgui.checkbox(language.get(languagePrefix .. "unlimited_bottles"), Module.data.unlimited_bottles)
-        if tetrad_shot_active then
+        if  Module.hidden.tetrad_shot_active then
             imgui.same_line()
             utils.tooltip(language.get(languagePrefix .. "tetrad_shot_active"))
         end
