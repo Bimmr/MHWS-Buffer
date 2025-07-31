@@ -1,4 +1,4 @@
-local version = "0.1.1"
+local version = "0.1.3"
 
 local isWindowOpen, wasOpen = false, false
 
@@ -10,6 +10,7 @@ local bindings = require("Buffer.Misc.BindingsHelper")
 
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
+local miscellaneous = require("Buffer.Modules.Miscellaneous")
 
 -- Weapon Modules
 local greatSword = require("Buffer.Modules.GreatSword")
@@ -29,6 +30,7 @@ local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
 
 local modules = {
     character,
+    miscellaneous,
     greatSword,
     -- swordAndShield,
     dualBlades,

@@ -19,181 +19,229 @@ Buffs, Modifications, and Cheats for weapons and stats.
 3. Launch your game. <small>(The menu will show up when the "Script Generated UI" tab is open in REFramework.)</small>
 
 ## Features
+<details>
+<summary><strong>Character</strong></summary>
+
 <table>
-   <tr>
-      <td style="vertical-align: top">
-         <ul>
-            <li>Character
-               <ul>
-                  <li>Health
-                     <ul>
-                        <li>Max health</li>
-                        <li>Unlimited health</li>
-                        <li>Healing</li>
-                     </ul>
-                  </li>
-                  <li>Stamina
-                     <ul>
-                        <li>Max stamina</li>
-                        <li>Unlimited stamina</li>
-                     </ul>
-                  </li>
-                  <li>Blights & Conditions
-                     <ul>
-                        <li>Blights
-                           <ul>
-                              <li>Fire</li>
-                              <li>Thunder</li>
-                              <li>Water</li>
-                              <li>Ice</li>
-                              <li>Dragon</li>
-                              <li>All</li>
-                           </ul>
-                        </li>
-                        <li>Conditions
-                           <ul>
-                              <li>Poison</li>
-                              <li>Stench</li>
-                              <li>Blast</li>
-                              <li>Bleed</li>
-                              <li>Defense Down</li>
-                              <li>Frenzy</li>
-                              <li>Stun</li>
-                              <li>Paralyze</li>
-                              <li>Sleep</li>
-                              <li>Sticky</li>
-                              <li>Frozen</li>
-                              <li>All</li>
-                           </ul>
-                        </li>
-                     </ul>
-                  </li>
-                  <li>Item Buffs
-                     <ul>
-                        <li>Might pill</li>
-                        <li>Adamant pill</li>
-                        <li>Demon powder</li>
-                        <li>Hardshell powder</li>
-                        <li>Hot drink</li>
-                        <li>Cool drink</li>
-                        <li>Dash juice</li>
-                        <li>Immunizer</li>
-                     </ul>
-                  </li>
-                  <li>Unlimited Sharpness</li>
-               </ul>
-            </li>
-         </ul>
-      </td>
-      <td style="vertical-align: top">
-         <ul>
-            <li>Great Sword
-               <ul>
-                  <li>True Charge boost</li>
-                  <li>Instant charge</li>
-               </ul>
-            </li>
-            <li>Dual Blades
-               <ul>
-                  <li>Full demon gauge</li>
-                  <li>Activate demon boost</li>
-               </ul>
-            </li>
-            <li>Long Sword
-               <ul>
-                  <li>Max aura gauge</li>
-                  <li>Max spirit gauge</li>
-                  <li>Aura level</li>
-               </ul>
-            </li>
-            <li>Hammer
-               <ul>
-                  <li>Instant charge</li>
-               </ul>
-            </li>
-            <li>Lance
-               <ul>
-                  <li>Counter charge level</li>
-                  <li>Rush level</li>
-                  <li>Infinite backstep</li>
-               </ul>
-            </li>
-            <li>Gunlance
-               <ul>
-                  <li>Free charge shot</li>
-                  <li>Shell level</li>
-                  <li>Infinite wyvern fire</li>
-                  <li>Infinite backstep</li>
-               </ul>
-            </li>
-            <li>Switch Axe
-               <ul>
-                  <li>Max charge</li>
-                  <li>Max sword charge</li>
-                  <li>Powered axe</li>
-               </ul>
-            </li>
-            <li>Charge Blade
-               <ul>
-                  <li>Max phials</li>
-                  <li>Overcharge phials</li>
-                  <li>Sword enhanced</li>
-                  <li>Axe enhanced</li>
-               </ul>
-            </li>
-            <li>Bow
-               <ul>
-                  <li>Charge level</li>
-                  <li>All arrow types</li>
-                  <li>Unlimited bottles</li>
-                  <li>Max trick arrow gauge</li>
-               </ul>
-            </li>
-         </ul>
-      </td>
-      <td style="vertical-align: top">
-         <ul>
-            <li>Insect Glaive
-               <ul>
-                  <li>Kinsect
-                     <ul>
-                        <li>Power</li>
-                        <li>Speed</li>
-                        <li>Recovery</li>
-                     </ul>
-                  </li>
-                  <li>Unlimited Stamina</li>
-                  <li>Red</li>
-                  <li>White</li>
-                  <li>Orange</li>
-                  <li>Infinite air attacks</li>
-                  <li>Max charge</li>
-               </ul>
-            </li>
-            <li>Light Bowgun
-               <ul>
-                  <li>Max special ammo</li>
-                  <li>Max rapid shot</li>
-                  <li>Max eagle shot</li>
-                  <li>Max eagle shot charge</li>
-               </ul>
-            </li>
-            <li>Heavy Bowgun
-               <ul>
-                  <li>Max special ammo</li>
-                  <li>Max wyvern howl</li>
-                  <li>Max gatling hits</li>
-               </ul>
-            </li>
-         </ul>
-      </td>
-   </tr>
+<tr>
+<td style="vertical-align: top">
+
+**Health**
+- Max health  
+- Unlimited health  
+- Healing  
+
+**Stamina**  
+- Max stamina  
+- Unlimited stamina  
+
+**Mantles**  
+- Instant cooldown  
+- Unlimited duration  
+
+**Invincible**  
+- Unlimited Sharpness  
+- Unlimited Consumables  
+- Unlimited Slinger Ammo  
+
+</td>
+<td style="vertical-align: top">
+
+**Blights**  
+- Fire  
+- Thunder  
+- Water  
+- Ice  
+- Dragon  
+- All  
+
+**Conditions**  
+- Poison  
+- Stench  
+- Blast  
+- Bleed  
+- Defense Down  
+- Frenzy  
+- Stun  
+- Paralyze  
+- Sleep  
+- Sticky  
+- Frozen  
+- Bubble  
+- All  
+
+</td>
+<td style="vertical-align: top">
+
+**Item Buffs**  
+- Might seed  
+- Might pill  
+- Demon drug  
+- Mega demondrug  
+- Demon powder  
+- Hot drink  
+- Dash juice  
+- Adamant seed  
+- Adamant pill  
+- Armor skin  
+- Mega armorskin  
+- Hardshell powder  
+- Cool drink  
+- Immunizer  
+
+</td>
+</tr>
 </table>
+
+</details>
+
+
+<details>
+<summary><strong>Miscellaneous</strong></summary>
+
+- **Akuma**
+  - Unlimited Drive Impact  
+  - Gou Hadoken Max Level  
+
+</details>
+
+<details>
+<summary><strong>Great Sword</strong></summary>
+
+- True Charge boost  
+- Instant charge  
+
+</details>
+
+<details>
+<summary><strong>Dual Blades</strong></summary>
+
+- Full demon gauge  
+- Activate demon boost  
+
+</details>
+
+<details>
+<summary><strong>Long Sword</strong></summary>
+
+- Aura level  
+- Max aura gauge  
+- Max spirit gauge  
+
+</details>
+
+<details>
+<summary><strong>Hammer</strong></summary>
+
+- Instant charge  
+
+</details>
+
+<details>
+<summary><strong>Hunting Horn</strong></summary>
+
+- Unlimited echo bubbles  
+
+</details>
+
+<details>
+<summary><strong>Lance</strong></summary>
+
+- Counter charge level  
+- Rush level  
+- Infinite backstep  
+
+</details>
+
+<details>
+<summary><strong>Gunlance</strong></summary>
+
+- Instant charge  
+- Free charge shot  
+- Shell level  
+- Infinite wyvern fire  
+- Infinite backstep  
+
+</details>
+
+<details>
+<summary><strong>Switch Axe</strong></summary>
+
+- Max charge  
+- Max sword charge  
+- Powered axe  
+
+</details>
+
+<details>
+<summary><strong>Charge Blade</strong></summary>
+
+- Max phials  
+- Overcharge phials  
+- Shield enhanced  
+- Sword enhanced  
+- Axe enhanced  
+
+</details>
+
+<details>
+<summary><strong>Insect Glaive</strong></summary>
+
+- **Kinsect**
+  - Power  
+  - Speed  
+  - Recovery  
+- Unlimited Stamina  
+- Fast charge  
+- Red Extract  
+- White Extract  
+- Orange Extract  
+- Infinite air attacks  
+- Unrestricted charge  
+
+</details>
+
+<details>
+<summary><strong>Bow</strong></summary>
+
+- Charge level  
+- All arrow types  
+- Unlimited bottles  
+- Max trick arrow gauge  
+
+</details>
+
+<details>
+<summary><strong>Light Bowgun</strong></summary>
+
+- Max special ammo  
+- Max rapid shot  
+- Max eagle shot  
+- Instant eagle shot charge  
+- Unlimited ammo  
+- No reload  
+- No recoil  
+
+</details>
+
+<details>
+<summary><strong>Heavy Bowgun</strong></summary>
+
+- Max special ammo  
+- Max wyvern howl  
+- Max gatling hits  
+- Unlimited ammo  
+- No reload  
+- No recoil  
+
+</details>
+
+
+
+
 
 <table>
    <tr>
-      <td><img src="https://staticdelivery.nexusmods.com/mods/6993/images/299/299-1741571388-775950960.png" alt="Image1"></td>
-      <td><img src="https://staticdelivery.nexusmods.com/mods/6993/images/299/299-1741571385-2091846160.png" alt="Image2"></td>
-      <td><img src="https://staticdelivery.nexusmods.com/mods/6993/images/299/299-1741571385-1197945299.png" alt="Image3"></td>
+      <td><img src="https://staticdelivery.nexusmods.com/mods/6993/images/299/299-1749396791-912163015.jpeg" alt="Buffer Mods as of 0.1.3"></td>
    </tr>
 </table>

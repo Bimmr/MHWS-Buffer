@@ -5,7 +5,8 @@ local Module = {
         charge_level = -1,
         all_arrow_types = false,
         unlimited_bottles = false,
-        max_trick_arrow_gauge = false
+        max_trick_arrow_gauge = false,
+        unlimited_bladescale = false
     },
     old = {}
 }
@@ -131,6 +132,18 @@ function Module.init_hooks()
             managed:get_field("<ArrowGauge>k__BackingField"):set_field("_Value", 100)
         end
 
+        -- Bladescale Loading
+        if Module.data.unlimited_bladescale then
+            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
+            for i = 0, skills:get_Length() - 1 do
+                local skill = skills:get_Item(i)
+                if skill and skill:get_SkillData():get_Index() == 201 then -- Bladescale Loading
+                    managed:set_field("<Skill218BottleNum>k__BackingField", 3)
+                    break
+                end
+            end
+        end
+
     end, function(retval) end)
 end
 
@@ -148,12 +161,22 @@ function Module.draw()
         changed, Module.data.all_arrow_types = imgui.checkbox(language.get(languagePrefix .. "all_arrow_types"), Module.data.all_arrow_types)
         any_changed = any_changed or changed
 
+        imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
+        imgui.table_next_row()
+        imgui.table_next_column()
+
         changed, Module.data.unlimited_bottles = imgui.checkbox(language.get(languagePrefix .. "unlimited_bottles"), Module.data.unlimited_bottles)
         if tetrad_shot_active then
             imgui.same_line()
             utils.tooltip(language.get(languagePrefix .. "tetrad_shot_active"))
         end
+
+        imgui.table_next_column()
+
+        changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
         any_changed = any_changed or changed
+
+        imgui.end_table()
 
         changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
         any_changed = any_changed or changed

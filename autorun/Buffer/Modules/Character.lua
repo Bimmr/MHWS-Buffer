@@ -356,7 +356,14 @@ function Module.init_hooks()
 
     -- Unlimited Sharpness
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireajiFromAttack(app.HitInfo)"), function(args)
-        local managed = sdk.to_managed_object(args[2])
+
+        if Module.data.unlimited_sharpness then
+            return sdk.PreHookResult.SKIP_ORIGINAL
+        end
+
+    end, function(retval) end)
+
+    sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireaji(System.Int32, System.Boolean)"), function(args)
 
         if Module.data.unlimited_sharpness then
             return sdk.PreHookResult.SKIP_ORIGINAL

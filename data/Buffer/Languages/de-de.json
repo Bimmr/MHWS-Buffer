@@ -33,7 +33,14 @@
     "base": {
         "disabled": "Deaktiviert"
     },
-
+    "miscellaneous": {
+        "title": "Verschiedenes",
+        "akuma": {
+            "title": "Akuma",
+            "instant_drive_gauge": "Sofortiges Drive-Messgerät",
+            "gou_hadoken_max_level": "Gou Hadoken Max Stufe"
+        }
+    },
     "character": {
         "title": "Charakter",
         "stamina": {
@@ -79,15 +86,15 @@
         },
         "item_buffs": {
             "title": "Gegenstandsbuffs",
-            "might_seed": "Might seed (TN)",
+            "might_seed": "Kraftsamen",
             "might_pill": "Macht Pille",
-            "adamant_seed": "Adamant seed (TN)",
+            "adamant_seed": "Hartmachersamen",
             "adamant_pill": "Adamant Pille",
-            "demon_drug": "Demon drug (TN)",
+            "demon_drug": "Daemondroge",
             "demon_powder": "Daemonenpulver",
             "hardshell_powder": "Hartschalenpulver",
             "mega_demondrug": "Megadaemonen-Droge",
-            "armor_skin": "Armor skin (TN)",
+            "armor_skin": "Ruestungshaut",
             "mega_armorskin": "Mega-Ruestungshaut",
             "cool_drink": "Kuehlendes Getraenk",
             "hot_drink": "Heisses Getraenk",
@@ -99,8 +106,8 @@
             "instant_cooldown": "Sofortige Abklingzeit",
             "unlimited_duration": "Unbegrenzte Dauer"
         },
-        "invincible": "Invincible(*)",
-        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
+        "invincible": "Unverwundbar",
+        "invincible_tooltip": "Unverwundbar gegen Schaden, aber nicht gegen Sturzschaden.",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
         "unlimited_slingers": "Unbegrenzte Schleudermunition"
@@ -181,6 +188,7 @@
         "all_arrow_types": "Alle Pfeilarten",
         "unlimited_bottles": "Unbegrenzte Flaschen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
+        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
         "max_trick_arrow_gauge": "Max Trick Pfeilstaerke"
     },
     "light_bowgun": {
@@ -190,6 +198,7 @@
         "max_eagle_shot": "Max Adler Schuss",
         "instant_eagle_shot_charge": "Maximale Adlerschussladung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
@@ -200,6 +209,7 @@
         "max_gatling_hits": "Maximale Gattertreffer",
         "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zuendung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },

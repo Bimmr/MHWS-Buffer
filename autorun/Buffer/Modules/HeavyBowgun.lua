@@ -7,7 +7,8 @@ local Module = {
         max_gatling_hits = false,
         unlimited_ammo = false,
         no_reload = false,
-        no_recoil = false
+        no_recoil = false,
+        unlimited_bladescale = false
     },
     old = {}
 }
@@ -58,6 +59,18 @@ function Module.init_hooks()
         -- Gatling Hit - Only affects Wyvernheart Ignition
         if Module.data.max_gatling_hits then
             managed:set_field("_GatlingHitCount", 9) 
+        end
+
+        -- Bladescale Loading
+        if Module.data.unlimited_bladescale then
+            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
+            for i = 0, skills:get_Length() - 1 do
+                local skill = skills:get_Item(i)
+                if skill and skill:get_SkillData():get_Index() == 201 then -- Bladescale Loading
+                    managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
+                    break
+                end
+            end
         end
 
     end, function(retval) end)
@@ -137,8 +150,19 @@ function Module.draw()
         utils.tooltip(language.get(languagePrefix .. "max_gatling_hits_tooltip"))
         any_changed = any_changed or changed
 
+        imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
+        imgui.table_next_row()
+        imgui.table_next_column()
+
         changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
         any_changed = any_changed or changed
+
+        imgui.table_next_column()
+
+        changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
+        any_changed = any_changed or changed
+
+        imgui.end_table()
 
         changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
         any_changed = any_changed or changed
