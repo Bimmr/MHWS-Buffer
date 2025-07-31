@@ -695,37 +695,6 @@ function Module.draw()
 
             imgui.tree_pop()
         end
-
-        languagePrefix = Module.title .. ".stats."
-        if imgui.tree_node(language.get(languagePrefix .. "title")) then
-
-            changed, Module.data.stats.bonus_attack = imgui.slider_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, -1, 400, Module.data.stats.bonus_attack == -1 and language.get("base.disabled") or "%d")
-            any_changed = any_changed or changed
-
-            changed, Module.data.stats.bonus_defence = imgui.slider_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, -1, 1000, Module.data.stats.bonus_defence == -1 and language.get("base.disabled") or "%d")
-            any_changed = any_changed or changed
-
-            languagePrefix = languagePrefix .. "element."
-            local attr_type = {
-                language.get("base.disabled"),
-                language.get(languagePrefix .. "none"),
-                language.get(languagePrefix .. "fire"),
-                language.get(languagePrefix .. "water"),
-                language.get(languagePrefix .. "ice"),
-                language.get(languagePrefix .. "electric"),
-                language.get(languagePrefix .. "dragon"),
-                language.get(languagePrefix .. "poison"),
-                language.get(languagePrefix .. "paralyse"),
-                language.get(languagePrefix .. "sleep"),
-                language.get(languagePrefix .. "blast")
-            }
-            local attr_index = Module.data.stats.element + 2
-            changed, attr_index = imgui.combo(language.get(languagePrefix .. "title"), attr_index, attr_type)
-            Module.data.stats.element = attr_index - 2
-            any_changed = any_changed or changed
-
-            imgui.tree_pop()
-        end
         
         languagePrefix = Module.title .. "."
 
