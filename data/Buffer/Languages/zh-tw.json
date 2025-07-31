@@ -101,6 +101,24 @@
             "dash_juice": "強走藥",
             "imunizer": "活力劑"
         },
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "火",
+                "water": "水",
+                "ice": "冰",
+                "thunder": "雷",
+                "dragon": "龍",
+                "poison": "毒",
+                "paralyze": "麻痺",
+                "sleep": "睡眠",
+                "blast": "爆破"
+            }
+        },
         "mantles": {
             "title": "衣裝",
             "instant_cooldown": "衣裝無冷卻",

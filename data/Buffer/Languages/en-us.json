@@ -99,6 +99,11 @@
             "dash_juice": "Dash juice",
             "imunizer": "Imunizer"
         },
+        "mantles": {
+            "title": "Mantles",
+            "instant_cooldown": "Instant cooldown",
+            "unlimited_duration": "Unlimited duration"
+        },
         "stats": {
             "title": "Stats",
             "bonus_attack": "Bonus attack",
@@ -109,18 +114,13 @@
                 "fire": "Fire",
                 "water": "Water",
                 "ice": "Ice",
-                "electric": "Electric",
+                "thunder": "Thunder",
                 "dragon": "Dragon",
                 "poison": "Poison",
-                "paralyse": "Paralyse",
+                "paralyze": "Paralyze",
                 "sleep": "Sleep",
                 "blast": "Blast"
             }
-        },
-        "mantles": {
-            "title": "Mantles",
-            "instant_cooldown": "Instant cooldown",
-            "unlimited_duration": "Unlimited duration"
         },
         "invincible": "Invincible",
         "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",

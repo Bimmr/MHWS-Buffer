@@ -106,6 +106,24 @@
             "instant_cooldown": "Enfriamiento instantánea",
             "unlimited_duration": "Duración ilimitada"
         },
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "Fuego",
+                "water": "Agua",
+                "ice": "Hielo",
+                "thunder": "Rayo",
+                "dragon": "Draco",
+                "poison": "Veneno",
+                "paralyze": "Parálisis",
+                "sleep": "Sueño",
+                "blast": "Nitro"
+            }
+        },
         "invincible": "Invencible",
         "invincible_tooltip": "No recibirás ningún daño, ni sufrirás retroceso, ni te estremecerás, ni serás afectado por ningún estado alterado.",
         "unlimited_sharpness": "Filo ilimitado",

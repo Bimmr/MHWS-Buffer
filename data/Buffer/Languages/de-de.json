@@ -106,6 +106,24 @@
             "instant_cooldown": "Sofortige Abklingzeit",
             "unlimited_duration": "Unbegrenzte Dauer"
         },
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "Feuer",
+                "water": "Wasser",
+                "ice": "Eis",
+                "thunder": "Electric",
+                "dragon": "Drachen",
+                "poison": "Gift",
+                "paralyze": "Laehmung",
+                "sleep": "Schlaf",
+                "blast": "Explosion"
+            }
+        },
         "invincible": "Unverwundbar",
         "invincible_tooltip": "Unverwundbar gegen Schaden, aber nicht gegen Sturzschaden.",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",

@@ -681,10 +681,10 @@ function Module.draw()
                 language.get(languagePrefix .. "fire"),
                 language.get(languagePrefix .. "water"),
                 language.get(languagePrefix .. "ice"),
-                language.get(languagePrefix .. "electric"),
+                language.get(languagePrefix .. "thunder"),
                 language.get(languagePrefix .. "dragon"),
                 language.get(languagePrefix .. "poison"),
-                language.get(languagePrefix .. "paralyse"),
+                language.get(languagePrefix .. "paralyze"),
                 language.get(languagePrefix .. "sleep"),
                 language.get(languagePrefix .. "blast")
             }
