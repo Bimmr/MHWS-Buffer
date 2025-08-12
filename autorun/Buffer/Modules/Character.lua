@@ -58,12 +58,35 @@ local Module = {
             instant_cooldown = false,
             unlimited_duration = false
         },
+        stats = {
+            bonus_attack = -1,
+            bonus_defence = -1,
+            critical_chance = -1,
+            element = -1
+        },
         invincible = false,
         unlimited_sharpness = false,
         unlimited_consumables = false,
         unlimited_slingers = false,
+    },
+    old = {
+        stats = {}
     }
 }
+
+local function updateDahliaFloatBox(key, field_name, managed, new_value)
+    if Module.old == nil then Module.old = {} end
+    if Module.old[key] == nil then Module.old[key] = {} end
+    if new_value >= 0 then 
+        if Module.old[key][field_name] == nil then 
+            Module.old[key][field_name] = managed:get_field(field_name):read()
+        end
+        managed:get_field(field_name):write(new_value+0.0) 
+    elseif Module.old[key][field_name] ~= nil then
+        managed:get_field(field_name):write(Module.old[key][field_name]+0.0)
+        Module.old[key][field_name] = nil
+    end 
+end
 
 function Module.init()
     utils = require("Buffer.Misc.Utils")
@@ -310,6 +333,22 @@ function Module.init_hooks()
             if dragon:get_field("_DurationTimer") > 0 then
                 dragon:set_field("_DurationTimer", 0)
             end
+        end
+        
+        updateDahliaFloatBox("bonus_attack", "_WeaponAttackPower", managed:get_AttackPower(), Module.data.stats.bonus_attack)
+        updateDahliaFloatBox("bonus_defence", "_OriginalArmorDefencePower", managed:get_DefencePower(), Module.data.stats.bonus_defence)
+        updateDahliaFloatBox("critical_chance", "_OriginalCritical", managed:get_CriticalRate(), Module.data.stats.critical_chance)
+
+        if Module.data.stats.element ~= -1 then
+            local attack_power = managed:get_field("_AttackPower")
+            if Module.old.stats.element == nil then
+                Module.old.stats.element = attack_power:get_field("_WeaponAttrType")
+            end
+            attack_power:set_field("_WeaponAttrType", Module.data.stats.element)
+        elseif Module.old.stats.element ~= nil then
+            local attack_power = managed:get_field("_AttackPower")
+            attack_power:set_field("_WeaponAttrType", Module.old.stats.element)
+            Module.old.stats.element = nil
         end
 
     end, function(retval)
@@ -626,7 +665,41 @@ function Module.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
-  
+        
+        languagePrefix = Module.title .. ".stats."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+
+            changed, Module.data.stats.bonus_attack = imgui.slider_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, -1, 5000, Module.data.stats.bonus_attack == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            changed, Module.data.stats.bonus_defence = imgui.slider_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, -1, 5000, Module.data.stats.bonus_defence == -1 and language.get("base.disabled") or "%d")
+            any_changed = any_changed or changed
+
+            changed, Module.data.stats.critical_chance = imgui.slider_int(language.get(languagePrefix .. "critical_chance"), Module.data.stats.critical_chance, -1, 100, Module.data.stats.critical_chance == -1 and language.get("base.disabled") or "%d%%")
+            any_changed = any_changed or changed
+
+            languagePrefix = languagePrefix .. "element."
+            local attr_type = {
+                language.get("base.disabled"),
+                language.get(languagePrefix .. "none"),
+                language.get(languagePrefix .. "fire"),
+                language.get(languagePrefix .. "water"),
+                language.get(languagePrefix .. "ice"),
+                language.get(languagePrefix .. "thunder"),
+                language.get(languagePrefix .. "dragon"),
+                language.get(languagePrefix .. "poison"),
+                language.get(languagePrefix .. "paralyze"),
+                language.get(languagePrefix .. "sleep"),
+                language.get(languagePrefix .. "blast")
+            }
+            local attr_index = Module.data.stats.element + 2
+            changed, attr_index = imgui.combo(language.get(languagePrefix .. "title"), attr_index, attr_type)
+            Module.data.stats.element = attr_index - 2
+            any_changed = any_changed or changed
+
+            imgui.tree_pop()
+        end
+        
         languagePrefix = Module.title .. "."
 
         changed, Module.data.invincible = imgui.checkbox(language.get(languagePrefix .. "invincible"), Module.data.invincible)

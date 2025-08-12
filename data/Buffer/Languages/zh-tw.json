@@ -39,6 +39,10 @@
             "title": "豪鬼",
             "instant_drive_gauge": "最大豪鬼計量表",
             "gou_hadoken_max_level": "豪波動拳傷害最大化"
+        },
+        "water gun": {
+            "title": "Water Gun(*)",
+            "unlimited_ammo": "Unlimited ammo(*)"
         }
     },
     "character": {
@@ -80,7 +84,7 @@
                 "sticky": "黏著",
                 "frenzy": "狂龍症",
                 "frozen": "凍結",
-                "bubble": "Bubble (*)",
+                "bubble": "泡沫",
                 "all": "全部 "
             }
         },
@@ -100,6 +104,25 @@
             "hot_drink": "熱飲",
             "dash_juice": "強走藥",
             "imunizer": "活力劑"
+        },
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "critical_chance": "Critical chance(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "火",
+                "water": "水",
+                "ice": "冰",
+                "thunder": "雷",
+                "dragon": "龍",
+                "poison": "毒",
+                "paralyze": "麻痺",
+                "sleep": "睡眠",
+                "blast": "爆破"
+            }
         },
         "mantles": {
             "title": "衣裝",
@@ -188,6 +211,7 @@
         "all_arrow_types": "可填充所有瓶",
         "unlimited_bottles": "無限瓶",
         "tetrad_shot_active": "啟用第四射擊",
+        "unlimited_bladescale": "Unlimited bladescale bottles",
         "max_trick_arrow_gauge": "無限特殊箭計量表"
     },
     "light_bowgun": {
@@ -197,6 +221,7 @@
         "max_eagle_shot": "無限集中特效彈",
         "instant_eagle_shot_charge": "最大集中特效彈續力",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },
@@ -207,6 +232,7 @@
         "max_gatling_hits": "最大龍熱機關龍累積傷害",
         "max_gatling_hits_tooltip": "僅影響龍熱機關龍彈",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },

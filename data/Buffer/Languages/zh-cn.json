@@ -39,6 +39,10 @@
             "title": "豪鬼",
             "instant_drive_gauge": "即时驱动计量表",
             "gou_hadoken_max_level": "豪波动拳最大等级"
+        },
+        "water gun": {
+            "title": "Water Gun(*)",
+            "unlimited_ammo": "Unlimited ammo(*)"
         }
     },
     "character": {
@@ -100,6 +104,25 @@
             "hot_drink": "热饮",
             "dash_juice": "强走药",
             "imunizer": "免疫剂"
+        },
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "critical_chance": "Critical chance(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "火属性",
+                "water": "水属性",
+                "ice": "冰属性",
+                "thunder": "雷属性",
+                "dragon": "龙属性",
+                "poison": "中毒",
+                "paralyze": "麻痹",
+                "sleep": "睡眠",
+                "blast": "爆破"
+            }
         },
         "mantles": {
             "title": "Mantles(TN)",
@@ -184,6 +207,7 @@
         "all_arrow_types": "全强化瓶解锁",
         "unlimited_bottles": "强化瓶无限使用",
         "tetrad_shot_active": "Tetrad shot support active",
+        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
         "max_trick_arrow_gauge": "特殊箭计量槽全满"
     },
     "light_bowgun": {
@@ -193,6 +217,7 @@
         "max_eagle_shot": "无限特殊射击",
         "instant_eagle_shot_charge": "特殊射击无需蓄力",
         "unlimited_ammo": "无限弹药",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "无需装填",
         "no_recoil": "无后座力"
     },
@@ -203,6 +228,7 @@
         "max_gatling_hits": "最大命中数",
         "max_gatling_hits_tooltip": "仅对龙热穿甲弹生效",
         "unlimited_ammo": "无限弹药",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "无需装填",
         "no_recoil": "无后座力"
     },

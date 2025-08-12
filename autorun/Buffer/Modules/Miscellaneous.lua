@@ -5,6 +5,9 @@ local Module = {
         akuma = {
             instant_drive_gauge = false,
             gou_hadoken_max_level = false
+        },
+        water_gun = {
+            unlimited_ammo = false,
         }
     }
 }
@@ -25,9 +28,8 @@ function Module.init_hooks()
         if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
         if not managed:get_IsMaster() then return end    
 
+        -- Akuma 
         local ex_emote = managed:get_ExEmote00()
-        if ex_emote == nil then return end
-
         -- Instant Drive Gauge
         if Module.data.akuma.instant_drive_gauge then
             ex_emote:set_field("_aimAttackTimer", 0)
@@ -40,6 +42,14 @@ function Module.init_hooks()
                 ex_emote:set_field("<ChargeLv>k__BackingField", max_level)
             end
         end
+
+        -- Watergun
+        local hunterInfo = managed:get_HunterInfoHolder()
+        local exEmote01Info = hunterInfo:get_ExEmote01Info()
+        if Module.data.water_gun.unlimited_ammo then
+            exEmote01Info:set_field("_AmmoCount", exEmote01Info:get_field("_MaxAmmoCount"))
+        end
+
     end, function(retval)
     end)
 end
@@ -59,6 +69,15 @@ function Module.draw()
             any_changed = any_changed or changed
 
             changed, Module.data.akuma.gou_hadoken_max_level = imgui.checkbox(language.get(languagePrefix .. "gou_hadoken_max_level"), Module.data.akuma.gou_hadoken_max_level)
+            any_changed = any_changed or changed
+
+            imgui.tree_pop()
+        end
+
+        languagePrefix = Module.title .. ".water gun."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            
+            changed, Module.data.water_gun.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.water_gun.unlimited_ammo)
             any_changed = any_changed or changed
 
             imgui.tree_pop()
