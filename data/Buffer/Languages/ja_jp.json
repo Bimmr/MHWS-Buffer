@@ -41,8 +41,8 @@
             "gou_hadoken_max_level": "豪波動拳最大レベル"
         },
         "water gun": {
-            "title": "Water Gun(*)",
-            "unlimited_ammo": "Unlimited ammo(*)"
+            "title": "水鉄砲",
+            "unlimited_ammo": "弾無限"
         }
     },
     "character": {
@@ -106,13 +106,13 @@
             "imunizer": "活力剤"
         },
         "stats": {
-            "title": "Stats(*)",
-            "bonus_attack": "Bonus attack(*)",
-            "bonus_defence": "Bonus defence(*)",
-            "critical_chance": "Critical chance(*)",
+            "title": "ステータス",
+            "bonus_attack": "攻撃力ボーナス",
+            "bonus_defence": "防御力ボーナス",
+            "critical_chance": "クリティカルチャンス",
             "element": {
-            "title": "Element(*)",
-            "none": "None(*)",
+            "title": "属性",
+            "none": "なし",
             "fire": "火",
             "water": "水",
             "ice": "氷",
@@ -207,7 +207,7 @@
         "all_arrow_types": "全ての矢タイプ",
         "unlimited_bottles": "ビン無限",
         "tetrad_shot_active": "四連射サポート有効",
-        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
+        "unlimited_bladescale": "無限刃鱗増装",
         "max_trick_arrow_gauge": "トリックアローゲージ最大"
     },
     "light_bowgun": {
@@ -217,7 +217,7 @@
         "max_eagle_shot": "集中特攻弾【射鵰】最大",
         "instant_eagle_shot_charge": "集中特攻弾【射鵰】即時溜め",
         "unlimited_ammo": "弾無限",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },
@@ -228,7 +228,7 @@
         "max_gatling_hits": "ガトリングヒット数最大",
         "max_gatling_hits_tooltip": "竜熱機関竜弾にのみ影響",
         "unlimited_ammo": "弾無限",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },
@@ -247,3 +247,4 @@
         "powered_axe": "斧モード強化"
     }
 }
+
