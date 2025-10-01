@@ -41,8 +41,8 @@
             "gou_hadoken_max_level": "Gou Hadoken Max Stufe"
         },
         "water gun": {
-            "title": "Water Gun(*)",
-            "unlimited_ammo": "Unlimited ammo(*)"
+            "title": "Wasserpistole",
+            "unlimited_ammo": "Unbegrenzte Munition"
         }
     },
     "character": {
@@ -111,13 +111,13 @@
             "unlimited_duration": "Unbegrenzte Dauer"
         },
         "stats": {
-            "title": "Stats(*)",
-            "bonus_attack": "Bonus attack(*)",
-            "bonus_defence": "Bonus defence(*)",
-            "critical_chance": "Critical chance(*)",
+            "title": "Statistiken",
+            "bonus_attack": "Bonusangriff",
+            "bonus_defence": "Bonusverteidigung",
+            "critical_chance": "Kritische Trefferchance",
             "element": {
-                "title": "Element(*)",
-                "none": "None(*)",
+                "title": "Element",
+                "none": "Keine",
                 "fire": "Feuer",
                 "water": "Wasser",
                 "ice": "Eis",
@@ -211,7 +211,7 @@
         "all_arrow_types": "Alle Pfeilarten",
         "unlimited_bottles": "Unbegrenzte Flaschen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
-        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
+        "unlimited_bladescale": "Unbegrenzte Anzahl an Bladescale-Flaschen",
         "max_trick_arrow_gauge": "Max Trick Pfeilstaerke"
     },
     "light_bowgun": {
@@ -221,7 +221,7 @@
         "max_eagle_shot": "Max Adler Schuss",
         "instant_eagle_shot_charge": "Maximale Adlerschussladung",
         "unlimited_ammo": "Unendliche Munition",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
@@ -232,7 +232,7 @@
         "max_gatling_hits": "Maximale Gattertreffer",
         "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zuendung",
         "unlimited_ammo": "Unendliche Munition",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
