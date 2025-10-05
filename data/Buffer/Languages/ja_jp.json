@@ -1,6 +1,6 @@
 {
     "_USE_FONT": "NotoSansSC-Regular.otf",
-    "_TRANSLATOR": "syarukasu, Ruri73",
+    "_TRANSLATOR": "syarukasu, Ruri73, 9c5s",
     "window": {
         "toggle_button": "バッファGUIの切り替え",
         "title": "修飾子 & 設定",
@@ -45,14 +45,14 @@
             "unlimited_ammo": "弾無限"
         },
         "pictomancy": {
-            "title": "Pictomancy(*)",
+            "title": "ピクトマンサー",
             "state": {
-                "title": "Active Pictomancy state(*)",
-                "pom": "Pom Motif(*)",
-                "wing": "Wing Motif(*)",
-                "mog": "Mog of the ages(*)"
+                "title": "絵画魔法状態",
+                "pom": "ピクトポンポン",
+                "wing": "ピクトウィング",
+                "mog": "モーグリストリーム"
             },
-            "instant_cooldown": "Instant cooldown(*)"
+            "instant_cooldown": "即時クールダウン"
         }
     },
     "character": {
@@ -95,7 +95,7 @@
                 "frenzy": "狂竜症",
                 "frozen": "氷結",
                 "bubble": "泡",
-                "hp_reduction": "HP Reduction(*)",
+                "hp_reduction": "最大HP減少",
                 "all": "すべて"
             }
         },
