@@ -52,9 +52,15 @@ function language.sort_languages()
     return languages
 end
 
+-- Get the display name of a language from its code
+function language.getLanguageName(code)
+    if language.languages[code] == nil then return "Unknown" end
+    return language.languages[code]["_LANGUAGE_NAME"] or "Unknown"
+end
+
 -- Get a single value from the language from the provided key
 function language.get(key)
-    if language.languages[language.current] == nil then
+    if language.languages[language.current] == nil or language.languages[language.current] == "" then
         return "Invalid Language Key: ".. key
     else
 

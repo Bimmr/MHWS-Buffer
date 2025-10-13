@@ -1,4 +1,4 @@
-local version = "0.1.2"
+local version = "0.1.10"
 
 local isWindowOpen, wasOpen = false, false
 
@@ -168,7 +168,6 @@ re.on_draw_ui(function()
                     imgui.end_menu()
                 end
                 
-
                 imgui.spacing()
                 imgui.end_menu()
             end
@@ -178,7 +177,7 @@ re.on_draw_ui(function()
                 if imgui.begin_menu("   " .. language.get(languagePrefix .. "language")) then
                     imgui.spacing()
                     for _, lang in pairs(language.sorted) do
-                        if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then language.change(lang) end
+                        if imgui.menu_item("   " .. language.getLanguageName(lang) .. "   ", "", lang == language.current, lang ~= language.current) then language.change(lang) end
                     end
                     imgui.spacing()
                     imgui.end_menu()
@@ -195,6 +194,31 @@ re.on_draw_ui(function()
                     end
                     imgui.spacing()
                     imgui.end_menu()
+                end
+                imgui.spacing()
+                imgui.end_menu()
+            end
+
+            if imgui.begin_menu(language.get(languagePrefix .. "options")) then
+                imgui.spacing()
+                if imgui.menu_item("   " .. language.get(languagePrefix .. "disable_all"), "", false, true) then
+
+                    function disable_all(data_layer)
+                        for key, value in pairs(data_layer) do
+                            if type(value) == "boolean" then
+                                data_layer[key] = false
+                            elseif type(value) == "number" then
+                                data_layer[key] = -1
+                            elseif type(value) == "table" then
+                                disable_all(value)
+                            end
+                        end
+                    end
+
+                    for _, module in pairs(modules) do 
+                        disable_all(module.data)
+                        config.save_section(module.create_config_section())
+                    end
                 end
                 imgui.spacing()
                 imgui.end_menu()

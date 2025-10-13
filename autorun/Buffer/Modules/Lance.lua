@@ -36,11 +36,6 @@ function Module.init_hooks()
             managed:set_field("_RushLevelTimer", 1.4)
         end
 
-        -- Infinite backstep
-        if Module.data.infinite_backstep then 
-            managed:set_field("_StepCount", 0) 
-        end
-
     end, function(retval) end)
 end
 
@@ -56,9 +51,6 @@ function Module.draw()
         any_changed = any_changed or changed     
 
         changed, Module.data.rush_level = imgui.slider_int(language.get(languagePrefix .. "rush_level"), Module.data.rush_level, -1, 1, Module.data.rush_level == -1 and language.get("base.disabled") or "%d")
-        any_changed = any_changed or changed
-
-        changed, Module.data.infinite_backstep = imgui.checkbox(language.get(languagePrefix .. "infinite_backstep"), Module.data.infinite_backstep)
         any_changed = any_changed or changed
 
         if any_changed then config.save_section(Module.create_config_section()) end

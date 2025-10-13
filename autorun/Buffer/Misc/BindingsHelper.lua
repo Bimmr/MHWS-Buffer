@@ -90,11 +90,11 @@ function helper.add(device, input, path, value)
     helper.original_add(device, input, function()
         local path_parts = utils.split(path, ".")
         local module_name = path_parts[1]
+        local value = value
         local value_text = enabled_text
 
-        if type(value) == "number" then
-            value_text = string.gsub(language.get("window.bindings.set_to"), "%%d", value)
-        end
+        local is_boolean = false
+        local is_number = false
 
         -- Find the module by title
         local module_index
@@ -114,15 +114,24 @@ function helper.add(device, input, path, value)
         end
 
         -- Toggle or set the value
-        if type(target[path_parts[#path_parts]]) == "boolean" then
-            target[path_parts[#path_parts]] = not target[path_parts[#path_parts]]
-        else
-            target[path_parts[#path_parts]] = value
+        local target_value = target[path_parts[#path_parts]]
+        local setting_path = module_name .. "." .. table.concat(path_parts, ".")
+
+        -- Handle boolean values
+        if type(target_value) == "boolean" then
+            target_value = not target_value
+            target[path_parts[#path_parts]] = target_value
+            value_text = target_value and enabled_text or disabled_text
+
+        -- Handle number values
+        elseif type(target_value) == "number" then
+            target_value = target_value > -1 and -1 or value
+            target[path_parts[#path_parts]] = target_value
+            value_text = target_value == -1 and disabled_text or
+                string.gsub(language.get("window.bindings.set_to"), "%%d", tostring(target_value))
         end
 
-        local setting_name = helper.get_setting_name_from_path(module_name .. "." .. table.concat(path_parts, "."))
-        local msg = setting_name .. " " .. (target[path_parts[#path_parts]] and value_text or disabled_text)
-        utils.send_message(msg)
+        utils.send_message(helper.get_setting_name_from_path(setting_path) .. " " .. value_text)
     end)
 
     -- Apply additional data to the bindings
@@ -146,18 +155,18 @@ end
 --- @param path string The path to the setting (e.g., "character.health").
 --- @return string The formatted name of the setting.
 function helper.get_setting_name_from_path(path)
-    path = utils.split(path, ".")
-    local currentPath = path[1]
-    local title = language.get(currentPath .. ".title")
-    for i = 2, #path, 1 do
-        currentPath = currentPath .. "." .. path[i]
-        if i == #path then
-            title = title .. "/" .. language.get(currentPath)
-        else
-            title = title .. "/" .. language.get(currentPath .. ".title")
-        end
+    local path_parts = utils.split(path, ".")
+    local title_parts = {}
+    
+    for i, part in ipairs(path_parts) do
+        local current_path = table.concat(path_parts, ".", 1, i)
+        local key = (i == #path_parts and type(language.get(current_path)) ~= "table") 
+            and current_path 
+            or current_path .. ".title"
+        table.insert(title_parts, language.get(key))
     end
-    return title
+    
+    return table.concat(title_parts, "/")
 end
 
 -- Draws the popup for adding a new binding
@@ -205,7 +214,11 @@ function helper.draw()
                                     imgui.end_menu()
                                 end
                             else
-                                if imgui.menu_item(language.get(current_path)) then
+                                local label_key = current_path
+                                if not string.find(language.get(current_path .. ".title"), "Invalid Language Key") then
+                                    label_key = current_path .. ".title"
+                                end
+                                if imgui.menu_item(language.get(label_key)) then
                                     helper.popup.path = current_path
                                     helper.popup.value = value
                                 end

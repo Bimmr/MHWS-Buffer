@@ -6,7 +6,7 @@ local Module = {
         infinite_wyvern_fire = false,
         infinite_backstep = false,
         instant_charge = false,
-        free_charge_shot = false
+        unlimited_ammo = false,
     }
 }
 
@@ -38,6 +38,8 @@ function Module.init_hooks()
         if not managed:get_Hunter() then return end
         if not managed:get_Hunter():get_IsMaster() then return end
 
+        local ammo = managed:get_field("_Ammo")
+
         -- Shell level
         update_field("_ShellLevel", managed, Module.data.shell_level)
 
@@ -46,20 +48,18 @@ function Module.init_hooks()
             managed:get_field("_RyuugekiGauge"):set_field("_Value", 2)
         end
 
-        -- Infinite backstep
-        if Module.data.infinite_backstep then 
-            managed:set_field("_StepCount", 0) 
-        end
-
         -- Instant charge
         if Module.data.instant_charge then 
-            managed:set_field("_ChargeShotElapsedTimer", 2.6)
+            local max_ammo = ammo:get_LimitAmmo()
+            managed:set_field("_ChargeShotBulletNum", max_ammo)
+            managed:set_field("_ChargeShotElapsedTimer", max_ammo * 1.1)
         end
 
-        -- Free charge shot
-        if Module.data.free_charge_shot then 
-            managed:set_field("_ChargeShotBulletNum", 0)
+        -- Unlimited ammo
+        if Module.data.unlimited_ammo then 
+            ammo:setLoadedAmmo(ammo:get_LimitAmmo())
         end
+
 
     end, function(retval) end)
 end
@@ -72,28 +72,17 @@ function Module.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
-        imgui.begin_table(languagePrefix.."title", 3, nil, nil, nil)
-        imgui.table_next_row()
-        imgui.table_next_column()
+
+        changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
+        any_changed = any_changed or changed
 
         changed, Module.data.instant_charge = imgui.checkbox(language.get(languagePrefix .. "instant_charge"), Module.data.instant_charge)
-        utils.tooltip(language.get(languagePrefix .. "instant_charge_tooltip"))
         any_changed = any_changed or changed
-
-        imgui.table_next_column()
-
-        changed, Module.data.free_charge_shot = imgui.checkbox(language.get(languagePrefix .. "free_charge_shot"), Module.data.free_charge_shot)
-        any_changed = any_changed or changed
-        
-        imgui.end_table()
 
         changed, Module.data.shell_level = imgui.slider_int(language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 6, Module.data.shell_level == -1 and language.get("base.disabled") or "%d")
         any_changed = any_changed or changed
         
         changed, Module.data.infinite_wyvern_fire = imgui.checkbox(language.get(languagePrefix .. "infinite_wyvern_fire"), Module.data.infinite_wyvern_fire)
-        any_changed = any_changed or changed
-
-        changed, Module.data.infinite_backstep = imgui.checkbox(language.get(languagePrefix .. "infinite_backstep"), Module.data.infinite_backstep)
         any_changed = any_changed or changed
         
         if any_changed then config.save_section(Module.create_config_section()) end

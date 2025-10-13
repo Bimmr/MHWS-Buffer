@@ -1,6 +1,7 @@
 {
-    "_USE_FONT": "NotoSansSC-Regular.otf",
     "_TRANSLATOR": "Paver",
+    "_LANGUAGE_NAME": "繁體中文 (TW)",
+    
     "window": {
         "toggle_button": "開關增益 GUI",
         "title": "修改器和設置",
@@ -12,6 +13,8 @@
         "author": "作者",
         "translator": "翻譯者",
         "version": "版本",
+        "options": "選項",
+        "disable_all": "禁用所有",
         "bindings": {
             "title": "快捷鍵",
             "keyboard": "鍵盤",
@@ -37,8 +40,22 @@
         "title": "雜項",
         "akuma": {
             "title": "豪鬼",
-            "instant_drive_gauge": "即時驅動計量表",
-            "gou_hadoken_max_level": "豪波動拳最大等級"
+            "instant_drive_gauge": "最大豪鬼計量表",
+            "gou_hadoken_max_level": "豪波動拳傷害最大化"
+        },
+        "water_gun": {
+            "title": "Water Gun(*)",
+            "unlimited_ammo": "Unlimited ammo(*)"
+        },
+        "pictomancy": {
+            "title": "Pictomancy(*)",
+            "state": {
+                "title": "Active Pictomancy state(*)",
+                "pom": "Pom Motif(*)",
+                "wing": "Wing Motif(*)",
+                "mog": "Mog of the ages(*)"
+            },
+            "instant_cooldown": "Instant cooldown(*)"
         }
     },
     "character": {
@@ -80,34 +97,54 @@
                 "sticky": "黏著",
                 "frenzy": "狂龍症",
                 "frozen": "凍結",
-                "bubble": "Bubble (*)",
+                "bubble": "泡沫",
+                "hp_reduction": "HP Reduction(*)",
                 "all": "全部 "
             }
         },
         "item_buffs": {
             "title": "物品增益",
-            "might_seed": "Might seed (TN)",
+            "might_seed": "怪力種子",
             "might_pill": "怪力藥丸",
-            "adamant_seed": "Adamant seed (TN)",
+            "adamant_seed": "忍耐種子",
             "adamant_pill": "忍耐藥丸",
-            "demon_drug": "Demon drug (TN)",
+            "demon_drug": "鬼人藥",
             "demon_powder": "鬼人粉塵",
             "hardshell_powder": "硬化粉塵",
             "mega_demondrug": "鬼人藥·大",
-            "armor_skin": "Armor skin (TN)",
+            "armor_skin": "硬化藥",
             "mega_armorskin": "硬化藥·大",
             "cool_drink": "冷飲",
             "hot_drink": "熱飲",
             "dash_juice": "強走藥",
             "imunizer": "活力劑"
         },
-        "mantles": {
-            "title": "Mantles(TN)",
-            "instant_cooldown": "Instant cooldown(TN)",
-            "unlimited_duration": "Unlimited duration(TN)"
+        "stats": {
+            "title": "Stats(*)",
+            "bonus_attack": "Bonus attack(*)",
+            "bonus_defence": "Bonus defence(*)",
+            "critical_chance": "Critical chance(*)",
+            "element": {
+                "title": "Element(*)",
+                "none": "None(*)",
+                "fire": "火",
+                "water": "水",
+                "ice": "冰",
+                "thunder": "雷",
+                "dragon": "龍",
+                "poison": "毒",
+                "paralyze": "麻痺",
+                "sleep": "睡眠",
+                "blast": "爆破"
+            }
         },
-        "invincible": "Invincible(*)",
-        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
+        "mantles": {
+            "title": "衣裝",
+            "instant_cooldown": "衣裝無冷卻",
+            "unlimited_duration": "衣裝無限持續時間"
+        },
+        "invincible": "無敵",
+        "invincible_tooltip": "你不會受到任何傷害、擊退、畏縮，或被任何異常狀態影響",
         "unlimited_sharpness": "無限鋒利度",
         "unlimited_consumables": "無限消耗品",
         "unlimited_slingers": "無限彈藥"
@@ -117,6 +154,7 @@
         "title": "大劍",
         "true_charge_boost": "真蓄力提升",
         "true_charge_boost_tooltip": "真蓄力初始命中加成",
+        "charge_level": "Charge level(*)",
         "instant_charge": "瞬間續力"
     },
     "sword_and_shield": {
@@ -159,27 +197,26 @@
 
     "hammer": {
         "title": "大錘",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "瞬間續力"
     },
     "hunting_horn": {
         "title": "狩獵笛",
-        "unlimited_echo_bubbles": "Unlimited echo bubbles"
+        "unlimited_echo_bubbles": "無限響玉"
     },
 
     "lance": {
         "title": "長槍",
         "counter_charge_level": "反擊續力等級",
-        "rush_level": "突進等級",
-        "infinite_backstep": "無限後跳"
+        "rush_level": "突進等級"
     },
     "gunlance": {
         "title": "銃槍",
         "shell_level": "炮擊威力等級",
         "infinite_wyvern_fire": "無限龍擊炮",
-        "infinite_backstep": "無限後跳",
         "instant_charge": "砲擊瞬間續力",
-        "instant_charge_tooltip": "需要稍微按住續力，然後放開發射",
-        "free_charge_shot": "無限續力射擊"
+        "unlimited_ammo": "無限彈藥"
     },
 
     "bow": {
@@ -188,6 +225,7 @@
         "all_arrow_types": "可填充所有瓶",
         "unlimited_bottles": "無限瓶",
         "tetrad_shot_active": "啟用第四射擊",
+        "unlimited_bladescale": "Unlimited bladescale bottles",
         "max_trick_arrow_gauge": "無限特殊箭計量表"
     },
     "light_bowgun": {
@@ -197,6 +235,7 @@
         "max_eagle_shot": "無限集中特效彈",
         "instant_eagle_shot_charge": "最大集中特效彈續力",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },
@@ -207,6 +246,7 @@
         "max_gatling_hits": "最大龍熱機關龍累積傷害",
         "max_gatling_hits_tooltip": "僅影響龍熱機關龍彈",
         "unlimited_ammo": "無限彈藥",
+        "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
         "no_recoil": "無後座力"
     },

@@ -1,5 +1,6 @@
 {
     "_TRANSLATOR": "SlikerDev",
+    "_LANGUAGE_NAME": "Deutsch (DE)",
 
     "window": {
         "toggle_button": "Umschalten Buffer GUI",
@@ -12,6 +13,8 @@
         "author": "Autor",
         "translator": "Üebersetzer",
         "version": "Version",
+        "options": "Optionen",
+        "disable_all": "Alle deaktivieren",
         "bindings": {
             "title": "Belegung",
             "keyboard": "Tastatur",
@@ -39,6 +42,20 @@
             "title": "Akuma",
             "instant_drive_gauge": "Sofortiges Drive-Messgerät",
             "gou_hadoken_max_level": "Gou Hadoken Max Stufe"
+        },
+        "water_gun": {
+            "title": "Wasserpistole",
+            "unlimited_ammo": "Unbegrenzte Munition"
+        },
+        "pictomancy": {
+            "title": "Pictomancy(*)",
+            "state": {
+                "title": "Active Pictomancy state(*)",
+                "pom": "Pom Motif(*)",
+                "wing": "Wing Motif(*)",
+                "mog": "Mog of the ages(*)"
+            },
+            "instant_cooldown": "Instant cooldown(*)"
         }
     },
     "character": {
@@ -81,20 +98,21 @@
                 "frenzy": "Wahnsinn",
                 "frozen": "Gefroren",
                 "bubble": "Blase",
+                "hp_reduction": "HP Reduction(*)",
                 "all": "Alle "
             }
         },
         "item_buffs": {
             "title": "Gegenstandsbuffs",
-            "might_seed": "Might seed (TN)",
+            "might_seed": "Kraftsamen",
             "might_pill": "Macht Pille",
-            "adamant_seed": "Adamant seed (TN)",
+            "adamant_seed": "Hartmachersamen",
             "adamant_pill": "Adamant Pille",
-            "demon_drug": "Demon drug (TN)",
+            "demon_drug": "Daemondroge",
             "demon_powder": "Daemonenpulver",
             "hardshell_powder": "Hartschalenpulver",
             "mega_demondrug": "Megadaemonen-Droge",
-            "armor_skin": "Armor skin (TN)",
+            "armor_skin": "Ruestungshaut",
             "mega_armorskin": "Mega-Ruestungshaut",
             "cool_drink": "Kuehlendes Getraenk",
             "hot_drink": "Heisses Getraenk",
@@ -106,8 +124,27 @@
             "instant_cooldown": "Sofortige Abklingzeit",
             "unlimited_duration": "Unbegrenzte Dauer"
         },
-        "invincible": "Invincible(*)",
-        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
+        "stats": {
+            "title": "Statistiken",
+            "bonus_attack": "Bonusangriff",
+            "bonus_defence": "Bonusverteidigung",
+            "critical_chance": "Kritische Trefferchance",
+            "element": {
+                "title": "Element",
+                "none": "Keine",
+                "fire": "Feuer",
+                "water": "Wasser",
+                "ice": "Eis",
+                "thunder": "Electric",
+                "dragon": "Drachen",
+                "poison": "Gift",
+                "paralyze": "Laehmung",
+                "sleep": "Schlaf",
+                "blast": "Explosion"
+            }
+        },
+        "invincible": "Unverwundbar",
+        "invincible_tooltip": "Unverwundbar gegen Schaden, aber nicht gegen Sturzschaden.",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
         "unlimited_slingers": "Unbegrenzte Schleudermunition"
@@ -117,6 +154,7 @@
         "title": "Grossschwert",
         "true_charge_boost": "Echter Ladungsboost",
         "true_charge_boost_tooltip": "Anfaenglicher Bonus fuer echte Aufladung",
+        "charge_level": "Charge level(*)",
         "instant_charge": "Sofortige Aufladung"
     },
     "sword_and_shield": {
@@ -159,6 +197,8 @@
 
     "hammer": {
         "title": "Hammer",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "Sofortige Aufladung"
     },
     "hunting_horn": {
@@ -169,17 +209,14 @@
     "lance": {
         "title": "Lanze",
         "counter_charge_level": "Konter angriff level",
-        "rush_level": "Eiltempo",
-        "infinite_backstep": "Unendlicher Rueckwaertsschritt"
+        "rush_level": "Eiltempo"
     },
     "gunlance": {
         "title": "Waffenlanze",
         "shell_level": "Gehaeuse Level",
         "infinite_wyvern_fire": "Unendliches Wyvernfeuer",
-        "infinite_backstep": "Unendlicher Rueckwaertsschritt",
         "instant_charge": "Sofortige Aufladung",
-        "instant_charge_tooltip": "Man muss sie einen Moment lang festhalten und dann loslassen, um zu feuern.",
-        "free_charge_shot": "Kostenloser Schuss"
+        "unlimited_ammo": "Unendliche Munition"
     },
 
     "bow": {
@@ -188,6 +225,7 @@
         "all_arrow_types": "Alle Pfeilarten",
         "unlimited_bottles": "Unbegrenzte Flaschen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
+        "unlimited_bladescale": "Unbegrenzte Anzahl an Bladescale-Flaschen",
         "max_trick_arrow_gauge": "Max Trick Pfeilstaerke"
     },
     "light_bowgun": {
@@ -197,6 +235,7 @@
         "max_eagle_shot": "Max Adler Schuss",
         "instant_eagle_shot_charge": "Maximale Adlerschussladung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
@@ -207,6 +246,7 @@
         "max_gatling_hits": "Maximale Gattertreffer",
         "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zuendung",
         "unlimited_ammo": "Unendliche Munition",
+        "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },

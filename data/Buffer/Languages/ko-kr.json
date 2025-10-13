@@ -1,0 +1,264 @@
+{
+    "_TRANSLATOR": "aquasaur11 & others",
+    "_LANGUAGE_NAME": "한국어 (KR)",
+
+    "window": {
+        "toggle_button": "버퍼 GUI 전환",
+        "title": "수정자 & 설정",
+        "settings": "설정",
+        "language": "언어",
+        "font_size": "폰트 크기",
+        "font_size_apply": "적용",
+        "about": "정보",
+        "author": "저자",
+        "translator": "번역자",
+        "version": "버전",
+        "options": "옵션",
+        "disable_all": "전체 비활성화",
+        "bindings": {
+            "title": "키 설정",
+            "keyboard": "키보드",
+            "gamepad": "컨트롤러",
+            "remove": "삭제",
+            "add_keyboard": "새로운 키보드 바인딩 추가",
+            "add_gamepad": "새로운 컨트롤러 바인딩 추가",
+            "choose_modification": "변경 선택",
+            "on_value": "유효 값",
+            "to_listen": "입력 대기",
+            "listening": "입력 대기 중",
+            "save": "저장",
+            "cancel": "취소",
+            "enabled": "가 활성화되었습니다.",
+            "disabled": "가 비활성화되었습니다.",
+            "set_to": "가 %d로 설정되었습니다."
+        }
+    },
+    "base": {
+        "disabled": "비활성화"
+    },
+    "miscellaneous": {
+        "title": "기타",
+        "akuma": {
+            "title": "고우키",
+            "instant_drive_gauge": "드라이브 임팩트 게이지 즉시 충전",
+            "gou_hadoken_max_level": "호파동권 최대 레벨"
+        },
+        "water_gun": {
+            "title": "물총",
+            "unlimited_ammo": "물총 탄약 무제한"
+        },
+        "pictomancy": {
+            "title": "픽토맨서",
+            "state": {
+                "title": "회화 마법",
+                "pom": "폼폼 그림",
+                "wing": "폼폼 날개",
+                "mog": "모그리 격류"
+            },
+            "instant_cooldown": "회화 마법 즉시 쿨다운"
+        }
+    },
+    "character": {
+        "title": "캐릭터",
+        "stamina": {
+            "title": "스태미너",
+            "max": "최대 스태미너",
+            "unlimited": "스태미너 무제한"
+        },
+        "health": {
+            "title": "체력",
+            "max": "최대 체력",
+            "unlimited": "체력 손실 없음",
+            "healing": "회복",
+            "healing_tooltip": "부족한 체력을 회복할 수 있습니다."
+        },
+        "blights_and_conditions": {
+            "title": "속성 및 상태 이상",
+            "tooltip": "속성 이상 및 상태 이상을 방지합니다",
+            "blights": {
+                "title": "속성 이상",
+                "fire": "불 속성",
+                "water": "물 속성",
+                "ice": "얼음 속성",
+                "thunder": "번개 속성",
+                "dragon": "용 속성",
+                "all": "속성 전부"
+            },
+            "conditions": {
+                "title": "상태 이상",
+                "poison": "독",
+                "sleep": "수면",
+                "paralyze": "마비",
+                "blast": "폭발",
+                "stun": "기절",
+                "defense_down": "방어력 감소",
+                "bleed": "열상",
+                "stench": "악취",
+                "sticky": "점착",
+                "frenzy": "광룡증",
+                "frozen": "동결",
+                "bubble": "거품",
+                "hp_reduction": "최대 체력 감소",
+                "all": "상태 이상 전부"
+            }
+        },
+        "item_buffs": {
+            "title": "아이템 강화",
+            "might_seed": "괴력의 씨앗",
+            "might_pill": "괴력의 환약",
+            "adamant_seed": "인내의 씨앗",
+            "adamant_pill": "인내의 환약",
+            "demon_drug": "귀인약",
+            "demon_powder": "귀인의 가루",
+            "hardshell_powder": "경화의 가루",
+            "mega_demondrug": "그레이트 귀인약",
+            "armor_skin": "경화약",
+            "mega_armorskin": "그레이트 경화약",
+            "cool_drink": "쿨 드링크",
+            "hot_drink": "핫 드링크",
+            "dash_juice": "강주약",
+            "imunizer": "활력제"
+        },
+        "stats": {
+            "title": "능력치",
+            "bonus_attack": "공격 보너스",
+            "bonus_defence": "방어 보너스",
+            "critical_chance": "최심율 증가",
+            "element": {
+            "title": "속성",
+            "none": "속성 없음",
+            "fire": "불",
+            "water": "물",
+            "ice": "얼음",
+            "thunder": "번개",
+            "dragon": "용",
+            "poison": "독",
+            "paralyze": "마비",
+            "sleep": "수면",
+            "blast": "폭발"
+            }
+        },
+        "mantles": {
+            "title": "복장",
+            "instant_cooldown": "복장 즉시 쿨다운",
+            "unlimited_duration": "복장 지속시간 무제한"
+        },
+        "invincible": "무적",
+        "invincible_tooltip": "공격 피해, 움츠리기, 움찔, 상태 이상을 받지 않습니다.",
+        "unlimited_sharpness": "예리도 무한",
+        "unlimited_consumables": "소비 아이템 무한",
+        "unlimited_slingers": "슬링어 탄약 무한"
+    },
+    "great_sword": {
+        "title": "대검",
+        "true_charge_boost": "진정한 참모아 강화",
+        "true_charge_boost_tooltip": "참모아 베기 첫 공격 대미지 증가",
+        "charge_level": "모으기 레벨",
+        "instant_charge": "즉시 참모아 시전"
+    },
+    "sword_and_shield": {
+        "title": "한손검"
+    },
+    "dual_blades": {
+        "title": "쌍검",
+        "demon_gauge": "귀인화 게이지 최대",
+        "demon_boost": "귀인 강화 발동"
+    },
+    "long_sword": {
+        "title": "태도",
+        "aura_level": "연기 게이지 레벨",
+        "aura_level_tooltip": "0에서 1로 설정하려면 연기 게이지가 차야 합니다.",
+        "max_aura_gauge": "연기 게이지 최대",
+        "max_spirit_gauge": "코팅 레벨 최대"
+    },
+    "insect_glaive": {
+        "title": "조충곤",
+        "kinsect": {
+            "title": "사냥벌레",
+            "power": "공격력",
+            "speed": "속도",
+            "recovery": "회복력",
+            "unlimited_stamina": "스태미너 무한",
+            "fast_charge": "고속 충전",
+            "charge_time": "충전 시간 %",
+            "charge_time_tooltip": "「충전 시간 %」는 최대 충전 시간의 비율을 원래 시간 대비로 설정합니다. \n값이 작을수록 고속 충전이 됩니다."
+        },
+        "red": "빨간색 진액",
+        "orange": "주황색 진액",
+        "white": "하얀색 진액",
+        "infinite_air_attacks": "무한 공중공격",
+        "fast_charge": "고속 충전",
+        "charge_time": "충전 시간 % %",
+        "charge_time_tooltip": "「충전 시간 %」는 최대 충전 시간의 비율을 원래 시간 대비로 설정합니다. \n값이 작을수록 고속 충전이 됩니다.",
+        "unrestricted_charge": "충전 제한 없음",
+        "unrestricted_charge_tooltip": "일반적으로 충전할 수 없는 상황(축적 공격 중, 납도 등)에서도 충전이 가능하도록 합니다."
+    },
+    "hammer": {
+        "title": "해머",
+        "charge_level": "모으기 레벨",
+        "super_charge_level": "슈퍼 모으기 레벨",
+        "instant_charge": "즉시 참모아 시전"
+    },
+    "hunting_horn": {
+        "title": "수렵피리",
+        "unlimited_echo_bubbles": "선율 효과 영구 지속"
+    },
+    "lance": {
+        "title": "랜스",
+        "counter_charge_level": "카운터 차지 레벨",
+        "rush_level": "돌진 레벨"
+    },
+    "gunlance": {
+        "title": "건랜스",
+        "shell_level": "포격 레벨",
+        "infinite_wyvern_fire": "용격포 무한 발사",
+        "instant_charge": "즉시 충전",
+        "unlimited_ammo": "포탄 무한"
+    },
+    "bow": {
+        "title": "활",
+        "charge_level": "모아쏘기 레벨",
+        "all_arrow_types": "모든 화살 유형",
+        "unlimited_bottles": "병 장전 무제한",
+        "tetrad_shot_active": "4중 연사 활성화",
+        "unlimited_bladescale": "칼날비늘 병 무제한",
+        "max_trick_arrow_gauge": "3중 화살 게이지 최대"
+    },
+    "light_bowgun": {
+        "title": "라이트 보우건",
+        "max_special_ammo": "특수탄 최대",
+        "max_rapid_shot": "속사 게이지 최대",
+        "max_eagle_shot": "기폭용탄 최대",
+        "instant_eagle_shot_charge": "기폭용탄 즉시 충전",
+        "unlimited_ammo": "탄약 무제한",
+        "unlimited_bladescale": "칼날비늘 탄 무제한",
+        "no_reload": "재장전 필요없음",
+        "no_recoil": "반동 없음"
+    },
+    "heavy_bowgun": {
+        "title": "헤비 보우건",
+        "max_special_ammo": "특수탄 최대",
+        "max_wyvern_howl": "용열 천갑탄 게이지 최대",
+        "max_gatling_hits": "용열 기관용탄 명중률 최대",
+        "max_gatling_hits_tooltip": "용열 기관용탄에만 영향",
+        "unlimited_ammo": "탄약 무제한",
+        "unlimited_bladescale": "칼날비늘 탄 무제한",
+        "no_reload": "재장전 필요없음",
+        "no_recoil": "반동 없음"
+    },
+    "charge_blade": {
+        "title": "차지 액스",
+        "max_phials": "병 갯수 최대",
+        "overcharge_phials": "강화병 상태",
+        "shield_enhanced": "속성(방패) 강화",
+        "sword_enhanced": "검 강화",
+        "axe_enhanced": "도끼 강화"
+    },
+    "switch_axe": {
+        "title": "슬래시 액스",
+        "max_charge": "슬래시(도끼) 게이지 최대",
+        "max_sword_charge": "각성(검) 게이지 최대",
+        "powered_axe": "고출력 상태"
+    }
+}
+

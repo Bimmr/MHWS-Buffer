@@ -1,6 +1,7 @@
 {
-    "_USE_FONT": "NotoSansSC-Regular.otf",
-    "_TRANSLATOR": "syarukasu, Ruri73",
+    "_TRANSLATOR": "syarukasu, Ruri73, 9c5s",
+    "_LANGUAGE_NAME": "日本語 (JP)",
+
     "window": {
         "toggle_button": "バッファGUIの切り替え",
         "title": "修飾子 & 設定",
@@ -12,6 +13,8 @@
         "author": "作者",
         "translator": "翻訳者",
         "version": "バージョン",
+        "options": "オプション",
+        "disable_all": "すべて無効化",
         "bindings": {
             "title": "キー設定",
             "keyboard": "キーボード",
@@ -37,8 +40,22 @@
         "title": "その他",
         "akuma": {
             "title": "豪鬼",
-            "instant_drive_gauge": "瞬間ドライブゲージ",
+            "instant_drive_gauge": "ドライブゲージ即時溜め",
             "gou_hadoken_max_level": "豪波動拳最大レベル"
+        },
+        "water_gun": {
+            "title": "水鉄砲",
+            "unlimited_ammo": "弾無限"
+        },
+        "pictomancy": {
+            "title": "ピクトマンサー",
+            "state": {
+                "title": "絵画魔法状態",
+                "pom": "ピクトポンポン",
+                "wing": "ピクトウィング",
+                "mog": "モーグリストリーム"
+            },
+            "instant_cooldown": "即時クールダウン"
         }
     },
     "character": {
@@ -81,6 +98,7 @@
                 "frenzy": "狂竜症",
                 "frozen": "氷結",
                 "bubble": "泡",
+                "hp_reduction": "最大HP減少",
                 "all": "すべて"
             }
         },
@@ -101,6 +119,25 @@
             "dash_juice": "強走薬",
             "imunizer": "活力剤"
         },
+        "stats": {
+            "title": "ステータス",
+            "bonus_attack": "攻撃力ボーナス",
+            "bonus_defence": "防御力ボーナス",
+            "critical_chance": "クリティカルチャンス",
+            "element": {
+            "title": "属性",
+            "none": "なし",
+            "fire": "火",
+            "water": "水",
+            "ice": "氷",
+            "thunder": "雷",
+            "dragon": "龍",
+            "poison": "毒",
+            "paralyze": "麻痺",
+            "sleep": "睡眠",
+            "blast": "爆破"
+            }
+        },
         "mantles": {
             "title": "装衣",
             "instant_cooldown": "即時クールダウン",
@@ -116,6 +153,7 @@
         "title": "大剣",
         "true_charge_boost": "真・溜め斬り強化",
         "true_charge_boost_tooltip": "真・溜め斬りの初撃ダメージ増加",
+        "charge_level": "Charge level(*)",
         "instant_charge": "即時溜め"
     },
     "sword_and_shield": {
@@ -157,6 +195,8 @@
     },
     "hammer": {
         "title": "ハンマー",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "即時溜め"
     },
     "hunting_horn": {
@@ -166,17 +206,14 @@
     "lance": {
         "title": "ランス",
         "counter_charge_level": "カウンターチャージレベル",
-        "rush_level": "突進レベル",
-        "infinite_backstep": "無限バックステップ"
+        "rush_level": "突進レベル"
     },
     "gunlance": {
         "title": "ガンランス",
         "shell_level": "砲撃レベル",
         "infinite_wyvern_fire": "竜撃砲無限",
-        "infinite_backstep": "無限バックステップ",
         "instant_charge": "即時溜め",
-        "instant_charge_tooltip": "少し溜める必要があります",
-        "free_charge_shot": "チャージショット自由"
+        "unlimited_ammo": "弾無限"
     },
     "bow": {
         "title": "弓",
@@ -184,6 +221,7 @@
         "all_arrow_types": "全ての矢タイプ",
         "unlimited_bottles": "ビン無限",
         "tetrad_shot_active": "四連射サポート有効",
+        "unlimited_bladescale": "無限刃鱗増装",
         "max_trick_arrow_gauge": "トリックアローゲージ最大"
     },
     "light_bowgun": {
@@ -193,6 +231,7 @@
         "max_eagle_shot": "集中特攻弾【射鵰】最大",
         "instant_eagle_shot_charge": "集中特攻弾【射鵰】即時溜め",
         "unlimited_ammo": "弾無限",
+        "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },
@@ -203,6 +242,7 @@
         "max_gatling_hits": "ガトリングヒット数最大",
         "max_gatling_hits_tooltip": "竜熱機関竜弾にのみ影響",
         "unlimited_ammo": "弾無限",
+        "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
         "no_recoil": "反動なし"
     },
@@ -221,3 +261,4 @@
         "powered_axe": "斧モード強化"
     }
 }
+

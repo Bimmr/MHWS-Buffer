@@ -1,4 +1,6 @@
 {
+    "_LANGUAGE_NAME": "English (US)",
+    
     "window": {
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",
@@ -10,6 +12,8 @@
         "author": "Author",
         "translator": "Translator",
         "version": "Version",
+        "options": "Options",
+        "disable_all": "Disable all",
         "bindings": {
             "title": "Bindings",
             "keyboard": "Keyboard",
@@ -37,6 +41,20 @@
             "title": "Akuma",
             "instant_drive_gauge": "Instant Drive Gauge",
             "gou_hadoken_max_level": "Gou Hadoken Max Level"
+        },
+        "water_gun": {
+            "title": "Water Gun",
+            "unlimited_ammo": "Unlimited ammo"
+        },
+        "pictomancy": {
+            "title": "Pictomancy",
+            "state": {
+                "title": "Active Pictomancy state",
+                "pom": "Pom Motif",
+                "wing": "Wing Motif",
+                "mog": "Mog of the ages"
+            },
+            "instant_cooldown": "Instant cooldown"
         }
     },
     "character": {
@@ -79,6 +97,7 @@
                 "frenzy": "Frenzy",
                 "frozen": "Frozen",
                 "bubble": "Bubble",
+                "hp_reduction": "HP Reduction",
                 "all": "All "
             }
         },
@@ -104,6 +123,25 @@
             "instant_cooldown": "Instant cooldown",
             "unlimited_duration": "Unlimited duration"
         },
+        "stats": {
+            "title": "Stats",
+            "bonus_attack": "Bonus attack",
+            "bonus_defence": "Bonus defence",
+            "critical_chance": "Critical chance",
+            "element": {
+                "title": "Element",
+                "none": "None",
+                "fire": "Fire",
+                "water": "Water",
+                "ice": "Ice",
+                "thunder": "Thunder",
+                "dragon": "Dragon",
+                "poison": "Poison",
+                "paralyze": "Paralyze",
+                "sleep": "Sleep",
+                "blast": "Blast"
+            }
+        },
         "invincible": "Invincible",
         "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",
         "unlimited_sharpness": "Unlimited Sharpness",
@@ -115,6 +153,7 @@
         "title": "Great Sword",
         "true_charge_boost": "True Charge boost",
         "true_charge_boost_tooltip": "Inital hit of true charge bonus",
+        "charge_level": "Charge level",
         "instant_charge": "Instant charge"
     },
     "sword_and_shield": {
@@ -157,6 +196,8 @@
 
     "hammer": {
         "title": "Hammer",
+        "charge_level": "Charge level",
+        "super_charge_level": "Super charge level",
         "instant_charge": "Instant charge"
     },
     "hunting_horn": {
@@ -167,17 +208,14 @@
     "lance": {
         "title": "Lance",
         "counter_charge_level": "Counter charge level",
-        "rush_level": "Rush level",
-        "infinite_backstep": "Infinite backstep"
+        "rush_level": "Rush level"
     },
     "gunlance": {
         "title": "Gunlance",
         "shell_level": "Shell level",
         "infinite_wyvern_fire": "Infinite wyvern fire",
-        "infinite_backstep": "Infinite backstep",
         "instant_charge": "Instant charge",
-        "instant_charge_tooltip": "Will require being held for a moment, then letting go to fire",
-        "free_charge_shot": "Free charge shot"
+        "unlimited_ammo": "Unlimited ammo"
     },
 
     "bow": {
@@ -186,6 +224,7 @@
         "all_arrow_types": "All arrow types",
         "unlimited_bottles": "Unlimited bottles",
         "tetrad_shot_active": "Tetrad shot support active",
+        "unlimited_bladescale": "Unlimited bladescale bottles",
         "max_trick_arrow_gauge": "Max trick arrow gauge"
     },
     "light_bowgun": {
@@ -195,6 +234,7 @@
         "max_eagle_shot": "Max eagle shot",
         "instant_eagle_shot_charge": "Instant eagle shot charge",
         "unlimited_ammo": "Unlimited ammo",
+        "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
         "no_recoil": "No recoil"
     },
@@ -205,6 +245,7 @@
         "max_gatling_hits": "Max gatling hits",
         "max_gatling_hits_tooltip": "Only affects Wyvernheart Ignition",
         "unlimited_ammo": "Unlimited ammo",
+        "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
         "no_recoil": "No recoil"
     },
