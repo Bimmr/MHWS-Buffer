@@ -44,18 +44,18 @@
             "gou_hadoken_max_level": "Gou Hadoken Nivel Máximo"
         },
         "water_gun": {
-            "title": "Water Gun(*)",
-            "unlimited_ammo": "Unlimited ammo(*)"
+            "title": "Pistola de agua(*)",
+            "unlimited_ammo": "Carga ilimitada(*)"
         },
         "pictomancy": {
-            "title": "Pictomancy(*)",
+            "title": "Pictomancia(*)",
             "state": {
-                "title": "Active Pictomancy state(*)",
-                "pom": "Pom Motif(*)",
-                "wing": "Wing Motif(*)",
-                "mog": "Mog of the ages(*)"
+                "title": "Estado de Pictomancia Activa(*)",
+                "pom": "Diseño de pompón(*)",
+                "wing": "Diseño de ala(*)",
+                "mog": "Moguri ancestral(*)"
             },
-            "instant_cooldown": "Instant cooldown(*)"
+            "instant_cooldown": "Enfriamiento instantáneo(*)"
         }
     },
     "character": {
@@ -98,7 +98,7 @@
                 "frenzy": "Frenesí",
                 "frozen": "Congelado",
                 "bubble": "Burbuja",
-                "hp_reduction": "HP Reduction(*)",
+                "hp_reduction": "Reducción PS(*)",
                 "all": "Todas"
             }
         },
@@ -125,13 +125,13 @@
             "unlimited_duration": "Duración ilimitada"
         },
         "stats": {
-            "title": "Stats(*)",
-            "bonus_attack": "Bonus attack(*)",
-            "bonus_defence": "Bonus defence(*)",
-            "critical_chance": "Critical chance(*)",
+            "title": "Estadísticas(*)",
+            "bonus_attack": "Bono de ataque(*)",
+            "bonus_defence": "Bonus de defensa(*)",
+            "critical_chance": "Probabilidad crítica(*)",
             "element": {
-                "title": "Element(*)",
-                "none": "None(*)",
+                "title": "Elemento(*)",
+                "none": "Ninguno(*)",
                 "fire": "Fuego",
                 "water": "Agua",
                 "ice": "Hielo",
@@ -154,7 +154,7 @@
         "title": "Gran Espada",
         "true_charge_boost": "Impulso de carga verdadera",
         "true_charge_boost_tooltip": "Golpe inicial con bonificación de carga verdadera",
-        "charge_level": "Charge level(*)",
+        "charge_level": "Nivel de carga(*)",
         "instant_charge": "Carga instantánea"
     },
     "sword_and_shield": {
@@ -197,8 +197,8 @@
 
     "hammer": {
         "title": "Martillo",
-        "charge_level": "Charge level(*)",
-        "super_charge_level": "Super charge level(*)",
+        "charge_level": "Nivel de carga(*)",
+        "super_charge_level": "Nivel de super carga(*)",
         "instant_charge": "Carga instantánea"
     },
     "hunting_horn": {
@@ -224,7 +224,7 @@
         "all_arrow_types": "Todos los tipos de flechas",
         "unlimited_bottles": "Frascos ilimitados",
         "tetrad_shot_active": "Disparo Tétrado activo",
-        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
+        "unlimited_bladescale": "Frascos Filoescama ilimitados(*)",
         "max_trick_arrow_gauge": "Medidor de flecha truco al máximo"
     },
     "light_bowgun": {
@@ -234,7 +234,7 @@
         "max_eagle_shot": "Ataque de águila al máximo",
         "instant_eagle_shot_charge": "Carga instantánea del disparo de águila",
         "unlimited_ammo": "Munición ilimitada",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "Disparos Filoescama ilimitados(*)",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso"
     },
@@ -245,7 +245,7 @@
         "max_gatling_hits": "Ignición coraje wyvern al máximo",
         "max_gatling_hits_tooltip": "Solo afecta a Ignición coraje wyvern",
         "unlimited_ammo": "Munición ilimitada",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "Disparos Filoescama ilimitados(*)",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso"
     },
