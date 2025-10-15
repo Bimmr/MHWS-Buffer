@@ -127,6 +127,28 @@ function Module.init_hooks()
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
     end, function(retval) return retval end)
+
+    local skip_shot_knockback = false
+    sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("getShootActType"), function(args) 
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
+        if not managed:get_Hunter() then return end
+        if not managed:get_Hunter():get_IsMaster() then return end
+        if managed:get_Weapon():get_WpType() ~= 12 then return end
+
+        if Module.data.no_recoil then
+            skip_shot_knockback = true
+        end
+
+    end, function(retval)
+        if skip_shot_knockback then
+            skip_shot_knockback = false
+            return sdk.to_ptr(1)
+        else
+            return retval
+        end
+    end)
+
 end
 
 function Module.draw()
@@ -134,7 +156,7 @@ function Module.draw()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
         changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)

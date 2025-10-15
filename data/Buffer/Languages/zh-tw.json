@@ -147,7 +147,8 @@
         "invincible_tooltip": "你不會受到任何傷害、擊退、畏縮，或被任何異常狀態影響",
         "unlimited_sharpness": "無限鋒利度",
         "unlimited_consumables": "無限消耗品",
-        "unlimited_slingers": "無限彈藥"
+        "unlimited_slingers": "無限彈藥",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
 
     "great_sword": {

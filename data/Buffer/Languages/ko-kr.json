@@ -147,13 +147,14 @@
         "invincible_tooltip": "공격 피해, 움츠리기, 움찔, 상태 이상을 받지 않습니다.",
         "unlimited_sharpness": "예리도 무한",
         "unlimited_consumables": "소비 아이템 무한",
-        "unlimited_slingers": "슬링어 탄약 무한"
+        "unlimited_slingers": "슬링어 탄약 무한",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
     "great_sword": {
         "title": "대검",
         "true_charge_boost": "진정한 참모아 강화",
         "true_charge_boost_tooltip": "참모아 베기 첫 공격 대미지 증가",
-        "charge_level": "모으기 레벨",
+        "charge_level": "차지 레벨",
         "instant_charge": "즉시 참모아 시전"
     },
     "sword_and_shield": {
@@ -195,8 +196,8 @@
     },
     "hammer": {
         "title": "해머",
-        "charge_level": "모으기 레벨",
-        "super_charge_level": "슈퍼 모으기 레벨",
+        "charge_level": "차지 레벨",
+        "super_charge_level": "슈퍼 차지 레벨",
         "instant_charge": "즉시 참모아 시전"
     },
     "hunting_horn": {
@@ -217,7 +218,7 @@
     },
     "bow": {
         "title": "활",
-        "charge_level": "모아쏘기 레벨",
+        "charge_level": "차지 레벨",
         "all_arrow_types": "모든 화살 유형",
         "unlimited_bottles": "병 장전 무제한",
         "tetrad_shot_active": "4중 연사 활성화",

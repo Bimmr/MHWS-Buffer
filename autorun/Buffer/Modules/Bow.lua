@@ -31,7 +31,6 @@ local function reset_arrow_types(weapon)
     Module.old.bottle_infos = nil
 end
 
-local tetrad_shot_active = false
 function Module.init_hooks()
 
     -- Watch for weapon changes, need to re-apply the default arrow types 
@@ -154,7 +153,7 @@ function Module.draw()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
         changed, Module.data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level == -1 and language.get("base.disabled") or "%d")

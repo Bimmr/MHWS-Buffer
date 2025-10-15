@@ -63,7 +63,7 @@ function Module.draw()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
         changed, Module.data.max_phials = imgui.checkbox(language.get(languagePrefix .. "max_phials"), Module.data.max_phials)

@@ -147,7 +147,8 @@
         "invincible_tooltip": "No recibirás ningún daño, ni sufrirás retroceso, ni te estremecerás, ni serás afectado por ningún estado alterado.",
         "unlimited_sharpness": "Filo ilimitado",
         "unlimited_consumables": "Consumibles ilimitados",
-        "unlimited_slingers": "Munición de eslinga ilimitada"
+        "unlimited_slingers": "Munición de eslinga ilimitada",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
 
     "great_sword": {

@@ -44,7 +44,7 @@ function Module.draw()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
         changed, Module.data.counter_charge_level = imgui.slider_int(language.get(languagePrefix .. "counter_charge_level"), Module.data.counter_charge_level, -1, 3, Module.data.counter_charge_level == -1 and language.get("base.disabled") or "%d")

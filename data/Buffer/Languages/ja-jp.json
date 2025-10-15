@@ -147,7 +147,8 @@
         "invincible_tooltip": "ダメージ、ノックバック、ひるみ、状態異常を受けない。",
         "unlimited_sharpness": "斬れ味無限",
         "unlimited_consumables": "消費アイテム無限",
-        "unlimited_slingers": "スリンガー弾無限"
+        "unlimited_slingers": "スリンガー弾無限",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
     "great_sword": {
         "title": "大剣",

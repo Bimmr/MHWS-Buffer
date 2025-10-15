@@ -1,4 +1,6 @@
 local utils, config, language
+
+local Icon = require("Buffer.Misc.Icon")
 local Module = {
     title = "great_sword",
     data = {
@@ -46,10 +48,11 @@ end
 
 function Module.draw()
     imgui.push_id(Module.title)
+
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
        
         changed, Module.data.true_charge_boost = imgui.checkbox(language.get(languagePrefix .. "true_charge_boost"), Module.data.true_charge_boost)

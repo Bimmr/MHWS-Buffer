@@ -146,7 +146,8 @@
         "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",
         "unlimited_sharpness": "Unlimited Sharpness",
         "unlimited_consumables": "Unlimited Consumables",
-        "unlimited_slingers": "Unlimited Slinger Ammo"
+        "unlimited_slingers": "Unlimited Slinger Ammo",
+        "unlimited_meal_timer": "Unlimited Meal Timer"
     },
 
     "great_sword": {

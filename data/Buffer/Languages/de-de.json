@@ -147,7 +147,8 @@
         "invincible_tooltip": "Unverwundbar gegen Schaden, aber nicht gegen Sturzschaden.",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
-        "unlimited_slingers": "Unbegrenzte Schleudermunition"
+        "unlimited_slingers": "Unbegrenzte Schleudermunition",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
 
     "great_sword": {

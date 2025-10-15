@@ -75,35 +75,50 @@ function Module.init_hooks()
                 end
             end
         end
-        
-        -- Maybe convert this into setting max ammo and level for all currently equipable ammo types 
-        -- if Module.data.all_ammo and not Module.old.ammo then
-        --     Module.old.ammo = {}
-        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
-        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
-        --         if ammo_info then
-        --             Module.old.ammo[i] = {
-        --                 num = ammo_info:get_field("<Num>k__BackingField"),
-        --                 level = ammo_info:get_field("_ShellLv")
-        --             }
-        --             ammo_info:set_field("<Num>k__BackingField", 10)
-        --             ammo_info:set_field("_ShellLv", 10)
-        --         end
+
+        -- _Ammos
+        -- 0  = Normal
+        -- 1  = Pierce
+        -- 2  = Spread
+        -- 3  = Sticky
+        -- 4  = Cluster
+        -- 5  = Slicing
+        -- 6  = Wyvern
+        -- 7  = Flaming
+        -- 8  = Water
+        -- 9  = Thunder
+        -- 10 = Ice
+        -- 11 = Dragon
+        -- 12 = Poison
+        -- 13 = Paralysis
+        -- 14 = Sleep
+        -- 15 = Demon
+        -- 16 = Armor
+        -- 17 = Recovery
+        -- 18 = Exhaust
+        -- 19 = Tranq
+
+        -- for i = 0, #managed:get_field("<EquipShellInfo>k__BackingField") do
+        --     local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
+        --     if ammo_info then
+        --         ammo_info:set_field("_ShellLv", 2) -- Valid values are 0, 1, 2. Anything over 2 does 1 damage
+        --         -- ammo_info:set_field("<CanRapid>k__BackingField", true) -- Doesn't seem to do anything
         --     end
-        -- elseif not Module.data.all_ammo and Module.old.ammo then
-        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
-        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
-        --         if ammo_info then
-        --             ammo_info:set_field("<Num>k__BackingField", Module.old.ammo[i].num)
-        --             ammo_info:set_field("_ShellLv", Module.old.ammo[i].level)
-        --         end
-        --     end
-        --     Module.old.ammo = nil
         -- end
+
+        -- for i = 0, #managed:get_field("_Ammos") do
+        --     local ammo_info = managed:get_field("_Ammos")[i]
+        --     if ammo_info then
+        --         ammo_info:set_field("_AmmoType", 1) -- Makes the ammo rapid,  0 = Normal, 1 = Rapid
+        --         -- ammo_info:setLimitAmmo(9) -- Doesn't work
+        --         -- ammo_info:setBackupAmmo(9) -- Doesn't work
+        --         -- ammo_info:setLoadedAmmo(9) -- Unlimited ammo alternative
+        --     end
+        -- end
+
 
     end, function(retval) end)
 
-   
     -- On shooting a shell, check if unlimited ammo is enabled, and if no reload is enabled
     local skip_ammo_usage = false
     local no_reload_managed_weapon = nil
@@ -156,6 +171,27 @@ function Module.init_hooks()
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
     end, function(retval) return retval end)
+
+    local skip_shot_knockback = false
+    sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("getShootActType"), function(args) 
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
+        if not managed:get_Hunter() then return end
+        if not managed:get_Hunter():get_IsMaster() then return end
+        if managed:get_Weapon():get_WpType() ~= 13 then return end
+
+        if Module.data.no_recoil then
+            skip_shot_knockback = true
+        end
+
+    end, function(retval)
+        if skip_shot_knockback then
+            skip_shot_knockback = false
+            return sdk.to_ptr(1)
+        else
+            return retval
+        end
+    end)
 end
 
 function Module.draw()
@@ -163,7 +199,7 @@ function Module.draw()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
         changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)

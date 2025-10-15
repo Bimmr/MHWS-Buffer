@@ -7,6 +7,7 @@ local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 local language = require("Buffer.Misc.Language")
 local bindings = require("Buffer.Misc.BindingsHelper")
+local Icon = require("Buffer.Misc.Icon")
 
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
@@ -80,8 +81,9 @@ re.on_draw_ui(function()
     if isWindowOpen then
         wasOpen = true
 
-        imgui.push_style_var(3, 7.5) -- Rounded window
-        imgui.push_style_var(12, 5.0) -- Rounded elements
+        imgui.push_style_var(imgui.ImGuiStyleVar.WindowRounding, 7.5) -- Rounded window
+        imgui.push_style_var(imgui.ImGuiStyleVar.FrameRounding, 5.0) -- Rounded elements
+        imgui.push_style_var(imgui.ImGuiStyleVar.Alpha, 0.9) -- Window transparency
 
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
@@ -241,12 +243,22 @@ re.on_draw_ui(function()
         imgui.separator()
 
         imgui.spacing()
-        for _, module in pairs(modules) do if module.draw ~= nil then module.draw() end end
+        for _, module in pairs(modules) do 
+            if module.draw ~= nil then 
+            
+                local header_pos = imgui.get_cursor_pos()
+                module.draw() 
+                local pos = imgui.get_cursor_pos()
+                imgui.set_cursor_pos({header_pos.x + 18, header_pos.y + 2})
+                Icon.drawIcon(module.title)
+                imgui.set_cursor_pos(pos)
+            end
+        end
         imgui.spacing()
 
         imgui.spacing()
         imgui.end_window()
-        imgui.pop_style_var(2)
+        imgui.pop_style_var(3)
 
         -- If the window is closed, but was just open. 
         -- This is needed because of the close icon on the window not triggering a save to the config
