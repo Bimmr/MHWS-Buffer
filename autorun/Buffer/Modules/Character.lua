@@ -73,6 +73,9 @@ local Module = ModuleBase:new("character", {
     unlimited_meal_timer = false,
 })
 
+-- Local variables
+local skip_consumable_use = false
+local skip_slinger_use = false
 
 -- Item Buffs
 local ITEM_BUFFS_DATA = {
@@ -191,7 +194,7 @@ function Module.create_hooks()
                 if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
                     hunter_meal_effect:set_field("_IsEffectActive", true)
                 end
-                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then -- Doesn't actually do anything, but it makes it look like stamina got increased by food
+                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then --* Doesn't actually do anything, but it makes it look like stamina got increased by food
                     hunter_meal_effect:set_field("_MaxStaminaAdd", 50)
                 end
                 if stamina:get_MaxStamina() < 150 then
@@ -209,35 +212,41 @@ function Module.create_hooks()
             end
         end
 
+        -- Item Buffs
         if item_buffs ~= nil then
 
+            -- Basic item buffs
             for buff_name, buff_data in pairs(ITEM_BUFFS_DATA) do
                 if Module.data.item_buffs[buff_name] then
                     item_buffs:set_field(buff_data.field, buff_data.duration)
                 end
             end
             
+            -- Demon Drug is handled differently
             if Module.data.item_buffs.demon_drug then
                 local demon_drug = item_buffs:get_field("_KijinDrink")
                 if demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(4), 1.0, 1.0)   
                 end
             end
-            if Module.data.item_buffs.mega_demondrug then 
-                local demon_drug = item_buffs:get_field("_KijinDrink_G")
-                if demon_drug:get_field("_Timer") <= 0 then
+            -- Mega Demondrug is handled differently
+            if Module.data.item_buffs.mega_demondrug then
+                local mega_demon_drug = item_buffs:get_field("_KijinDrink_G")
+                if mega_demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(5), 1.0, 1.0)
                 end
             end
+            -- Armor Skin is handled differently
             if Module.data.item_buffs.armor_skin then
                 local armor_skin = item_buffs:get_field("_KoukaDrink")
                 if armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(10), 1.0, 1.0)        
                 end
             end
+            -- Mega Armorskin is handled differently
             if Module.data.item_buffs.mega_armorskin then
-                local armor_skin = item_buffs:get_field("_KoukaDrink_G")
-                if armor_skin:get_field("_Timer") <= 0 then
+                local mega_armor_skin = item_buffs:get_field("_KoukaDrink_G")
+                if mega_armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(11), 1.0, 1.0)
                 end
             end
@@ -253,9 +262,10 @@ function Module.create_hooks()
             end
         end
 
-        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then -- Not far enough into story to know, will probably affect armor buff
+        -- Frenzy is handled different
+        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then
             local frenzy = conditions:get_field("_Frenzy")
-             -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
+            -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
             -- _DurationTimer - counts down from _DurationTime
             -- _OvercomePoint - builds up on attack towards _OvercomeTargetPoint
             -- _PointReduceTimer - Builds up to 1 (Keeping at 0 stops _DurationTimer from counting down, if _State is 1)
@@ -264,24 +274,27 @@ function Module.create_hooks()
                 frenzy:set_field("_DurationTimer", 0.2)
             end
         end
+        -- Stun is handled differently
         if Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all then
             local stun = conditions:get_field("_Stun")
-            if stun:get_field("_ReduceTimer") < 6 then -- Maybe a Jewel or skill lowers this
+            if stun:get_field("_ReduceTimer") < 6 then --? Maybe a Jewel or skill lowers this
                 stun:set_field("_ReduceTimer", 6)
             end
             if stun:get_field("_Accumulator") > 0 then
                 stun:set_field("_Accumulator", 0)
             end
         end
+        -- Paralyze is handled differently
         if Module.data.blights_and_conditions.conditions.paralyze or Module.data.blights_and_conditions.conditions.all then
             local paralyze = conditions:get_field("_Paralyze") -- Effect still plays
             if paralyze:get_field("_DurationTime") > 0 then
-                paralyze:cure() -- cure stops more of the animation than forceDeactivate
+                paralyze:cure() --* cure stops more of the animation than forceDeactivate
             end
             if paralyze:get_field("_Accumulator") > 0 then
                 paralyze:set_field("_Accumulator", 0)
             end
         end
+        -- Sticky is handled differently
         if Module.data.blights_and_conditions.conditions.sticky or Module.data.blights_and_conditions.conditions.all then
             local sticky = conditions:get_field("_Sticky") -- Effect probably still plays
             if sticky:get_field("_DurationTime") > 0 then
@@ -289,6 +302,7 @@ function Module.create_hooks()
                 sticky:set_field("_IsRestrainted", false)
             end
         end
+        -- Frozen is handled differently
         if Module.data.blights_and_conditions.conditions.frozen or Module.data.blights_and_conditions.conditions.all then
             local frozen = conditions:get_field("_Frozen") -- Effect still partially plays
             if frozen:get_field("_DurationTime") > 0 then
@@ -349,7 +363,6 @@ function Module.create_hooks()
 
 
     -- Unlimited Consumables
-    local skip_consumable_use = false
     sdk.hook(sdk.find_type_definition("app.HunterCharacter.cHunterExtendBase"):get_method("useItem"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_IsMaster() then return end
@@ -377,7 +390,6 @@ function Module.create_hooks()
     end)
     
     -- Used for consumables in both the slinger and item pouch
-    local skip_slinger_use = false
     sdk.hook(sdk.find_type_definition("app.savedata.cItemParam"):get_method("changeItemPouchNum(app.ItemDef.ID, System.Int16, app.savedata.cItemParam.POUCH_CHANGE_TYPE)"), function(args)
         if skip_consumable_use or skip_slinger_use then
             return sdk.PreHookResult.SKIP_ORIGINAL

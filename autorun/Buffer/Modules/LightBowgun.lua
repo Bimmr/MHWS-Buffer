@@ -11,12 +11,21 @@ local Module = ModuleBase:new("light_bowgun", {
     no_reload = false,
     no_recoil = false,
     unlimited_bladescale = false,
-    -- all_ammo = false
+    all_rapid_fire = false,
+    shell_level = -1
 })
 
 function Module.create_hooks()
+
+    -- Watch for weapon changes to reset ammo types
+    sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeapon"), function(args) 
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
+        if not managed:get_IsMaster() then return end
+
+        Module:reset()
+    end, function(retval) end)
     
-    -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
@@ -35,8 +44,7 @@ function Module.create_hooks()
             managed:get_field("_RapidShotBoostInfo"):set_field("_ModeTime", 100)
         end
        
-
-        -- Weak Ammo (Also known in game as Eagle Shot)
+        -- Unlimited Eagle Shots
         if Module.data.max_eagle_shot then
             local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
             if weak_ammo_info then
@@ -44,6 +52,7 @@ function Module.create_hooks()
             end
         end
 
+        -- Instant Eagle Shot Charge
         if Module.data.instant_eagle_shot_charge then
             local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
             if weak_ammo_info then
@@ -61,7 +70,12 @@ function Module.create_hooks()
             end
         end
 
-        -- _Ammos
+        -- All Rapid Fire (0 = Normal, 1 = Rapid)
+        local ammos = managed:get_field("_Ammos")
+        Module:cache_and_update_array_toggle("ammos", ammos, "_AmmoType", Module.data.all_rapid_fire)
+
+
+        --* _Ammos
         -- 0  = Normal
         -- 1  = Pierce
         -- 2  = Spread
@@ -83,18 +97,14 @@ function Module.create_hooks()
         -- 18 = Exhaust
         -- 19 = Tranq
 
-        -- for i = 0, #managed:get_field("<EquipShellInfo>k__BackingField") do
-        --     local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
-        --     if ammo_info then
-        --         ammo_info:set_field("_ShellLv", 2) -- Valid values are 0, 1, 2. Anything over 2 does 1 damage
-        --         -- ammo_info:set_field("<CanRapid>k__BackingField", true) -- Doesn't seem to do anything
-        --     end
-        -- end
+        -- Shell Level (Valid values are 0, 1, 2. Anything over 2 does 1 damage)
+        local equip_shell_info = managed:get_field("<EquipShellInfo>k__BackingField")
+        Module:cache_and_update_array_value("equip_shell_info", equip_shell_info, "_ShellLv", Module.data.shell_level)
 
+        --* Can't force ammo into the bowgun, need to explore this more
         -- for i = 0, #managed:get_field("_Ammos") do
         --     local ammo_info = managed:get_field("_Ammos")[i]
         --     if ammo_info then
-        --         ammo_info:set_field("_AmmoType", 1) -- Makes the ammo rapid,  0 = Normal, 1 = Rapid
         --         -- ammo_info:setLimitAmmo(9) -- Doesn't work
         --         -- ammo_info:setBackupAmmo(9) -- Doesn't work
         --         -- ammo_info:setLoadedAmmo(9) -- Unlimited ammo alternative
@@ -198,9 +208,6 @@ function Module.add_ui()
 
     imgui.end_table()
     
-    -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
-    -- any_changed = any_changed or changed
-    
     imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
     imgui.table_next_row()
     imgui.table_next_column()
@@ -214,18 +221,37 @@ function Module.add_ui()
     any_changed = any_changed or changed
 
     imgui.end_table()
-
+    
     changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
     any_changed = any_changed or changed
 
     changed, Module.data.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), Module.data.no_recoil)
     any_changed = any_changed or changed
 
+    changed, Module.data.all_rapid_fire = imgui.checkbox(language.get(languagePrefix .. "all_rapid_fire"), Module.data.all_rapid_fire)
+    any_changed = any_changed or changed
+
+    changed, Module.data.shell_level = imgui.slider_int(language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 2, Module.data.shell_level == -1 and language.get("base.disabled") or tostring(Module.data.shell_level + 1))
+    any_changed = any_changed or changed
+
     return any_changed
 end
 
 function Module.reset()
-    -- Implement reset functionality if needed
+    local player = utils.get_master_character()
+    if not player then return end
+    
+    local weapon_handling = player:get_WeaponHandling()
+    if not weapon_handling then return end
+    if not Module:weapon_hook_guard(weapon_handling, "app.cHunterWp13Handling") then return end
+
+    -- Restore original ammo types
+    local ammos = weapon_handling:get_field("_Ammos")
+    Module:cache_and_update_array_toggle("ammos", ammos, "_AmmoType", false)
+    
+    -- Restore original shell levels
+    local equip_shell_info = weapon_handling:get_field("<EquipShellInfo>k__BackingField")
+    Module:cache_and_update_array_value("equip_shell_info", equip_shell_info, "_ShellLv", -1)
 end
 
 return Module

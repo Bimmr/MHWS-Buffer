@@ -7,12 +7,9 @@ local Module = ModuleBase:new("charge_blade", {
 
 function Module.create_hooks()
     
-    -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp09Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp09Handling") then return end
-
-        -- no overheat sword (Also no charge) _swordEnergyPoint:_Value
 
         -- Max Phials
         if Module.data.max_phials then

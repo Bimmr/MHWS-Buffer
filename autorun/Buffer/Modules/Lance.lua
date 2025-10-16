@@ -9,7 +9,6 @@ local Module = ModuleBase:new("lance", {
 
 function Module.create_hooks()
     
-    -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp06Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp06Handling") then return end

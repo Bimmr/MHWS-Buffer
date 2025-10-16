@@ -25,6 +25,7 @@ function Module.create_hooks()
 
         -- Akuma 
         local akuma = managed:get_ExEmote00()
+
         -- Instant Drive Gauge
         if Module.data.akuma.instant_drive_gauge then
             akuma:set_field("_aimAttackTimer", 0)
@@ -41,12 +42,15 @@ function Module.create_hooks()
         -- Watergun
         local hunterInfo = managed:get_HunterInfoHolder()
         local exEmote01Info = hunterInfo:get_ExEmote01Info()
+        
+        -- Unlimited Ammo
         if Module.data.water_gun.unlimited_ammo then
             exEmote01Info:set_field("_AmmoCount", exEmote01Info:get_field("_MaxAmmoCount"))
         end
 
         -- Pictomancy
         local pictomancy = managed:get_ExEmote03()
+
         -- Instant Cooldown
         if Module.data.pictomancy.instant_cooldown then
             pictomancy:set_field("<PictItemCDTimer>k__BackingField", 0)
@@ -58,7 +62,7 @@ function Module.create_hooks()
 
             -- Only set if different or if a multiple of 2 (0, 2, 4)
             if current_state % 2 ~= 0 or current_state ~= Module.data.pictomancy.state * 2 then
-                pictomancy:set_field("<PictPhase>k__BackingField", Module.data.pictomancy.state * 2) -- x2 because in-game values are: 0 = Pom Motif, 2 = Wing Motif, 4 = Mog of the ages
+                pictomancy:set_field("<PictPhase>k__BackingField", Module.data.pictomancy.state * 2) --* x2 because in-game values are: 0 = Pom Motif, 2 = Wing Motif, 4 = Mog of the ages
             end
         end
 
@@ -115,8 +119,5 @@ function Module.add_ui()
     return any_changed
 end
 
-function Module.reset()
-    -- Implement reset functionality if needed
-end
 
 return Module

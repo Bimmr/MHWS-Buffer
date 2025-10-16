@@ -10,7 +10,6 @@ local Module = ModuleBase:new("great_sword", {
 
 function Module.create_hooks()
     
-    -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp00Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp00Handling") then return end
@@ -20,15 +19,15 @@ function Module.create_hooks()
             managed:set_field("_IsSpiritSlashEnhanced", true) 
         end
 
-        -- Charge level
-        if Module.data.charge_level >= 0 and managed:get_field("_ChargeTimer") > 0 then
-            managed:set_field("_ChargeLevel", Module.data.charge_level)
-        end
-
          -- Instant charge
         if Module.data.instant_charge then 
             managed:set_field("_ChargeTimer", 3)
             managed:set_field("_ChargeLevel", 3)
+        end
+        
+        -- Charge level
+        if Module.data.charge_level >= 0 and managed:get_field("_ChargeTimer") > 0 then
+            managed:set_field("_ChargeLevel", Module.data.charge_level)
         end
 
     end, function(retval) end)

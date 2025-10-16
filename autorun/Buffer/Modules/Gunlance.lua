@@ -1,5 +1,6 @@
 local ModuleBase = require("Buffer.Misc.ModuleBase")
 local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
 local Module = ModuleBase:new("gunlance", {
     shell_level = -1,
@@ -8,17 +9,6 @@ local Module = ModuleBase:new("gunlance", {
     instant_charge = false,
     unlimited_ammo = false,
 })
-
-local function update_field(field_name, managed, new_value)
-    if Module.old == nil then Module.old = {} end
-    if Module.old[field_name] == nil then Module.old[field_name] = managed:get_field(field_name) end
-    if new_value >= 0 then 
-        managed:set_field(field_name, new_value) 
-    else
-        managed:set_field(field_name, Module.old[field_name])
-        Module.old[field_name] = nil
-    end 
-end
 
 function Module.create_hooks()
     
@@ -30,7 +20,7 @@ function Module.create_hooks()
         local ammo = managed:get_field("_Ammo")
 
         -- Shell level
-        update_field("_ShellLevel", managed, Module.data.shell_level)
+        Module:cache_and_update_field("_ShellLevel", managed, "_ShellLevel", Module.data.shell_level)
 
         -- Infinite wyvernshots
         if Module.data.infinite_wyvern_fire then 
@@ -48,7 +38,6 @@ function Module.create_hooks()
         if Module.data.unlimited_ammo then 
             ammo:setLoadedAmmo(ammo:get_LimitAmmo())
         end
-
 
     end, function(retval) end)
 end
@@ -70,6 +59,19 @@ function Module.add_ui()
     any_changed = any_changed or changed
 
     return any_changed
+end
+
+function Module.reset()
+    local player = utils.get_master_character()
+    if not player then return end
+    
+    local weapon_handling = player:get_WeaponHandling()
+    if not weapon_handling then return end
+
+    if not Module:weapon_hook_guard(weapon_handling, "app.cHunterWp07Handling") then return end
+
+    -- Reset shell level if needed
+    Module:cache_and_update_field("_ShellLevel", weapon_handling, "_ShellLevel", -1)
 end
 
 return Module
