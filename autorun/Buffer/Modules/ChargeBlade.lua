@@ -45,7 +45,7 @@ end
 
 function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:get_title() .. "."
+    local languagePrefix = Module.title .. "."
        
     changed, Module.data.max_phials = imgui.checkbox(language.get(languagePrefix .. "max_phials"), Module.data.max_phials)
     any_changed = any_changed or changed

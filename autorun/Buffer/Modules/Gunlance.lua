@@ -55,7 +55,7 @@ end
 
 function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:get_title() .. "."
+    local languagePrefix = Module.title .. "."
 
     changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
     any_changed = any_changed or changed

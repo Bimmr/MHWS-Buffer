@@ -36,7 +36,7 @@ end
 
 function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:get_title() .. "."
+    local languagePrefix = Module.title .. "."
        
     changed, Module.data.true_charge_boost = imgui.checkbox(language.get(languagePrefix .. "true_charge_boost"), Module.data.true_charge_boost)
     utils.tooltip(language.get(languagePrefix .. "true_charge_boost_tooltip"))

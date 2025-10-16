@@ -45,24 +45,6 @@ function ModuleBase:add_ui() end
 function ModuleBase:reset() end
 
 
---- Get the module's data table
---- @return table The module's data table
-function ModuleBase:get_data()
-    return self.data
-end
-
---- Get the module's title
---- @return string The module's title
-function ModuleBase:get_title()
-    return self.title
-end
-
---- Get the module's old data table
---- @return table The module's old data table
-function ModuleBase:get_old_data()
-    return self.old
-end
-
 --- Save current configuration
 function ModuleBase:save_config()
     config.save_section({
@@ -72,7 +54,7 @@ end
 
 -- Load configuration from the config file
 function ModuleBase:load_config()
-    utils.update_table_with_existing_table(self:get_data(), config.get_section(self:get_title()))
+    utils.update_table_with_existing_table(self.data, config.get_section(self.title))
 end
 
 --- Create a standard weapon hook guard
@@ -94,10 +76,10 @@ function ModuleBase:draw_module()
     local header_pos = imgui.get_cursor_pos()
 
     -- Setup id for imgui elements
-    imgui.push_id(self:get_title())
+    imgui.push_id(self.title)
 
     -- Draw the header. Add spaces to the left to add space for the icon
-    if imgui.collapsing_header("    " .. language.get(self:get_title() .. ".title")) then
+    if imgui.collapsing_header("    " .. language.get(self.title .. ".title")) then
 
         -- Draw the module content
         imgui.indent(10)
@@ -109,7 +91,7 @@ function ModuleBase:draw_module()
     -- Draw the icon
     local pos = imgui.get_cursor_pos()
     imgui.set_cursor_pos({header_pos.x + 18, header_pos.y + 2})
-    icons.draw_icon(self:get_title())
+    icons.draw_icon(self.title)
     imgui.set_cursor_pos(pos)
 
     -- Pop the id

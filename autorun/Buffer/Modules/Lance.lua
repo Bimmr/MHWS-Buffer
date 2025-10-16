@@ -30,7 +30,7 @@ end
 
 function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:get_title() .. "."
+    local languagePrefix = Module.title .. "."
        
     changed, Module.data.counter_charge_level = imgui.slider_int(language.get(languagePrefix .. "counter_charge_level"), Module.data.counter_charge_level, -1, 3, Module.data.counter_charge_level == -1 and language.get("base.disabled") or "%d")
     any_changed = any_changed or changed     
