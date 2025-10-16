@@ -237,6 +237,8 @@
         "instant_eagle_shot_charge": "Maximale Adlerschussladung",
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
+        "shell_level": "Shell level (*)",
+        "all_rapid_fire": "All rapid fire (*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
@@ -248,6 +250,7 @@
         "max_gatling_hits_tooltip": "Betrifft nur Wyvernherz-Zuendung",
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
+        "shell_level": "Shell level (*)",
         "no_reload": "Kein Nachladen",
         "no_recoil": "Kein Rueckstoss"
     },
