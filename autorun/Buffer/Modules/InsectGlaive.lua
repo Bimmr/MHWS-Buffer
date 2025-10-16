@@ -57,7 +57,7 @@ sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeapo
     if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
     if not managed:get_IsMaster() then return end
 
-    local player = utils.getMasterCharacter()
+    local player = utils.get_master_character()
     local weapon_handling = player:get_WeaponHandling()
     local reserve_weapon_handling = player:get_ReserveWeaponHandling()
 
@@ -72,12 +72,12 @@ sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeapo
     reset_kinsect(weapon:get_Insect())
 end, function(retval) end)
 
-function Module.createHooks()
+function Module.create_hooks()
 
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp10Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp10Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp10Handling") then return end
 
         -- Kinsect
         local kinsect = managed:get_Insect()
@@ -134,7 +134,7 @@ function Module.createHooks()
 
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
@@ -218,7 +218,7 @@ end
 function Module.reset()
     if Module.old.kinsect and (Module.old.kinsect._PowerLv or Module.data.kinsect._RecoveryLv or Module.old.kinsect._SpeedLv) then
 
-        local player = utils.getMasterCharacter()
+        local player = utils.get_master_character()
         local weapon_handling = player:get_WeaponHandling()
         local reserve_weapon_handling = player:get_ReserveWeaponHandling()
 

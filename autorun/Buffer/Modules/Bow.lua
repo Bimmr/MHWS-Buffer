@@ -24,7 +24,7 @@ local function resetArrowTypes(weapon)
     Module.old.bottle_infos = nil
 end
 
-function Module.createHooks()
+function Module.create_hooks()
 
     -- Watch for weapon changes, need to re-apply the default arrow types 
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeapon"), function(args) 
@@ -56,7 +56,7 @@ function Module.createHooks()
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp11Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp11Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp11Handling") then return end
 
 
         -- Charge Level
@@ -102,7 +102,7 @@ function Module.createHooks()
         -- Unlimited bottles
         if Module.data.unlimited_bottles then
             -- Check for Tetrad Shot skill (index 38)
-            tetrad_shot_active = utils.hasSkill(managed:get_Hunter(), 38)
+            tetrad_shot_active = utils.has_skill(managed:get_Hunter(), 38)
 
             local max_bottle_num = tetrad_shot_active and 4 or 10
 
@@ -119,7 +119,7 @@ function Module.createHooks()
         -- Bladescale Loading
         if Module.data.unlimited_bladescale then
             -- Check for Bladescale Loading skill (index 201)
-            if utils.hasSkill(managed:get_Hunter(), 201) then
+            if utils.has_skill(managed:get_Hunter(), 201) then
                 managed:set_field("<Skill218BottleNum>k__BackingField", 3)
             end
         end
@@ -127,9 +127,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
 
     changed, Module.data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level == -1 and language.get("base.disabled") or "%d")
     any_changed = any_changed or changed
@@ -164,7 +164,7 @@ function Module.reset()
 
     -- Reset the arrow types if all_arrow_types is enabled
     if Module.data.all_arrow_types and Module.old.bottle_infos then
-        local player = utils.getMasterCharacter()
+        local player = utils.get_master_character()
         local weapon_handling = player:get_WeaponHandling()
         local reserve_weapon_handling = player:get_ReserveWeaponHandling()
 

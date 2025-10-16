@@ -7,12 +7,12 @@ local Module = ModuleBase:new("lance", {
     infinite_backstep = false,
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp06Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp06Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp06Handling") then return end
 
         -- Counter charge level
         if Module.data.counter_charge_level ~= -1 then 
@@ -28,9 +28,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
        
     changed, Module.data.counter_charge_level = imgui.slider_int(language.get(languagePrefix .. "counter_charge_level"), Module.data.counter_charge_level, -1, 3, Module.data.counter_charge_level == -1 and language.get("base.disabled") or "%d")
     any_changed = any_changed or changed     

@@ -8,12 +8,12 @@ local Module = ModuleBase:new("long_sword", {
     max_spirit_gauge = false,
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp03Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp03Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp03Handling") then return end
 
         -- Aura level
         if Module.data.aura_level ~= -1 then
@@ -37,9 +37,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
        
     changed, Module.data.aura_level = imgui.slider_int(language.get(languagePrefix .. "aura_level"), Module.data.aura_level, -1, 3, Module.data.aura_level == -1 and language.get("base.disabled") or "%d")   
     utils.tooltip(language.get(languagePrefix .. "aura_level_tooltip"))

@@ -217,7 +217,7 @@ re.on_draw_ui(function()
 
                     for _, module in pairs(modules) do 
                         disable_all(module.data)
-                        module:saveConfig()
+                        module:save_config()
                     end
                 end
                 imgui.spacing()
@@ -242,7 +242,7 @@ re.on_draw_ui(function()
 
         imgui.spacing()
         for _, module in pairs(modules) do 
-            module:drawModule()
+            module:draw_module()
         end
         imgui.spacing()
 
@@ -272,5 +272,5 @@ end)
 
 -- On script save
 re.on_config_save(function()
-    for _, module in pairs(modules) do module:saveConfig() end
+    for _, module in pairs(modules) do module:save_config() end
 end)

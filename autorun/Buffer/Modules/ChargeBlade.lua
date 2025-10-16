@@ -2,19 +2,15 @@ local ModuleBase = require("Buffer.Misc.ModuleBase")
 local language = require("Buffer.Misc.Language")
 
 local Module = ModuleBase:new("charge_blade", {
-    max_phials = false,
-    overcharge_phials = false,
-    shield_enhanced = false,
-    sword_enhanced = false,
-    axe_enhanced = false        
+    max_sword_charge = 2
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp09Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp09Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp09Handling") then return end
 
         -- no overheat sword (Also no charge) _swordEnergyPoint:_Value
 
@@ -47,9 +43,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
        
     changed, Module.data.max_phials = imgui.checkbox(language.get(languagePrefix .. "max_phials"), Module.data.max_phials)
     any_changed = any_changed or changed

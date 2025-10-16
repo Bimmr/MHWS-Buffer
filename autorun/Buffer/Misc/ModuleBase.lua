@@ -35,44 +35,44 @@ end
 ---       -- Custom initialization here
 ---   end
 function ModuleBase:init()
-    self:loadConfig()
-    self:createHooks()
+    self:load_config()
+    self:create_hooks()
 end
 
 -- To be overridden in child modules
-function ModuleBase:createHooks() end
-function ModuleBase:addUI() end
+function ModuleBase:create_hooks() end
+function ModuleBase:add_ui() end
 function ModuleBase:reset() end
 
 
 --- Get the module's data table
 --- @return table The module's data table
-function ModuleBase:getData()
+function ModuleBase:get_data()
     return self.data
 end
 
 --- Get the module's title
 --- @return string The module's title
-function ModuleBase:getTitle()
+function ModuleBase:get_title()
     return self.title
 end
 
 --- Get the module's old data table
 --- @return table The module's old data table
-function ModuleBase:getOldData()
+function ModuleBase:get_old_data()
     return self.old
 end
 
 --- Save current configuration
-function ModuleBase:saveConfig()
+function ModuleBase:save_config()
     config.save_section({
         [self.title] = self.data
     })
 end
 
 -- Load configuration from the config file
-function ModuleBase:loadConfig()
-    utils.update_table_with_existing_table(self:getData(), config.get_section(self:getTitle()))
+function ModuleBase:load_config()
+    utils.update_table_with_existing_table(self:get_data(), config.get_section(self:get_title()))
 end
 
 --- Create a standard weapon hook guard
@@ -80,7 +80,7 @@ end
 --- @param managed userdata The managed object
 --- @param weapon_class string The weapon class to check (e.g., "app.cHunterWp11Handling")
 --- @return boolean True if all checks pass
-function ModuleBase:weaponHookGuard(managed, weapon_class)
+function ModuleBase:weapon_hook_guard(managed, weapon_class)
     if not managed then return false end
     if not managed:get_type_definition():is_a(weapon_class) then return false end
     if not managed:get_Hunter() then return false end
@@ -89,19 +89,19 @@ function ModuleBase:weaponHookGuard(managed, weapon_class)
 end
 
 
-function ModuleBase:drawModule()
+function ModuleBase:draw_module()
     local any_changed = false
     local header_pos = imgui.get_cursor_pos()
 
     -- Setup id for imgui elements
-    imgui.push_id(self:getTitle())
+    imgui.push_id(self:get_title())
 
     -- Draw the header. Add spaces to the left to add space for the icon
-    if imgui.collapsing_header("    " .. language.get(self:getTitle() .. ".title")) then
+    if imgui.collapsing_header("    " .. language.get(self:get_title() .. ".title")) then
 
         -- Draw the module content
         imgui.indent(10)
-        any_changed = self:addUI()
+        any_changed = self:add_ui()
         imgui.unindent(10)
 
     end
@@ -109,7 +109,7 @@ function ModuleBase:drawModule()
     -- Draw the icon
     local pos = imgui.get_cursor_pos()
     imgui.set_cursor_pos({header_pos.x + 18, header_pos.y + 2})
-    icons.drawIcon(self:getTitle())
+    icons.draw_icon(self:get_title())
     imgui.set_cursor_pos(pos)
 
     -- Pop the id
@@ -117,7 +117,7 @@ function ModuleBase:drawModule()
 
     -- Save config if anything changed
     if any_changed then 
-        self:saveConfig() 
+        self:save_config() 
     end
 
 end

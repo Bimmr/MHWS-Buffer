@@ -143,7 +143,7 @@ local function updateDahliaFloatBox(key, field_name, managed, new_value, is_over
     field:write(final_value + 0.0)
 end
 
-function Module.createHooks() 
+function Module.create_hooks() 
 
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -415,7 +415,7 @@ function Module.createHooks()
 
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 

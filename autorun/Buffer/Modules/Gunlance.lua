@@ -20,12 +20,12 @@ local function update_field(field_name, managed, new_value)
     end 
 end
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp07Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp07Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp07Handling") then return end
 
         local ammo = managed:get_field("_Ammo")
 
@@ -53,9 +53,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
 
     changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
     any_changed = any_changed or changed

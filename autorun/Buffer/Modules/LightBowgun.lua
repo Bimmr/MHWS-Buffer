@@ -14,12 +14,12 @@ local Module = ModuleBase:new("light_bowgun", {
     -- all_ammo = false
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp13Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
 
         -- Special Ammo
         if Module.data.max_special_ammo and Module.old.special_ammo_heal_rate == nil then
@@ -56,7 +56,7 @@ function Module.createHooks()
 
         -- Bladescale Loading
         if Module.data.unlimited_bladescale then
-            if utils.hasSkill(managed:get_Hunter(), 201) then -- Bladescale Loading
+            if utils.has_skill(managed:get_Hunter(), 201) then -- Bladescale Loading
                 managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
             end
         end
@@ -109,7 +109,7 @@ function Module.createHooks()
     local no_reload_managed_weapon = nil
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("shootShell"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
         
         -- If unlimited ammo is enabled, set skip ammo usage
@@ -145,7 +145,7 @@ function Module.createHooks()
     -- On updating the request recoil, check if no recoil is enabled
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("updateRequestRecoil(app.mcShellPlGun, System.Int32)"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
 
         if Module.data.no_recoil then
@@ -156,7 +156,7 @@ function Module.createHooks()
     local skip_shot_knockback = false
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("getShootActType"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
 
         if Module.data.no_recoil then
@@ -173,7 +173,7 @@ function Module.createHooks()
     end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 

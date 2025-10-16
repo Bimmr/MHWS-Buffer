@@ -8,12 +8,12 @@ local Module = ModuleBase:new("great_sword", {
     instant_charge = false
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp00Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp00Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp00Handling") then return end
 
         -- True charge boost
         if Module.data.true_charge_boost then 
@@ -34,9 +34,9 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = Module:getTitle() .. "."
+    local languagePrefix = Module:get_title() .. "."
        
     changed, Module.data.true_charge_boost = imgui.checkbox(language.get(languagePrefix .. "true_charge_boost"), Module.data.true_charge_boost)
     utils.tooltip(language.get(languagePrefix .. "true_charge_boost_tooltip"))

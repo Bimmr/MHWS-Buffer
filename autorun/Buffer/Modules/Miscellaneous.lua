@@ -15,7 +15,7 @@ local Module = ModuleBase:new("miscellaneous", {
     }
 })
 
-function Module.createHooks()
+function Module.create_hooks()
 
 
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
@@ -66,7 +66,7 @@ function Module.createHooks()
     end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
         

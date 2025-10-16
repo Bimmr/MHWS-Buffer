@@ -5,12 +5,12 @@ local Module = ModuleBase:new("hunting_horn", {
    unlimited_echo_bubbles = false,
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp05Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp05Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp05Handling") then return end
 
         if Module.data.unlimited_echo_bubbles then
             local echo_bubbles = managed:get_field("_HibikiFloatShellInfo")
@@ -21,7 +21,7 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
    

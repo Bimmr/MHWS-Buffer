@@ -7,12 +7,12 @@ local Module = ModuleBase:new("hammer", {
     instant_charge = false,
 })
 
-function Module.createHooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp04Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weaponHookGuard(managed, "app.cHunterWp04Handling") then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp04Handling") then return end
 
        -- Charge level
        if Module.data.charge_level >= 0 and managed:get_field("_ChargeTimer") > 0 then
@@ -32,7 +32,7 @@ function Module.createHooks()
     end, function(retval) end)
 end
 
-function Module.addUI()
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
