@@ -2,6 +2,26 @@ local utils = require("Buffer.Misc.Utils")
 local configPath = "Buffer/Config.json"
 local config = {}
 
+-- Helper function to navigate nested config structure by key path
+-- Returns the parent table and the final key
+local function navigate_to_key(config_table, key)
+    if string.find(key, ".") == nil then
+        return config_table, key
+    end
+    
+    local keys = utils.split(key, ".")
+    local current = config_table
+    
+    for i = 1, #keys - 1 do
+        if current[keys[i]] == nil then
+            current[keys[i]] = {}
+        end
+        current = current[keys[i]]
+    end
+    
+    return current, keys[#keys]
+end
+
 -- Get the config file - return config as JSON or nil if not found
 function config.get_config()
     if json ~= nil then return json.load_file(configPath) end
@@ -32,20 +52,8 @@ end
 -- If a key with a . is given, it will update it in the section
 function config.set(key, value)
     local current_config = config.get_config() or {}
-    if string.find(key, ".") == nil then
-        current_config[key] = value
-    else
-        local keys = utils.split(key, ".")
-        local config_section = current_config
-        for i = 1, #keys do
-            if i == #keys then
-                config_section[keys[i]] = value
-            else
-                if config_section[keys[i]] == nil then config_section[keys[i]] = {} end
-                config_section = config_section[keys[i]]
-            end
-        end
-    end
+    local parent, final_key = navigate_to_key(current_config, key)
+    parent[final_key] = value
     json.dump_file(configPath, current_config)
 end
 
@@ -54,17 +62,19 @@ end
 function config.get(key)
     local current_config = config.get_config()
     if current_config == nil then return nil end
+    
     if string.find(key, ".") == nil then
         return current_config[key]
-    else
-        local keys = utils.split(key, ".")
-        local value = current_config
-        for i = 1, #keys do
-            value = value[keys[i]]
-            if value == nil then return nil end
-        end
-        return value
     end
+    
+    local keys = utils.split(key, ".")
+    local value = current_config
+    for i = 1, #keys do
+        value = value[keys[i]]
+        if value == nil then return nil end
+    end
+    return value
 end
 
 return config
+

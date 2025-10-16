@@ -15,7 +15,7 @@ local language = {
 function language.init()
     language.load_languages()
     language.current = config.get("window.language") or language.current
-    language.font_size = config.get("window.font_size") or language.font_size
+    language.font.size = config.get("window.font_size") or language.font.size
     language.change(language.current)
 end
 

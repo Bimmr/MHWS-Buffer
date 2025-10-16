@@ -1,80 +1,77 @@
-local utils, config, language
-local Module = {
-    title = "character",
-    data = {
-        health = {
-            max = false,
-            unlimited = false,
-            healing = false
-        },
-        stamina = {
-            max = false,
-            unlimited = false
-        },
-        item_buffs = {
-            dash_juice = false,
-            hot_drink = false,
-            cool_drink = false,
-            imunizer = false,
-            might_seed = false, -- _Kairiki_Timer
-            might_pill = false, -- _Kairiki_G_Timer
-            adamant_seed = false, -- _Nintai_Timer
-            adamant_pill = false, -- _Nintai_G_Timer
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-            demon_drug = false, -- _KijinDrink
-            mega_demondrug = false, -- _KijinDrink_G
-            armor_skin = false, -- _KoukaDrink
-            mega_armorskin = false, -- _KoukaDrink_G 
-
-            demon_powder = false, -- _KijinPowder_Timer
-            hardshell_powder = false -- _KoukaPowder_Timer
-        },
-        blights_and_conditions = {
-            blights = {
-                fire = false,
-                thunder = false,
-                water = false,
-                ice = false,
-                dragon = false,
-                all = false
-            },
-            conditions = {
-                poison = false,
-                stench = false,
-                blast = false,
-                bleed = false,
-                defense_down = false,
-                frenzy = false,
-                stun = false,
-                paralyze = false,
-                sleep = false,
-                sticky = false,
-                frozen = false,
-                bubble = false,
-                hp_reduction = false,
-                all = false
-            }
-        },
-        mantles = {
-            instant_cooldown = false,
-            unlimited_duration = false
-        },
-        stats = {
-            bonus_attack = -1,
-            bonus_defence = -1,
-            critical_chance = -1,
-            element = -1
-        },
-        invincible = false,
-        unlimited_sharpness = false,
-        unlimited_consumables = false,
-        unlimited_slingers = false,
-        unlimited_meal_timer = false,
+local Module = ModuleBase:new("character", {
+    health = {
+        max = false,
+        unlimited = false,
+        healing = false
     },
-    old = {
-        stats = {}
-    }
-}
+    stamina = {
+        max = false,
+        unlimited = false
+    },
+    item_buffs = {
+        dash_juice = false,
+        hot_drink = false,
+        cool_drink = false,
+        imunizer = false,
+        might_seed = false, -- _Kairiki_Timer
+        might_pill = false, -- _Kairiki_G_Timer
+        adamant_seed = false, -- _Nintai_Timer
+        adamant_pill = false, -- _Nintai_G_Timer
+
+        demon_drug = false, -- _KijinDrink
+        mega_demondrug = false, -- _KijinDrink_G
+        armor_skin = false, -- _KoukaDrink
+        mega_armorskin = false, -- _KoukaDrink_G 
+
+        demon_powder = false, -- _KijinPowder_Timer
+        hardshell_powder = false -- _KoukaPowder_Timer
+    },
+    blights_and_conditions = {
+        blights = {
+            fire = false,
+            thunder = false,
+            water = false,
+            ice = false,
+            dragon = false,
+            all = false
+        },
+        conditions = {
+            poison = false,
+            stench = false,
+            blast = false,
+            bleed = false,
+            defense_down = false,
+            frenzy = false,
+            stun = false,
+            paralyze = false,
+            sleep = false,
+            sticky = false,
+            frozen = false,
+            bubble = false,
+            hp_reduction = false,
+            all = false
+        }
+    },
+    mantles = {
+        instant_cooldown = false,
+        unlimited_duration = false
+    },
+    stats = {
+        bonus_attack = -1,
+        bonus_defence = -1,
+        critical_chance = -1,
+        element = -1
+    },
+    invincible = false,
+    unlimited_sharpness = false,
+    unlimited_consumables = false,
+    unlimited_slingers = false,
+    unlimited_meal_timer = false,
+})
 
 
 -- Item Buffs
@@ -146,15 +143,7 @@ local function updateDahliaFloatBox(key, field_name, managed, new_value, is_over
     field:write(final_value + 0.0)
 end
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    Module.init_hooks()
-end
-
-function Module.init_hooks() 
+function Module.createHooks() 
 
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -318,11 +307,12 @@ function Module.init_hooks()
         -- Element
         if Module.data.stats.element ~= -1 then
             local attack_power = managed:get_field("_AttackPower")
+            if not Module.old.stats then Module.old.stats = {} end
             if Module.old.stats.element == nil then
                 Module.old.stats.element = attack_power:get_field("_WeaponAttrType")
             end
             attack_power:set_field("_WeaponAttrType", Module.data.stats.element)
-        elseif Module.old.stats.element ~= nil then
+        elseif Module.old.stats and Module.old.stats.element ~= nil then
             local attack_power = managed:get_field("_AttackPower")
             attack_power:set_field("_WeaponAttrType", Module.old.stats.element)
             Module.old.stats.element = nil
@@ -425,16 +415,12 @@ function Module.init_hooks()
 
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.addUI()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-
-        languagePrefix = Module.title .. ".health."
-        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+    languagePrefix = Module.title .. ".health."
+    if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
             changed, Module.data.health.max = imgui.checkbox(language.get(languagePrefix .. "max"), Module.data.health.max)
             any_changed = any_changed or changed
@@ -596,30 +582,12 @@ function Module.draw()
         changed, Module.data.unlimited_meal_timer = imgui.checkbox(language.get(languagePrefix .. "unlimited_meal_timer"), Module.data.unlimited_meal_timer)
         any_changed = any_changed or changed
             
-        if any_changed then config.save_section(Module.create_config_section()) end
 
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-    imgui.pop_id()
+    return any_changed
 end
 
 function Module.reset()
     -- Implement reset functionality if needed
-end
-
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
-
-function Module.load_from_config(config_section)
-    if not config_section then
-        return
-    end
-    utils.update_table_with_existing_table(Module.data, config_section)
 end
 
 return Module

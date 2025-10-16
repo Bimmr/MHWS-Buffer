@@ -15,6 +15,7 @@ function utils.getMasterPlayerInfo()
     if not player_manager then
         player_manager = sdk.get_managed_singleton("app.PlayerManager")
     end
+    if not player_manager then return nil end
     local player = player_manager:getMasterPlayerInfo()
     return player
 end
@@ -22,8 +23,9 @@ end
 -- Get the Master Chacter from the player info
 function utils.getMasterCharacter()
     local player = utils.getMasterPlayerInfo()
-    player = player:get_Character()
-    return player
+    if not player then return nil end
+    local character = player:get_Character()
+    return character
 end
 
 -- Function to get length of table
@@ -77,9 +79,10 @@ end
 
 -- Send a message to the player through the system log
 function utils.send_message(text)
-    if chatManager == nil then
+    if not chatManager then
         chatManager = sdk.get_managed_singleton("app.ChatManager")
     end
+    if not chatManager then return end
     chatManager:addSystemLog(text)
 end
 
@@ -103,6 +106,32 @@ function utils.update_table_with_existing_table(baseTable, newTable)
             baseTable[key] = newTable[key]
         end
     end
+end
+
+--- Check if hunter has specific skill
+--- @param character userdata The hunter character. If nil, will get master character
+--- @param skill_index number The skill index to check
+--- @return boolean True if skill is active
+function utils.hasSkill(character, skill_index)
+    if not character then character = utils.getMasterCharacter() end
+    
+    local hunter_skill = character:get_HunterSkill()
+    if not hunter_skill then return false end
+    
+    local next_skill_info = hunter_skill:get_field("_NextSkillInfo")
+    if not next_skill_info then return false end
+    
+    local skills = next_skill_info:get_field("_items")
+    if not skills then return false end
+    
+    for i = 0, skills:get_Length() - 1 do
+        local skill = skills:get_Item(i)
+        if skill and skill:get_SkillData():get_Index() == skill_index then
+            return true
+        end
+    end
+    
+    return false
 end
 
 return utils

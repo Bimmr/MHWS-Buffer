@@ -1,35 +1,25 @@
-local utils, config, language
-local Module = {
-    title = "light_bowgun",
-    data = {
-        max_special_ammo = false,
-        max_rapid_shot = false,
-        max_eagle_shot = false,
-        instant_eagle_shot_charge = false,
-        unlimited_ammo = false,
-        no_reload = false,
-        no_recoil = false,
-        unlimited_bladescale = false,
-        -- all_ammo = false
-    },
-    old = {}
-}
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
+local Module = ModuleBase:new("light_bowgun", {
+    max_special_ammo = false,
+    max_rapid_shot = false,
+    max_eagle_shot = false,
+    instant_eagle_shot_charge = false,
+    unlimited_ammo = false,
+    no_reload = false,
+    no_recoil = false,
+    unlimited_bladescale = false,
+    -- all_ammo = false
+})
 
-    Module.init_hooks()
-end
-
-function Module.init_hooks()
+function Module.createHooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWp13Handling") then return end
-        if not managed:get_Weapon() or not managed:get_Weapon():get_IsMaster() then return end
+        if not Module:weaponHookGuard(managed, "app.cHunterWp13Handling") then return end
 
         -- Special Ammo
         if Module.data.max_special_ammo and Module.old.special_ammo_heal_rate == nil then
@@ -66,13 +56,8 @@ function Module.init_hooks()
 
         -- Bladescale Loading
         if Module.data.unlimited_bladescale then
-            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
-            for i = 0, skills:get_Length() - 1 do
-                local skill = skills:get_Item(i)
-                if skill and skill:get_SkillData():get_Index() == 201 then -- Bladescale Loading
-                    managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
-                    break
-                end
+            if utils.hasSkill(managed:get_Hunter(), 201) then -- Bladescale Loading
+                managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
             end
         end
 
@@ -124,9 +109,7 @@ function Module.init_hooks()
     local no_reload_managed_weapon = nil
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("shootShell"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
+        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
         
         -- If unlimited ammo is enabled, set skip ammo usage
@@ -162,9 +145,7 @@ function Module.init_hooks()
     -- On updating the request recoil, check if no recoil is enabled
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("updateRequestRecoil(app.mcShellPlGun, System.Int32)"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
+        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
 
         if Module.data.no_recoil then
@@ -175,9 +156,7 @@ function Module.init_hooks()
     local skip_shot_knockback = false
     sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("getShootActType"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
+        if not Module:weaponHookGuard(managed, "app.cHunterWpGunHandling") then return end
         if managed:get_Weapon():get_WpType() ~= 13 then return end
 
         if Module.data.no_recoil then
@@ -194,80 +173,59 @@ function Module.init_hooks()
     end)
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.addUI()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
+    changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
+    any_changed = any_changed or changed
 
-        changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
-        any_changed = any_changed or changed
-
-        changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
-        any_changed = any_changed or changed
+    changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
+    any_changed = any_changed or changed
 
 
-        imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
-        imgui.table_next_row()
-        imgui.table_next_column()
+    imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
+    imgui.table_next_row()
+    imgui.table_next_column()
 
-        changed, Module.data.max_eagle_shot = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot"), Module.data.max_eagle_shot)
-        any_changed = any_changed or changed
+    changed, Module.data.max_eagle_shot = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot"), Module.data.max_eagle_shot)
+    any_changed = any_changed or changed
 
-        imgui.table_next_column()
+    imgui.table_next_column()
 
-        changed, Module.data.instant_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "instant_eagle_shot_charge"), Module.data.instant_eagle_shot_charge)
-        any_changed = any_changed or changed
+    changed, Module.data.instant_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "instant_eagle_shot_charge"), Module.data.instant_eagle_shot_charge)
+    any_changed = any_changed or changed
 
-        imgui.end_table()
-        
-        -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
-        -- any_changed = any_changed or changed
-        
-        imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
-        imgui.table_next_row()
-        imgui.table_next_column()
-        
-        changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
-        any_changed = any_changed or changed
-
-        imgui.table_next_column()
-
-        changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
-        any_changed = any_changed or changed
-
-        imgui.end_table()
-
-        changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
-        any_changed = any_changed or changed
-
-        changed, Module.data.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), Module.data.no_recoil)
-        any_changed = any_changed or changed
-
-        if any_changed then config.save_section(Module.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
+    imgui.end_table()
     
-    imgui.pop_id()
+    -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
+    -- any_changed = any_changed or changed
+    
+    imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
+    imgui.table_next_row()
+    imgui.table_next_column()
+    
+    changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
+    any_changed = any_changed or changed
+
+    imgui.end_table()
+
+    changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
+    any_changed = any_changed or changed
+
+    changed, Module.data.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), Module.data.no_recoil)
+    any_changed = any_changed or changed
+
+    return any_changed
 end
 
 function Module.reset()
     -- Implement reset functionality if needed
-end
-
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
-
-function Module.load_from_config(config_section)
-    if not config_section then return end
-    utils.update_table_with_existing_table(Module.data, config_section)
 end
 
 return Module

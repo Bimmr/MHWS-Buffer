@@ -1,5 +1,5 @@
 local Icons = {
-    Icon = {
+    glyphs = {
         great_sword = "\u{e917}",
         sword_and_shield = "\u{e939}",
         dual_blades = "\u{e918}",
@@ -16,24 +16,36 @@ local Icons = {
         heavy_bowgun = "\u{e936}\u{e937}",
 
         character = "\u{e900}",
-        miscellaneous = "\u{e904}",
-
-        info = "\u{1F6C8}"
+        miscellaneous = "\u{e904}"
 
     },
-    font = nil
+    font = nil,
+    loaded_font_size = nil  -- Track the font size we loaded with
 }
 local language = require("Buffer.Misc.Language")
 
 
 function Icons.loadIcons()
     Icons.font = imgui.load_font('Monster-Hunter-Icons.ttf', language.font.size+2, {0xE900, 0xE9FF, 0x1F6C8, 0})
+    Icons.loaded_font_size = language.font.size
+end
+
+-- Reload icons if the language font size has changed
+function Icons.reloadIfNeeded()
+    if Icons.loaded_font_size ~= language.font.size then
+        Icons.loadIcons()
+    end
 end
 
 function Icons.drawIcon(icon)
-    if Icons.font == nil then Icons.loadIcons() end
+    if Icons.font == nil then 
+        Icons.loadIcons() 
+    else
+        Icons.reloadIfNeeded()
+    end
+    
     imgui.push_font(Icons.font)
-    local code = Icons.Icon[icon] or "?"
+    local code = Icons.glyphs[icon] or "?"
     local pos = imgui.get_cursor_pos()
     for _, char in utf8.codes(code) do
         imgui.set_cursor_pos(pos)
