@@ -1,4 +1,4 @@
-local version = "0.1.10"
+local version = "1.0.0"
 
 local isWindowOpen, wasOpen = false, false
 
@@ -7,7 +7,6 @@ local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 local language = require("Buffer.Misc.Language")
 local bindings = require("Buffer.Misc.BindingsHelper")
-local Icon = require("Buffer.Misc.Icon")
 
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
@@ -55,10 +54,9 @@ language.init()
 bindings.load(modules)
 
 
--- Init the modules, and load their config sections
+-- Init the modules
 for i, module in pairs(modules) do
-    if module.init ~= nil then module.init() end
-    if module.load_from_config ~= nil then module.load_from_config(config.get_section(module.title)) end
+    if module.init ~= nil then module:init() end
 end
 
 -- Check if the window was last open
@@ -219,7 +217,7 @@ re.on_draw_ui(function()
 
                     for _, module in pairs(modules) do 
                         disable_all(module.data)
-                        config.save_section(module.create_config_section())
+                        module:save_config()
                     end
                 end
                 imgui.spacing()
@@ -244,15 +242,7 @@ re.on_draw_ui(function()
 
         imgui.spacing()
         for _, module in pairs(modules) do 
-            if module.draw ~= nil then 
-            
-                local header_pos = imgui.get_cursor_pos()
-                module.draw() 
-                local pos = imgui.get_cursor_pos()
-                imgui.set_cursor_pos({header_pos.x + 18, header_pos.y + 2})
-                Icon.drawIcon(module.title)
-                imgui.set_cursor_pos(pos)
-            end
+            module:draw_module()
         end
         imgui.spacing()
 
@@ -277,10 +267,10 @@ end)
 
 -- On script reset, reset anything that needs to be reset
 re.on_script_reset(function()
-    for _, module in pairs(modules) do if module.reset ~= nil then module.reset() end end
+    for _, module in pairs(modules) do if module.reset ~= nil then module:reset() end end
 end)
 
 -- On script save
 re.on_config_save(function()
-    for _, module in pairs(modules) do config.save_section(module.create_config_section()) end
+    for _, module in pairs(modules) do module:save_config() end
 end)

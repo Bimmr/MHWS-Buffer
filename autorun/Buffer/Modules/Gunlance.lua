@@ -1,47 +1,26 @@
-local utils, config, language
-local Module = {
-    title = "gunlance",
-    data = {
-        shell_level = -1,
-        infinite_wyvern_fire = false,
-        infinite_backstep = false,
-        instant_charge = false,
-        unlimited_ammo = false,
-    }
-}
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
+local Module = ModuleBase:new("gunlance", {
+    shell_level = -1,
+    infinite_wyvern_fire = false,
+    infinite_backstep = false,
+    instant_charge = false,
+    unlimited_ammo = false,
+})
 
-    Module.init_hooks()
-end
-
-local function update_field(field_name, managed, new_value)
-    if Module.old == nil then Module.old = {} end
-    if Module.old[field_name] == nil then Module.old[field_name] = managed:get_field(field_name) end
-    if new_value >= 0 then 
-        managed:set_field(field_name, new_value) 
-    else
-        managed:set_field(field_name, Module.old[field_name])
-        Module.old[field_name] = nil
-    end 
-end
-
-function Module.init_hooks()
+function Module.create_hooks()
     
     -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp07Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWp07Handling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp07Handling") then return end
 
         local ammo = managed:get_field("_Ammo")
 
         -- Shell level
-        update_field("_ShellLevel", managed, Module.data.shell_level)
+        Module:cache_and_update_field("_ShellLevel", managed, "_ShellLevel", Module.data.shell_level)
 
         -- Infinite wyvernshots
         if Module.data.infinite_wyvern_fire then 
@@ -60,52 +39,39 @@ function Module.init_hooks()
             ammo:setLoadedAmmo(ammo:get_LimitAmmo())
         end
 
-
     end, function(retval) end)
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-       
+    changed, Module.data.shell_level = imgui.slider_int(language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 6, Module.data.shell_level == -1 and language.get("base.disabled") or "%d")
+    any_changed = any_changed or changed
 
-        changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
-        any_changed = any_changed or changed
+    changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
+    any_changed = any_changed or changed
 
-        changed, Module.data.instant_charge = imgui.checkbox(language.get(languagePrefix .. "instant_charge"), Module.data.instant_charge)
-        any_changed = any_changed or changed
+    changed, Module.data.instant_charge = imgui.checkbox(language.get(languagePrefix .. "instant_charge"), Module.data.instant_charge)
+    any_changed = any_changed or changed
+    
+    changed, Module.data.infinite_wyvern_fire = imgui.checkbox(language.get(languagePrefix .. "infinite_wyvern_fire"), Module.data.infinite_wyvern_fire)
+    any_changed = any_changed or changed
 
-        changed, Module.data.shell_level = imgui.slider_int(language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 6, Module.data.shell_level == -1 and language.get("base.disabled") or "%d")
-        any_changed = any_changed or changed
-        
-        changed, Module.data.infinite_wyvern_fire = imgui.checkbox(language.get(languagePrefix .. "infinite_wyvern_fire"), Module.data.infinite_wyvern_fire)
-        any_changed = any_changed or changed
-        
-        if any_changed then config.save_section(Module.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-    imgui.pop_id()
+    return any_changed
 end
 
 function Module.reset()
-    -- Implement reset functionality if needed
-end
+    local player = utils.get_master_character()
+    if not player then return end
+    
+    local weapon_handling = player:get_WeaponHandling()
+    if not weapon_handling then return end
 
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
+    if not Module:weapon_hook_guard(weapon_handling, "app.cHunterWp07Handling") then return end
 
-function Module.load_from_config(config_section)
-    if not config_section then return end
-    utils.update_table_with_existing_table(Module.data, config_section)
+    -- Reset shell level if needed
+    Module:cache_and_update_field("_ShellLevel", weapon_handling, "_ShellLevel", -1)
 end
 
 return Module

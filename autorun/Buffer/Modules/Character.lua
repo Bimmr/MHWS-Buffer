@@ -1,81 +1,81 @@
-local utils, config, language
-local Module = {
-    title = "character",
-    data = {
-        health = {
-            max = false,
-            unlimited = false,
-            healing = false
-        },
-        stamina = {
-            max = false,
-            unlimited = false
-        },
-        item_buffs = {
-            dash_juice = false,
-            hot_drink = false,
-            cool_drink = false,
-            imunizer = false,
-            might_seed = false, -- _Kairiki_Timer
-            might_pill = false, -- _Kairiki_G_Timer
-            adamant_seed = false, -- _Nintai_Timer
-            adamant_pill = false, -- _Nintai_G_Timer
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-            demon_drug = false, -- _KijinDrink
-            mega_demondrug = false, -- _KijinDrink_G
-            armor_skin = false, -- _KoukaDrink
-            mega_armorskin = false, -- _KoukaDrink_G 
-
-            demon_powder = false, -- _KijinPowder_Timer
-            hardshell_powder = false -- _KoukaPowder_Timer
-        },
-        blights_and_conditions = {
-            blights = {
-                fire = false,
-                thunder = false,
-                water = false,
-                ice = false,
-                dragon = false,
-                all = false
-            },
-            conditions = {
-                poison = false,
-                stench = false,
-                blast = false,
-                bleed = false,
-                defense_down = false,
-                frenzy = false,
-                stun = false,
-                paralyze = false,
-                sleep = false,
-                sticky = false,
-                frozen = false,
-                bubble = false,
-                hp_reduction = false,
-                all = false
-            }
-        },
-        mantles = {
-            instant_cooldown = false,
-            unlimited_duration = false
-        },
-        stats = {
-            bonus_attack = -1,
-            bonus_defence = -1,
-            critical_chance = -1,
-            element = -1
-        },
-        invincible = false,
-        unlimited_sharpness = false,
-        unlimited_consumables = false,
-        unlimited_slingers = false,
-        unlimited_meal_timer = false,
+local Module = ModuleBase:new("character", {
+    health = {
+        max = false,
+        unlimited = false,
+        healing = false
     },
-    old = {
-        stats = {}
-    }
-}
+    stamina = {
+        max = false,
+        unlimited = false
+    },
+    item_buffs = {
+        dash_juice = false,
+        hot_drink = false,
+        cool_drink = false,
+        imunizer = false,
+        might_seed = false, -- _Kairiki_Timer
+        might_pill = false, -- _Kairiki_G_Timer
+        adamant_seed = false, -- _Nintai_Timer
+        adamant_pill = false, -- _Nintai_G_Timer
 
+        demon_drug = false, -- _KijinDrink
+        mega_demondrug = false, -- _KijinDrink_G
+        armor_skin = false, -- _KoukaDrink
+        mega_armorskin = false, -- _KoukaDrink_G 
+
+        demon_powder = false, -- _KijinPowder_Timer
+        hardshell_powder = false -- _KoukaPowder_Timer
+    },
+    blights_and_conditions = {
+        blights = {
+            fire = false,
+            thunder = false,
+            water = false,
+            ice = false,
+            dragon = false,
+            all = false
+        },
+        conditions = {
+            poison = false,
+            stench = false,
+            blast = false,
+            bleed = false,
+            defense_down = false,
+            frenzy = false,
+            stun = false,
+            paralyze = false,
+            sleep = false,
+            sticky = false,
+            frozen = false,
+            bubble = false,
+            hp_reduction = false,
+            all = false
+        }
+    },
+    mantles = {
+        instant_cooldown = false,
+        unlimited_duration = false
+    },
+    stats = {
+        bonus_attack = -1,
+        bonus_defence = -1,
+        critical_chance = -1,
+        element = -1
+    },
+    invincible = false,
+    unlimited_sharpness = false,
+    unlimited_consumables = false,
+    unlimited_slingers = false,
+    unlimited_meal_timer = false,
+})
+
+-- Local variables
+local skip_consumable_use = false
+local skip_slinger_use = false
 
 -- Item Buffs
 local ITEM_BUFFS_DATA = {
@@ -146,15 +146,7 @@ local function updateDahliaFloatBox(key, field_name, managed, new_value, is_over
     field:write(final_value + 0.0)
 end
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    Module.init_hooks()
-end
-
-function Module.init_hooks() 
+function Module.create_hooks() 
 
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -202,7 +194,7 @@ function Module.init_hooks()
                 if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
                     hunter_meal_effect:set_field("_IsEffectActive", true)
                 end
-                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then -- Doesn't actually do anything, but it makes it look like stamina got increased by food
+                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then --* Doesn't actually do anything, but it makes it look like stamina got increased by food
                     hunter_meal_effect:set_field("_MaxStaminaAdd", 50)
                 end
                 if stamina:get_MaxStamina() < 150 then
@@ -220,35 +212,41 @@ function Module.init_hooks()
             end
         end
 
+        -- Item Buffs
         if item_buffs ~= nil then
 
+            -- Basic item buffs
             for buff_name, buff_data in pairs(ITEM_BUFFS_DATA) do
                 if Module.data.item_buffs[buff_name] then
                     item_buffs:set_field(buff_data.field, buff_data.duration)
                 end
             end
             
+            -- Demon Drug is handled differently
             if Module.data.item_buffs.demon_drug then
                 local demon_drug = item_buffs:get_field("_KijinDrink")
                 if demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(4), 1.0, 1.0)   
                 end
             end
-            if Module.data.item_buffs.mega_demondrug then 
-                local demon_drug = item_buffs:get_field("_KijinDrink_G")
-                if demon_drug:get_field("_Timer") <= 0 then
+            -- Mega Demondrug is handled differently
+            if Module.data.item_buffs.mega_demondrug then
+                local mega_demon_drug = item_buffs:get_field("_KijinDrink_G")
+                if mega_demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(5), 1.0, 1.0)
                 end
             end
+            -- Armor Skin is handled differently
             if Module.data.item_buffs.armor_skin then
                 local armor_skin = item_buffs:get_field("_KoukaDrink")
                 if armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(10), 1.0, 1.0)        
                 end
             end
+            -- Mega Armorskin is handled differently
             if Module.data.item_buffs.mega_armorskin then
-                local armor_skin = item_buffs:get_field("_KoukaDrink_G")
-                if armor_skin:get_field("_Timer") <= 0 then
+                local mega_armor_skin = item_buffs:get_field("_KoukaDrink_G")
+                if mega_armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(11), 1.0, 1.0)
                 end
             end
@@ -264,9 +262,10 @@ function Module.init_hooks()
             end
         end
 
-        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then -- Not far enough into story to know, will probably affect armor buff
+        -- Frenzy is handled different
+        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then
             local frenzy = conditions:get_field("_Frenzy")
-             -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
+            -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
             -- _DurationTimer - counts down from _DurationTime
             -- _OvercomePoint - builds up on attack towards _OvercomeTargetPoint
             -- _PointReduceTimer - Builds up to 1 (Keeping at 0 stops _DurationTimer from counting down, if _State is 1)
@@ -275,24 +274,27 @@ function Module.init_hooks()
                 frenzy:set_field("_DurationTimer", 0.2)
             end
         end
+        -- Stun is handled differently
         if Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all then
             local stun = conditions:get_field("_Stun")
-            if stun:get_field("_ReduceTimer") < 6 then -- Maybe a Jewel or skill lowers this
+            if stun:get_field("_ReduceTimer") < 6 then --? Maybe a Jewel or skill lowers this
                 stun:set_field("_ReduceTimer", 6)
             end
             if stun:get_field("_Accumulator") > 0 then
                 stun:set_field("_Accumulator", 0)
             end
         end
+        -- Paralyze is handled differently
         if Module.data.blights_and_conditions.conditions.paralyze or Module.data.blights_and_conditions.conditions.all then
             local paralyze = conditions:get_field("_Paralyze") -- Effect still plays
             if paralyze:get_field("_DurationTime") > 0 then
-                paralyze:cure() -- cure stops more of the animation than forceDeactivate
+                paralyze:cure() --* cure stops more of the animation than forceDeactivate
             end
             if paralyze:get_field("_Accumulator") > 0 then
                 paralyze:set_field("_Accumulator", 0)
             end
         end
+        -- Sticky is handled differently
         if Module.data.blights_and_conditions.conditions.sticky or Module.data.blights_and_conditions.conditions.all then
             local sticky = conditions:get_field("_Sticky") -- Effect probably still plays
             if sticky:get_field("_DurationTime") > 0 then
@@ -300,6 +302,7 @@ function Module.init_hooks()
                 sticky:set_field("_IsRestrainted", false)
             end
         end
+        -- Frozen is handled differently
         if Module.data.blights_and_conditions.conditions.frozen or Module.data.blights_and_conditions.conditions.all then
             local frozen = conditions:get_field("_Frozen") -- Effect still partially plays
             if frozen:get_field("_DurationTime") > 0 then
@@ -318,11 +321,12 @@ function Module.init_hooks()
         -- Element
         if Module.data.stats.element ~= -1 then
             local attack_power = managed:get_field("_AttackPower")
+            if not Module.old.stats then Module.old.stats = {} end
             if Module.old.stats.element == nil then
                 Module.old.stats.element = attack_power:get_field("_WeaponAttrType")
             end
             attack_power:set_field("_WeaponAttrType", Module.data.stats.element)
-        elseif Module.old.stats.element ~= nil then
+        elseif Module.old.stats and Module.old.stats.element ~= nil then
             local attack_power = managed:get_field("_AttackPower")
             attack_power:set_field("_WeaponAttrType", Module.old.stats.element)
             Module.old.stats.element = nil
@@ -359,7 +363,6 @@ function Module.init_hooks()
 
 
     -- Unlimited Consumables
-    local skip_consumable_use = false
     sdk.hook(sdk.find_type_definition("app.HunterCharacter.cHunterExtendBase"):get_method("useItem"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_IsMaster() then return end
@@ -387,7 +390,6 @@ function Module.init_hooks()
     end)
     
     -- Used for consumables in both the slinger and item pouch
-    local skip_slinger_use = false
     sdk.hook(sdk.find_type_definition("app.savedata.cItemParam"):get_method("changeItemPouchNum(app.ItemDef.ID, System.Int16, app.savedata.cItemParam.POUCH_CHANGE_TYPE)"), function(args)
         if skip_consumable_use or skip_slinger_use then
             return sdk.PreHookResult.SKIP_ORIGINAL
@@ -425,16 +427,12 @@ function Module.init_hooks()
 
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header("    " .. language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-
-        languagePrefix = Module.title .. ".health."
-        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+    languagePrefix = Module.title .. ".health."
+    if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
             changed, Module.data.health.max = imgui.checkbox(language.get(languagePrefix .. "max"), Module.data.health.max)
             any_changed = any_changed or changed
@@ -596,30 +594,12 @@ function Module.draw()
         changed, Module.data.unlimited_meal_timer = imgui.checkbox(language.get(languagePrefix .. "unlimited_meal_timer"), Module.data.unlimited_meal_timer)
         any_changed = any_changed or changed
             
-        if any_changed then config.save_section(Module.create_config_section()) end
 
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-    imgui.pop_id()
+    return any_changed
 end
 
 function Module.reset()
     -- Implement reset functionality if needed
-end
-
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
-
-function Module.load_from_config(config_section)
-    if not config_section then
-        return
-    end
-    utils.update_table_with_existing_table(Module.data, config_section)
 end
 
 return Module

@@ -237,7 +237,9 @@
         "unlimited_ammo": "Unlimited ammo",
         "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
-        "no_recoil": "No recoil"
+        "no_recoil": "No recoil",
+        "all_rapid_fire": "All rapid fire",
+        "shell_level": "Shell level"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -248,7 +250,8 @@
         "unlimited_ammo": "Unlimited ammo",
         "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
-        "no_recoil": "No recoil"
+        "no_recoil": "No recoil",
+        "shell_level": "Shell level"
     },
 
     "charge_blade": {

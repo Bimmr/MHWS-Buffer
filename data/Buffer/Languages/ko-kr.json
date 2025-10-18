@@ -234,7 +234,9 @@
         "unlimited_ammo": "탄약 무제한",
         "unlimited_bladescale": "칼날비늘 탄 무제한",
         "no_reload": "재장전 필요없음",
-        "no_recoil": "반동 없음"
+        "no_recoil": "반동 없음",
+        "shell_level": "Shell level (*)",
+        "all_rapid_fire": "All rapid fire (*)"
     },
     "heavy_bowgun": {
         "title": "헤비 보우건",
@@ -245,7 +247,8 @@
         "unlimited_ammo": "탄약 무제한",
         "unlimited_bladescale": "칼날비늘 탄 무제한",
         "no_reload": "재장전 필요없음",
-        "no_recoil": "반동 없음"
+        "no_recoil": "반동 없음",
+        "shell_level": "Shell level (*)"
     },
     "charge_blade": {
         "title": "차지 액스",

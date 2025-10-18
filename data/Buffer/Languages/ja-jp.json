@@ -234,7 +234,9 @@
         "unlimited_ammo": "弾無限",
         "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
-        "no_recoil": "反動なし"
+        "no_recoil": "反動なし",
+        "all_rapid_fire": "All rapid fire (*)",
+        "shell_level": "Shell level (*)"
     },
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
@@ -245,7 +247,8 @@
         "unlimited_ammo": "弾無限",
         "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
-        "no_recoil": "反動なし"
+        "no_recoil": "反動なし",
+        "shell_level": "Shell level (*)"
     },
     "charge_blade": {
         "title": "チャージアックス",

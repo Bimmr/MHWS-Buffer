@@ -238,7 +238,9 @@
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
-        "no_recoil": "Kein Rueckstoss"
+        "no_recoil": "Kein Rueckstoss",
+        "all_rapid_fire": "All rapid fire (*)",
+        "shell_level": "Shell level (*)"
     },
     "heavy_bowgun": {
         "title": "Schweres Bogengewehr",
@@ -249,7 +251,8 @@
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
-        "no_recoil": "Kein Rueckstoss"
+        "no_recoil": "Kein Rueckstoss",
+        "shell_level": "Shell level (*)"
     },
 
     "charge_blade": {

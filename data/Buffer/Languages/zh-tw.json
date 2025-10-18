@@ -238,7 +238,9 @@
         "unlimited_ammo": "無限彈藥",
         "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
-        "no_recoil": "無後座力"
+        "no_recoil": "無後座力",
+        "shell_level": "Shell level (*)",
+        "all_rapid_fire": "All rapid fire (*)"
     },
     "heavy_bowgun": {
         "title": "重弩",
@@ -249,7 +251,8 @@
         "unlimited_ammo": "無限彈藥",
         "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
-        "no_recoil": "無後座力"
+        "no_recoil": "無後座力",
+        "shell_level": "Shell level (*)"
     },
 
     "charge_blade": {
