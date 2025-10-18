@@ -148,7 +148,7 @@
         "unlimited_sharpness": "Filo ilimitado",
         "unlimited_consumables": "Consumibles ilimitados",
         "unlimited_slingers": "Munición de eslinga ilimitada",
-        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
+        "unlimited_meal_timer": "Bono de comida ilimitado"
     },
 
     "great_sword": {
@@ -238,8 +238,8 @@
         "unlimited_bladescale": "Disparos Filoescama ilimitados",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso",
-        "all_rapid_fire": "All rapid fire (*)",
-        "shell_level": "Shell level (*)"
+        "all_rapid_fire": "Todos disparo rápido",
+        "shell_level": "Nivel de cargas"
     },
     "heavy_bowgun": {
         "title": "Ballesta Pesada",
@@ -251,7 +251,7 @@
         "unlimited_bladescale": "Disparos Filoescama ilimitados",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso",
-        "shell_level": "Shell level (*)"
+        "shell_level": "Nivel de cargas"
     },
 
     "charge_blade": {
