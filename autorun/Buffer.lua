@@ -11,6 +11,7 @@ local bindings = require("Buffer.Misc.BindingsHelper")
 -- -- Misc Modules
 local character = require("Buffer.Modules.Character")
 local miscellaneous = require("Buffer.Modules.Miscellaneous")
+local skills = require("Buffer.Modules.Skills")
 
 -- Weapon Modules
 local greatSword = require("Buffer.Modules.GreatSword")
@@ -31,6 +32,7 @@ local heavyBowgun = require("Buffer.Modules.HeavyBowgun")
 local modules = {
     character,
     miscellaneous,
+    skills,
     greatSword,
     -- swordAndShield,
     dualBlades,
