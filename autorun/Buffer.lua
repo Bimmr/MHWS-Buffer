@@ -16,8 +16,8 @@ local Language = require("Buffer.Misc.Language")
 local Bindings = require("Buffer.Misc.BindingsHelper")
 
 -- -- Misc Modules
-local _, character = pcall(require, "Buffer.Modules.Character")
-local _, miscellaneous = pcall(require, "Buffer.Modules.Miscellaneous")
+local character = require("Buffer.Modules.Character")
+local miscellaneous = require("Buffer.Modules.Miscellaneous")
 local skills = require("Buffer.Modules.Skills")
 
 -- Weapon Modules
@@ -36,26 +36,25 @@ local _, bow = pcall(require, "Buffer.Modules.Bow")
 local _, lightBowgun = pcall(require, "Buffer.Modules.LightBowgun")
 local _, heavyBowgun = pcall(require, "Buffer.Modules.HeavyBowgun")
 
-local modules = {}
-
--- Add the modules that loaded successfully
-if type(character) == "table" then table.insert(modules, character) end
-if type(miscellaneous) == "table" then table.insert(modules, miscellaneous) end
-
-if type(greatSword) == "table" then table.insert(modules, greatSword) end
--- if type(swordAndShield) == "table" then table.insert(modules, swordAndShield) end
-if type(dualBlades) == "table" then table.insert(modules, dualBlades) end
-if type(longSword) == "table" then table.insert(modules, longSword) end
-if type(hammer) == "table" then table.insert(modules, hammer) end
-if type(huntingHorn) == "table" then table.insert(modules, huntingHorn) end
-if type(lance) == "table" then table.insert(modules, lance) end
-if type(gunlance) == "table" then table.insert(modules, gunlance) end
-if type(switchAxe) == "table" then table.insert(modules, switchAxe) end
-if type(chargeBlade) == "table" then table.insert(modules, chargeBlade) end
-if type(insectGlaive) == "table" then table.insert(modules, insectGlaive) end
-if type(bow) == "table" then table.insert(modules, bow) end
-if type(lightBowgun) == "table" then table.insert(modules, lightBowgun) end
-if type(heavyBowgun) == "table" then table.insert(modules, heavyBowgun) end
+local modules = {
+    character,
+    miscellaneous,
+    skills,
+    greatSword,
+    -- swordAndShield,
+    dualBlades,
+    longSword,
+    hammer,
+    huntingHorn,
+    lance,
+    gunlance,
+    switchAxe,
+    chargeBlade,
+    insectGlaive,
+    bow,
+    lightBowgun,
+    heavyBowgun
+}
 
 -- Load the languages
 Language.init()
