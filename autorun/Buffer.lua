@@ -18,6 +18,7 @@ local Bindings = require("Buffer.Misc.BindingsHelper")
 -- -- Misc Modules
 local _, character = pcall(require, "Buffer.Modules.Character")
 local _, miscellaneous = pcall(require, "Buffer.Modules.Miscellaneous")
+local skills = require("Buffer.Modules.Skills")
 
 -- Weapon Modules
 local _, greatSword = pcall(require, "Buffer.Modules.GreatSword")
