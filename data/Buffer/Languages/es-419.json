@@ -239,7 +239,7 @@
         "unlimited_bladescale": "Disparos Filoescama ilimitados",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso",
-        "no_knockback": "No knockback (*)",
+        "no_knockback": "Sin derribo",
         "all_rapid_fire": "Todos disparo rápido",
         "shell_level": "Nivel de cargas"
     },
@@ -253,7 +253,7 @@
         "unlimited_bladescale": "Disparos Filoescama ilimitados",
         "no_reload": "Sin recarga",
         "no_recoil": "Sin retroceso",
-        "no_knockback": "No knockback (*)",
+        "no_knockback": "Sin derribo",
         "shell_level": "Nivel de cargas"
     },
 
