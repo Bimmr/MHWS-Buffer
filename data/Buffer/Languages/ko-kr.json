@@ -127,7 +127,7 @@
             "bonus_attack": "공격 보너스",
             "bonus_defence": "방어 보너스",
             "critical_chance": "최심율 증가",
-            "bonus_elemental": "Bonus elemental (*)",
+            "bonus_elemental": "추가 속성 수치",
             "element": {
             "title": "속성",
             "none": "속성 없음",
@@ -271,5 +271,6 @@
         "powered_axe": "고출력 상태"
     }
 }
+
 
 
