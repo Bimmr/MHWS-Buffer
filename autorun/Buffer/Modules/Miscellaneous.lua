@@ -18,7 +18,7 @@ local Module = ModuleBase:new("miscellaneous", {
 function Module.create_hooks()
 
 
-    sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
+    ModuleBase.hook("app.HunterCharacter", "update", function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
         if not managed:get_IsMaster() then return end    
@@ -66,8 +66,10 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval)
-    end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

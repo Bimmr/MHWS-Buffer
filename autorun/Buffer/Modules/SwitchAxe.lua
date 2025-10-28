@@ -8,8 +8,8 @@ local Module = ModuleBase:new("switch_axe", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp08Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp08Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp08Handling") then return end
 
@@ -28,7 +28,10 @@ function Module.create_hooks()
             managed:set_field("_AxeEnhancedTimer", 45) 
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

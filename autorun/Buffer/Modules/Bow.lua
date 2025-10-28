@@ -44,7 +44,7 @@ function Module.create_hooks()
     end, function(retval) end)
     
     -- Weapon changes
-    sdk.hook(sdk.find_type_definition("app.cHunterWp11Handling"):get_method("update"), function(args) 
+   ModuleBase.hook("app.cHunterWp11Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp11Handling") then return end
 
@@ -92,7 +92,10 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

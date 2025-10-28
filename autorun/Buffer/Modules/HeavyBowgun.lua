@@ -24,8 +24,8 @@ function Module.create_hooks()
 
         Module:reset()
     end, function(retval) end)
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp12Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp12Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp12Handling") then return end
 
@@ -74,7 +74,10 @@ function Module.create_hooks()
         local equip_shell_info = managed:get_field("<EquipShellInfo>k__BackingField")
         Module:cache_and_update_array_value("equip_shell_info", equip_shell_info, "_ShellLv", Module.data.shell_level)
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 
     -- On shooting a shell, check if unlimited ammo is enabled, and if no reload is enabled
     local skip_ammo_usage = false

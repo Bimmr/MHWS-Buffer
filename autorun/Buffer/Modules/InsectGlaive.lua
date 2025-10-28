@@ -2,8 +2,6 @@ local ModuleBase = require("Buffer.Misc.ModuleBase")
 local utils = require("Buffer.Misc.Utils")
 local language = require("Buffer.Misc.Language")
 
---TODO: Fast Charge doesn't work, or isn't broken and just says disabled
-
 local Module = ModuleBase:new("insect_glaive", {
     kinsect = {
         power = -1,
@@ -55,7 +53,7 @@ function Module.create_hooks()
     end, function(retval) end)
 
     -- Weapon modifications
-    sdk.hook(sdk.find_type_definition("app.cHunterWp10Handling"):get_method("update"), function(args) 
+    ModuleBase.hook("app.cHunterWp10Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp10Handling") then return end
 
@@ -108,7 +106,10 @@ function Module.create_hooks()
             shouldSkip = true
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 
     sdk.hook(sdk.find_type_definition("app.cHunterWp10Handling"):get_method("updateCharge"), updateChargeHook, nil)
 

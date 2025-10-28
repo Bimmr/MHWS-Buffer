@@ -9,8 +9,8 @@ local Module = ModuleBase:new("long_sword", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp03Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp03Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp03Handling") then return end
 
@@ -32,7 +32,10 @@ function Module.create_hooks()
         --? <KabutowariAuraLevel>k__BackingField -- The dropping from the sky attack, not sure what it does besides that it's associated with that
         --? _KijinChargeLv -- Not sure
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

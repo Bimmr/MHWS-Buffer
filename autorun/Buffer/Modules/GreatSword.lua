@@ -9,8 +9,8 @@ local Module = ModuleBase:new("great_sword", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp00Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp00Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp00Handling") then return end
 
@@ -30,7 +30,10 @@ function Module.create_hooks()
             managed:set_field("_ChargeLevel", Module.data.charge_level)
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

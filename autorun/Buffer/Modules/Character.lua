@@ -153,7 +153,7 @@ end
 
 function Module.create_hooks() 
 
-    sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
+   ModuleBase.hook("app.cHunterStatus", "update", function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterStatus") then return end
         if managed:get_IsMaster() == false then return end
@@ -347,8 +347,10 @@ function Module.create_hooks()
             Module.old.stats.element = nil
         end
 
-    end, function(retval)
-    end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 
     -- Unlimited Sharpness
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireajiFromAttack(app.HitInfo)"), function(args)
@@ -420,7 +422,7 @@ function Module.create_hooks()
 
 
     -- Mantles
-    sdk.hook(sdk.find_type_definition("app.mcActiveSkillController"):get_method("updateMain"), function(args)
+    ModuleBase.hook("app.mcActiveSkillController", "updateMain", function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_field("_Hunter"):get_IsMaster() then return end
@@ -438,8 +440,10 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval) end)
-
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

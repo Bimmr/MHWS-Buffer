@@ -26,8 +26,8 @@ function Module.create_hooks()
 
         Module:reset()
     end, function(retval) end)
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp13Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
 
@@ -113,7 +113,10 @@ function Module.create_hooks()
         -- end
 
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 
     -- On shooting a shell, check if unlimited ammo is enabled, and if no reload is enabled
     local skip_ammo_usage = false

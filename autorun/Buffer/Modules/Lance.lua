@@ -7,8 +7,8 @@ local Module = ModuleBase:new("lance", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp06Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp06Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp06Handling") then return end
 
@@ -23,7 +23,10 @@ function Module.create_hooks()
             managed:set_field("_RushLevelTimer", 1.4)
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

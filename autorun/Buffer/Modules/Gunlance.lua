@@ -12,7 +12,7 @@ local Module = ModuleBase:new("gunlance", {
 function Module.create_hooks()
     
     -- Weapon changes
-    sdk.hook(sdk.find_type_definition("app.cHunterWp07Handling"):get_method("update"), function(args) 
+    ModuleBase.hook("app.cHunterWp07Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp07Handling") then return end
 
@@ -38,7 +38,10 @@ function Module.create_hooks()
             ammo:setLoadedAmmo(ammo:get_LimitAmmo())
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

@@ -7,8 +7,8 @@ local Module = ModuleBase:new("dual_blades", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp02Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp02Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp02Handling") then return end
 
@@ -21,7 +21,10 @@ function Module.create_hooks()
             managed:set_field("<IsMikiriBuff>k__BackingField", true) 
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()

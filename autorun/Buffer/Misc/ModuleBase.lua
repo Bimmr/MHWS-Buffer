@@ -8,6 +8,7 @@ local language = require("Buffer.Misc.Language")
 --- Base class for all Buffer modules providing common functionality
 --- @class ModuleBase
 local ModuleBase = {}
+ModuleBase.UPDATE_DELAY = 10
 ModuleBase.__index = ModuleBase
 
 --- Create a new module instance
@@ -254,4 +255,52 @@ function ModuleBase:draw_module()
 
 end
 
+--- Create a staggered hook that only executes every Nth call
+--- Useful for performance optimization when you don't need to check/modify every frame
+--- @param type_name string The type name to hook
+--- @param method_name string The method name to hook
+--- @param pre_func function The pre-hook function to call
+--- @param post_func function The post-hook function to call
+--- @param stagger_rate number How often to execute (1 = every call, 2 = every other call, etc.)
+function ModuleBase.hook(type_name, method_name, pre_func, post_func, stagger_rate)
+    if not stagger_rate or stagger_rate < 1 then
+        stagger_rate = 1
+    end
+    local type_def = sdk.find_type_definition(type_name)
+    if not type_def then
+        log.debug("ModuleBase:hook - Type not found: " .. type_name)
+        return
+    end
+
+    local method = type_def:get_method(method_name)
+    if not method then
+        log.debug("ModuleBase:hook - Method not found: " .. method_name .. " in type " .. type_name)
+        return
+    end
+
+    -- Use shared counters across all modules for coordinated staggering
+    if not ModuleBase._shared_stagger_counters then
+        ModuleBase._shared_stagger_counters = {}
+    end
+
+    local hook_key = type_name .. "." .. method_name
+    if not ModuleBase._shared_stagger_counters[hook_key] then
+        ModuleBase._shared_stagger_counters[hook_key] = 0
+    end
+
+    log.debug("ModuleBase:hook - Creating staggered hook on " .. hook_key .. " with rate " .. stagger_rate)
+    sdk.hook(method,
+        function(args)
+            ModuleBase._shared_stagger_counters[hook_key] = ModuleBase._shared_stagger_counters[hook_key] + 1
+            if ModuleBase._shared_stagger_counters[hook_key] % stagger_rate == 1 then
+                pre_func(args)
+            end
+        end,
+        function(retval)
+            if ModuleBase._shared_stagger_counters[hook_key] % stagger_rate == 1 then
+                post_func(retval)
+            end
+        end
+    )
+end
 return ModuleBase

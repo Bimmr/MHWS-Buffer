@@ -6,8 +6,8 @@ local Module = ModuleBase:new("hunting_horn", {
 })
 
 function Module.create_hooks()
-    
-    sdk.hook(sdk.find_type_definition("app.cHunterWp05Handling"):get_method("update"), function(args) 
+
+    ModuleBase.hook("app.cHunterWp05Handling", "update", function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp05Handling") then return end
 
@@ -17,7 +17,10 @@ function Module.create_hooks()
             echo_bubbles:set_field("_ReloadTimer", echo_bubbles:get_field("_MaxReloadTime"))
         end
 
-    end, function(retval) end)
+    end, 
+    function(retval) end,
+    ModuleBase.UPDATE_DELAY
+    )
 end
 
 function Module.add_ui()
