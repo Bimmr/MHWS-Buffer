@@ -15,9 +15,9 @@
         "version": "Versión",
         "options": "Opciones",
         "disable_all": "Desactivar todo",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "Mejoras activadas(*)",
+        "nothing_enabled": "Nada está activado(*)",
+        "disable": "Desactivado(*)",
         "bindings": {
             "title": "Asignaciones",
             "keyboard": "Teclado",
@@ -132,7 +132,7 @@
             "bonus_attack": "Bono de ataque",
             "bonus_defence": "Bonus de defensa",
             "critical_chance": "Probabilidad crítica",
-            "bonus_elemental": "Bonus elemental (*)",
+            "bonus_elemental": "Bonus elemental(*)",
             "element": {
                 "title": "Elemento",
                 "none": "Ninguno",
