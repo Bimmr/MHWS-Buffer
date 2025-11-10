@@ -15,6 +15,9 @@
         "version": "Version",
         "options": "Optionen",
         "disable_all": "Alle deaktivieren",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "Belegung",
             "keyboard": "Tastatur",

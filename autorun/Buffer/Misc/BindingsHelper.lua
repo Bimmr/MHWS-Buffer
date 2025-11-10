@@ -17,6 +17,52 @@ setmetatable(helper, {
     __index = bindings
 })
 
+--- Sets a value in a module's data structure using a dot-separated path
+--- @param path string The path to the setting (e.g., "character.health")
+--- @param value any The value to set
+--- @return boolean success Whether the operation was successful
+function helper.set_module_value(path, value)
+    local path_parts = utils.split(path, ".")
+    local module_name = path_parts[1]
+
+    -- Find the module by title
+    local module_index
+    for key, mod in pairs(modules) do
+        if mod.title == module_name then
+            module_index = key
+            break
+        end
+    end
+    if not module_index then return false end
+
+    -- Traverse to the target value
+    table.remove(path_parts, 1)
+    local target = modules[module_index].data
+    for i = 1, #path_parts - 1 do
+        if not target[path_parts[i]] then
+            target[path_parts[i]] = {}
+        end
+        target = target[path_parts[i]]
+    end
+
+    -- Set the value directly
+    target[path_parts[#path_parts]] = value
+    return true
+end
+
+-- Helper function to recursively disable all settings
+function helper.disable_all(data_layer)
+    for key, value in pairs(data_layer) do
+        if type(value) == "boolean" then
+            data_layer[key] = false
+        elseif type(value) == "number" then
+            data_layer[key] = -1
+        elseif type(value) == "table" then
+            helper.disable_all(value)
+        end
+    end
+end
+
 function helper.convert_old_format()
     local file = json.load_file(file_path)
     if file then
@@ -96,6 +142,15 @@ function helper.add(device, input, path, value)
         local is_boolean = false
         local is_number = false
 
+        if path == "window.disable_all" then
+            -- Special case to disable all settings
+            for _, mod in pairs(modules) do
+                helper.disable_all(mod.data)
+            end
+            utils.send_message(language.get("window.title") .. " " .. language.get("window.bindings.disabled"))
+            return
+        end
+
         -- Find the module by title
         local module_index
         for key, mod in pairs(modules) do
@@ -120,13 +175,13 @@ function helper.add(device, input, path, value)
         -- Handle boolean values
         if type(target_value) == "boolean" then
             target_value = not target_value
-            target[path_parts[#path_parts]] = target_value
+            helper.set_module_value(path, target_value)
             value_text = target_value and enabled_text or disabled_text
 
         -- Handle number values
         elseif type(target_value) == "number" then
             target_value = target_value > -1 and -1 or value
-            target[path_parts[#path_parts]] = target_value
+            helper.set_module_value(path, target_value)
             value_text = target_value == -1 and disabled_text or
                 string.gsub(language.get("window.bindings.set_to"), "%%d", tostring(target_value))
         end
@@ -203,13 +258,15 @@ function helper.draw()
 
         if imgui.begin_menu(binding_path) then
             for module_key, module in pairs(modules) do
-                if imgui.begin_menu(language.get(module.title .. ".title")) then
+            imgui.spacing()
+                if imgui.begin_menu(" "..language.get(module.title .. ".title")) then
 
                     local function draw_menu(data, path)
-                        for key, value in pairs(data) do
+                        for key, value in pairs(data) do   
+                            imgui.spacing()
                             local current_path = path .. "." .. key
                             if type(value) == "table" then
-                                if imgui.begin_menu(language.get(current_path .. ".title")) then
+                                if imgui.begin_menu(" "..language.get(current_path .. ".title")) then
                                     draw_menu(value, current_path)
                                     imgui.end_menu()
                                 end
@@ -218,17 +275,26 @@ function helper.draw()
                                 if not string.find(language.get(current_path .. ".title"), "Invalid Language Key") then
                                     label_key = current_path .. ".title"
                                 end
-                                if imgui.menu_item(language.get(label_key)) then
+                                if imgui.menu_item(" "..language.get(label_key)) then
                                     helper.popup.path = current_path
                                     helper.popup.value = value
                                 end
                             end
                         end
+                        imgui.spacing()
                     end
                     draw_menu(module.data, module.title)
                     imgui.end_menu()
                 end
             end
+            imgui.spacing()
+            imgui.separator()
+            imgui.spacing()
+            if imgui.menu_item(" "..language.get("window.disable_all")) then
+                helper.popup.path = "window.disable_all"
+                helper.popup.value = false
+            end
+            imgui.spacing()
             imgui.end_menu()
         end
 
@@ -238,7 +304,11 @@ function helper.draw()
             imgui.same_line()
             if type(helper.popup.value) == "boolean" then
                 imgui.begin_disabled()
-                imgui.input_text("   ", "true/false")
+                if helper.popup.path == "window.disable_all" then
+                    imgui.input_text("   ", "false")
+                else
+                    imgui.input_text("   ", "true/false")
+                end
                 imgui.end_disabled()
             elseif type(helper.popup.value) == "number" then
                 imgui.text(language.get("window.bindings.on_value") .. ": ")

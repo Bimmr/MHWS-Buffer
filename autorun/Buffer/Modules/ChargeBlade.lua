@@ -2,8 +2,16 @@ local ModuleBase = require("Buffer.Misc.ModuleBase")
 local language = require("Buffer.Misc.Language")
 
 local Module = ModuleBase:new("charge_blade", {
-    max_sword_charge = 2
+    max_phials = false,
+    overcharge_phials = false,
+    shield_enhanced = false,
+    sword_enhanced = false,
+    axe_enhanced = false  
 })
+
+function Module:init()
+    ModuleBase.init(self)
+end
 
 function Module.create_hooks()
     

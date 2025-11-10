@@ -50,6 +50,7 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Unlimited Sharpness  
 - Unlimited Consumables  
 - Unlimited Slinger Ammo  
+- Unlimited Meal Timer  
 
 </td>
 <td style="vertical-align: top">
@@ -114,8 +115,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - **Watergun**
   - Unlimited Ammo 
 
-- **Pictomandy**
-  - Active Pictomancy state
+- **Pictomancy**
+  - State selection (Pom Motif, Wing Motif, Mog of the Ages)
   - Instant cooldown
 
 </details>
@@ -123,6 +124,7 @@ Buffs, Modifications, and Cheats for weapons and stats.
 <details>
 <summary><strong>Great Sword</strong></summary>
 
+- Charge level  
 - True Charge boost  
 - Instant charge  
 
@@ -148,6 +150,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 <details>
 <summary><strong>Hammer</strong></summary>
 
+- Charge level  
+- Super charge level  
 - Instant charge  
 
 </details>
@@ -236,6 +240,9 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Unlimited ammo  
 - No reload  
 - No recoil  
+- No knockback
+- All rapid fire ammo
+- Shell level adjustment
 - Bladescale support
 
 </details>
@@ -249,6 +256,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Unlimited ammo  
 - No reload  
 - No recoil  
+- No knockback
+- Shell level adjustment
 - Bladescale support
 
 </details>

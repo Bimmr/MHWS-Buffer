@@ -14,7 +14,10 @@
         "translator": "译者",
         "version": "版本",
         "options": "选项",
-        "disable_all": "禁用所有",
+        "disable_all": "全部禁用",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "快捷键",
             "keyboard": "键盘",

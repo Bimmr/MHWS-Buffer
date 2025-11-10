@@ -15,6 +15,9 @@
         "version": "バージョン",
         "options": "オプション",
         "disable_all": "すべて無効化",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "キー設定",
             "keyboard": "キーボード",
