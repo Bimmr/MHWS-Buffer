@@ -15,9 +15,9 @@
         "version": "버전",
         "options": "옵션",
         "disable_all": "모두 비활성화",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "활성화된 버프",
+        "nothing_enabled": "아무것도 활성화되지 않음",
+        "disable": "비활성화",
         "bindings": {
             "title": "키 설정",
             "keyboard": "키보드",
@@ -271,6 +271,7 @@
         "powered_axe": "고출력 상태"
     }
 }
+
 
 
 
