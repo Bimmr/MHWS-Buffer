@@ -15,9 +15,9 @@
         "version": "Versión",
         "options": "Opciones",
         "disable_all": "Desactivar todo",
-        "enabled_buffs": "Mejoras activadas(*)",
-        "nothing_enabled": "Nada está activado(*)",
-        "disable": "Desactivado(*)",
+        "enabled_buffs": "Mejoras activadas",
+        "nothing_enabled": "Nada está activado",
+        "disable": "Desactivado",
         "bindings": {
             "title": "Asignaciones",
             "keyboard": "Teclado",
