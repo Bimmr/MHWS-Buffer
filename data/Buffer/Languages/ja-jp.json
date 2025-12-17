@@ -15,9 +15,9 @@
         "version": "バージョン",
         "options": "オプション",
         "disable_all": "すべて無効化",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "有効なバフ",
+        "nothing_enabled": "有効なものはありません",
+        "disable": "無効化",
         "bindings": {
             "title": "キー設定",
             "keyboard": "キーボード",
@@ -271,4 +271,5 @@
         "powered_axe": "斧モード強化"
     }
 }
+
 
