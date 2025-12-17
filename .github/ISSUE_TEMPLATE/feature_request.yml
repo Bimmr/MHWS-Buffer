@@ -10,8 +10,6 @@ body:
       description: >-
         Please note that I will not be making any changes/edits to skills,
         changing activation of skills, or enabling skills.
-    validations:
-      required: true
   - type: textarea
     id: solution
     attributes:

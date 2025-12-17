@@ -1,5 +1,6 @@
 {
     "_TRANSLATOR": "SlikerDev",
+    "_LANGUAGE_NAME": "Deutsch (DE)",
 
     "window": {
         "toggle_button": "Umschalten Buffer GUI",
@@ -12,6 +13,11 @@
         "author": "Autor",
         "translator": "Üebersetzer",
         "version": "Version",
+        "options": "Optionen",
+        "disable_all": "Alle deaktivieren",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "Belegung",
             "keyboard": "Tastatur",
@@ -40,9 +46,19 @@
             "instant_drive_gauge": "Sofortiges Drive-Messgerät",
             "gou_hadoken_max_level": "Gou Hadoken Max Stufe"
         },
-        "water gun": {
+        "water_gun": {
             "title": "Wasserpistole",
             "unlimited_ammo": "Unbegrenzte Munition"
+        },
+        "pictomancy": {
+            "title": "Pictomancy(*)",
+            "state": {
+                "title": "Active Pictomancy state(*)",
+                "pom": "Pom Motif(*)",
+                "wing": "Wing Motif(*)",
+                "mog": "Mog of the ages(*)"
+            },
+            "instant_cooldown": "Instant cooldown(*)"
         }
     },
     "character": {
@@ -85,6 +101,7 @@
                 "frenzy": "Wahnsinn",
                 "frozen": "Gefroren",
                 "bubble": "Blase",
+                "hp_reduction": "HP Reduction(*)",
                 "all": "Alle "
             }
         },
@@ -115,6 +132,7 @@
             "bonus_attack": "Bonusangriff",
             "bonus_defence": "Bonusverteidigung",
             "critical_chance": "Kritische Trefferchance",
+            "bonus_elemental": "Bonus elemental (*)",
             "element": {
                 "title": "Element",
                 "none": "Keine",
@@ -133,13 +151,15 @@
         "invincible_tooltip": "Unverwundbar gegen Schaden, aber nicht gegen Sturzschaden.",
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
-        "unlimited_slingers": "Unbegrenzte Schleudermunition"
+        "unlimited_slingers": "Unbegrenzte Schleudermunition",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
 
     "great_sword": {
         "title": "Grossschwert",
         "true_charge_boost": "Echter Ladungsboost",
         "true_charge_boost_tooltip": "Anfaenglicher Bonus fuer echte Aufladung",
+        "charge_level": "Charge level(*)",
         "instant_charge": "Sofortige Aufladung"
     },
     "sword_and_shield": {
@@ -182,6 +202,8 @@
 
     "hammer": {
         "title": "Hammer",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "Sofortige Aufladung"
     },
     "hunting_horn": {
@@ -192,17 +214,14 @@
     "lance": {
         "title": "Lanze",
         "counter_charge_level": "Konter angriff level",
-        "rush_level": "Eiltempo",
-        "infinite_backstep": "Unendlicher Rueckwaertsschritt"
+        "rush_level": "Eiltempo"
     },
     "gunlance": {
         "title": "Waffenlanze",
         "shell_level": "Gehaeuse Level",
         "infinite_wyvern_fire": "Unendliches Wyvernfeuer",
-        "infinite_backstep": "Unendlicher Rueckwaertsschritt",
         "instant_charge": "Sofortige Aufladung",
-        "instant_charge_tooltip": "Man muss sie einen Moment lang festhalten und dann loslassen, um zu feuern.",
-        "free_charge_shot": "Kostenloser Schuss"
+        "unlimited_ammo": "Unendliche Munition"
     },
 
     "bow": {
@@ -223,7 +242,10 @@
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
-        "no_recoil": "Kein Rueckstoss"
+        "no_recoil": "Kein Rueckstoss",
+        "no_knockback": "No knockback (*)",
+        "all_rapid_fire": "All rapid fire (*)",
+        "shell_level": "Shell level (*)"
     },
     "heavy_bowgun": {
         "title": "Schweres Bogengewehr",
@@ -234,7 +256,9 @@
         "unlimited_ammo": "Unendliche Munition",
         "unlimited_bladescale": "Unbegrenzte Bladescale-Schüsse",
         "no_reload": "Kein Nachladen",
-        "no_recoil": "Kein Rueckstoss"
+        "no_recoil": "Kein Rueckstoss",
+        "no_knockback": "No knockback (*)",
+        "shell_level": "Shell level (*)"
     },
 
     "charge_blade": {

@@ -1,35 +1,35 @@
-local utils, config, language
-local Module = {
-    title = "light_bowgun",
-    data = {
-        max_special_ammo = false,
-        max_rapid_shot = false,
-        max_eagle_shot = false,
-        instant_eagle_shot_charge = false,
-        unlimited_ammo = false,
-        no_reload = false,
-        no_recoil = false,
-        unlimited_bladescale = false,
-        -- all_ammo = false
-    },
-    old = {}
-}
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
+local Module = ModuleBase:new("light_bowgun", {
+    max_special_ammo = false,
+    max_rapid_shot = false,
+    max_eagle_shot = false,
+    instant_eagle_shot_charge = false,
+    unlimited_ammo = false,
+    no_reload = false,
+    no_recoil = false,
+    no_knockback = false,
+    unlimited_bladescale = false,
+    all_rapid_fire = false,
+    shell_level = -1
+})
 
-    Module.init_hooks()
-end
+function Module.create_hooks()
 
-function Module.init_hooks()
+    -- Watch for weapon changes to reset ammo types
+    sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeapon"), function(args) 
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
+        if not managed:get_IsMaster() then return end
+
+        Module:reset()
+    end, function(retval) end)
     
-    -- Weapon changes
     sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("update"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWp13Handling") then return end
-        if not managed:get_Weapon() or not managed:get_Weapon():get_IsMaster() then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
 
         -- Special Ammo
         if Module.data.max_special_ammo and Module.old.special_ammo_heal_rate == nil then
@@ -45,8 +45,7 @@ function Module.init_hooks()
             managed:get_field("_RapidShotBoostInfo"):set_field("_ModeTime", 100)
         end
        
-
-        -- Weak Ammo (Also known in game as Eagle Shot)
+        -- Unlimited Eagle Shots
         if Module.data.max_eagle_shot then
             local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
             if weak_ammo_info then
@@ -54,6 +53,7 @@ function Module.init_hooks()
             end
         end
 
+        -- Instant Eagle Shot Charge
         if Module.data.instant_eagle_shot_charge then
             local weak_ammo_info = managed:get_field("_WeakAmmoInfo")
             if weak_ammo_info then
@@ -66,53 +66,61 @@ function Module.init_hooks()
 
         -- Bladescale Loading
         if Module.data.unlimited_bladescale then
-            local skills = managed:get_Hunter():get_HunterSkill():get_field("_NextSkillInfo"):get_field("_items")
-            for i = 0, skills:get_Length() - 1 do
-                local skill = skills:get_Item(i)
-                if skill and skill:get_SkillData():get_Index() == 201 then -- Bladescale Loading
-                    managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
-                    break
-                end
+            if utils.has_skill(managed:get_Hunter(), 201) then -- Bladescale Loading
+                managed:set_field("<Skill218AdditionalShellNum>k__BackingField", managed:get_field("<Skill218AdditionalShellMaxNum>k__BackingField"))
             end
         end
-        
-        -- Maybe convert this into setting max ammo and level for all currently equipable ammo types 
-        -- if Module.data.all_ammo and not Module.old.ammo then
-        --     Module.old.ammo = {}
-        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
-        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
-        --         if ammo_info then
-        --             Module.old.ammo[i] = {
-        --                 num = ammo_info:get_field("<Num>k__BackingField"),
-        --                 level = ammo_info:get_field("_ShellLv")
-        --             }
-        --             ammo_info:set_field("<Num>k__BackingField", 10)
-        --             ammo_info:set_field("_ShellLv", 10)
-        --         end
+
+        -- All Rapid Fire (0 = Normal, 1 = Rapid)
+        local ammos = managed:get_field("_Ammos")
+        Module:cache_and_update_array_value("ammos", ammos, "_AmmoType", Module.data.all_rapid_fire and 1 or -1)
+
+
+        --* _Ammos
+        -- 0  = Normal
+        -- 1  = Pierce
+        -- 2  = Spread
+        -- 3  = Sticky
+        -- 4  = Cluster
+        -- 5  = Slicing
+        -- 6  = Wyvern
+        -- 7  = Flaming
+        -- 8  = Water
+        -- 9  = Thunder
+        -- 10 = Ice
+        -- 11 = Dragon
+        -- 12 = Poison
+        -- 13 = Paralysis
+        -- 14 = Sleep
+        -- 15 = Demon
+        -- 16 = Armor
+        -- 17 = Recovery
+        -- 18 = Exhaust
+        -- 19 = Tranq
+
+        -- Shell Level (Valid values are 0, 1, 2. Anything over 2 does 1 damage)
+        local equip_shell_info = managed:get_field("<EquipShellInfo>k__BackingField")
+        Module:cache_and_update_array_value("equip_shell_info", equip_shell_info, "_ShellLv", Module.data.shell_level)
+
+        --* Can't force ammo into the bowgun, need to explore this more
+        -- for i = 0, #managed:get_field("_Ammos") do
+        --     local ammo_info = managed:get_field("_Ammos")[i]
+        --     if ammo_info then
+        --         -- ammo_info:setLimitAmmo(9) -- Doesn't work
+        --         -- ammo_info:setBackupAmmo(9) -- Doesn't work
+        --         -- ammo_info:setLoadedAmmo(9) -- Unlimited ammo alternative
         --     end
-        -- elseif not Module.data.all_ammo and Module.old.ammo then
-        --     for i = 1, #managed:get_field("<EquipShellInfo>k__BackingField") do
-        --         local ammo_info = managed:get_field("<EquipShellInfo>k__BackingField")[i]
-        --         if ammo_info then
-        --             ammo_info:set_field("<Num>k__BackingField", Module.old.ammo[i].num)
-        --             ammo_info:set_field("_ShellLv", Module.old.ammo[i].level)
-        --         end
-        --     end
-        --     Module.old.ammo = nil
         -- end
+
 
     end, function(retval) end)
 
-   
     -- On shooting a shell, check if unlimited ammo is enabled, and if no reload is enabled
     local skip_ammo_usage = false
     local no_reload_managed_weapon = nil
-    sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("shootShell"), function(args) 
+    sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("shootShell"), function(args) 
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
-        if managed:get_Weapon():get_WpType() ~= 13 then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
         
         -- If unlimited ammo is enabled, set skip ammo usage
         if Module.data.unlimited_ammo then
@@ -145,93 +153,132 @@ function Module.init_hooks()
     end, function(retval) return retval end)
 
     -- On updating the request recoil, check if no recoil is enabled
-    sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("updateRequestRecoil(app.mcShellPlGun, System.Int32)"), function(args)
+    sdk.hook(sdk.find_type_definition("app.cHunterWp13Handling"):get_method("updateRequestRecoil(app.mcShellPlGun, System.Int32)"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("app.cHunterWpGunHandling") then return end
-        if not managed:get_Hunter() then return end
-        if not managed:get_Hunter():get_IsMaster() then return end
-        if managed:get_Weapon():get_WpType() ~= 13 then return end
+        if not Module:weapon_hook_guard(managed, "app.cHunterWp13Handling") then return end
 
         if Module.data.no_recoil then
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
     end, function(retval) return retval end)
+
+    local skip_shot_knockback = false
+    sdk.hook(sdk.find_type_definition("app.cHunterWpGunHandling"):get_method("getShootActType"), function(args) 
+        local managed = sdk.to_managed_object(args[2])
+        if not Module:weapon_hook_guard(managed, "app.cHunterWpGunHandling") then return end
+        if managed:get_Weapon():get_WpType() ~= 13 then return end
+
+        if Module.data.no_knockback then
+            skip_shot_knockback = true
+        end
+
+    end, function(retval)
+        if skip_shot_knockback then
+            skip_shot_knockback = false
+
+            -- Get the shell recoil type
+            local value = sdk.to_int64(retval)
+
+            -- 1 = No shoot
+            -- 2 = 3 shot burst
+            -- 3 = No shoot
+            -- 4 = Burst
+            -- 5 = Burst Middle
+            -- 6 = Burst High
+            -- 7 = Middle
+            -- 8 = High
+            -- 9-11 = No shoot
+            if (value >= 1 and value <= 3) then
+                return sdk.to_ptr(1)
+            end
+            if  (value >= 4 and value <= 8) then
+                return sdk.to_ptr(4)
+            end
+        end
+        return retval
+    end)
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
+    changed, Module.data.shell_level = imgui.slider_int(language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 2, Module.data.shell_level == -1 and language.get("base.disabled") or tostring(Module.data.shell_level + 1))
+    any_changed = any_changed or changed
 
-        changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
-        any_changed = any_changed or changed
+    changed, Module.data.max_special_ammo = imgui.checkbox(language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
+    any_changed = any_changed or changed
 
-        changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
-        any_changed = any_changed or changed
+    changed, Module.data.max_rapid_shot = imgui.checkbox(language.get(languagePrefix .. "max_rapid_shot"), Module.data.max_rapid_shot)
+    any_changed = any_changed or changed
 
 
-        imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
-        imgui.table_next_row()
-        imgui.table_next_column()
+    imgui.begin_table(Module.title.."1", 2, nil, nil, nil)
+    imgui.table_next_row()
+    imgui.table_next_column()
 
-        changed, Module.data.max_eagle_shot = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot"), Module.data.max_eagle_shot)
-        any_changed = any_changed or changed
+    changed, Module.data.max_eagle_shot = imgui.checkbox(language.get(languagePrefix .. "max_eagle_shot"), Module.data.max_eagle_shot)
+    any_changed = any_changed or changed
 
-        imgui.table_next_column()
+    imgui.table_next_column()
 
-        changed, Module.data.instant_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "instant_eagle_shot_charge"), Module.data.instant_eagle_shot_charge)
-        any_changed = any_changed or changed
+    changed, Module.data.instant_eagle_shot_charge = imgui.checkbox(language.get(languagePrefix .. "instant_eagle_shot_charge"), Module.data.instant_eagle_shot_charge)
+    any_changed = any_changed or changed
 
-        imgui.end_table()
-        
-        -- changed, Module.data.all_ammo = imgui.checkbox(language.get(languagePrefix .. "all_ammo"), Module.data.all_ammo)
-        -- any_changed = any_changed or changed
-        
-        imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
-        imgui.table_next_row()
-        imgui.table_next_column()
-        
-        changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
-        any_changed = any_changed or changed
-
-        imgui.table_next_column()
-
-        changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
-        any_changed = any_changed or changed
-
-        imgui.end_table()
-
-        changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
-        any_changed = any_changed or changed
-
-        changed, Module.data.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), Module.data.no_recoil)
-        any_changed = any_changed or changed
-
-        if any_changed then config.save_section(Module.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
+    imgui.end_table()
     
-    imgui.pop_id()
+    imgui.begin_table(Module.title.."2", 2, nil, nil, nil)
+    imgui.table_next_row()
+    imgui.table_next_column()
+    
+    changed, Module.data.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), Module.data.unlimited_ammo)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.unlimited_bladescale = imgui.checkbox(language.get(languagePrefix .. "unlimited_bladescale"), Module.data.unlimited_bladescale)
+    any_changed = any_changed or changed
+
+    imgui.end_table()
+    
+    changed, Module.data.no_reload = imgui.checkbox(language.get(languagePrefix .. "no_reload"), Module.data.no_reload)
+    any_changed = any_changed or changed
+
+    imgui.begin_table(Module.title.."3", 2, nil, nil, nil)
+    imgui.table_next_row()
+    imgui.table_next_column()
+
+    changed, Module.data.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), Module.data.no_recoil)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.no_knockback = imgui.checkbox(language.get(languagePrefix .. "no_knockback"), Module.data.no_knockback)
+    any_changed = any_changed or changed
+
+    imgui.end_table()
+
+    changed, Module.data.all_rapid_fire = imgui.checkbox(language.get(languagePrefix .. "all_rapid_fire"), Module.data.all_rapid_fire)
+    any_changed = any_changed or changed
+
+    return any_changed
 end
 
 function Module.reset()
-    -- Implement reset functionality if needed
-end
+    local player = utils.get_master_character()
+    if not player then return end
+    
+    local weapon_handling = player:get_WeaponHandling()
+    if not weapon_handling then return end
+    if not Module:weapon_hook_guard(weapon_handling, "app.cHunterWp13Handling") then return end
 
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
-
-function Module.load_from_config(config_section)
-    if not config_section then return end
-    utils.update_table_with_existing_table(Module.data, config_section)
+    -- Restore original ammo types
+    local ammos = weapon_handling:get_field("_Ammos")
+    Module:cache_and_update_array_toggle("ammos", ammos, "_AmmoType", false)
+    
+    -- Restore original shell levels
+    local equip_shell_info = weapon_handling:get_field("<EquipShellInfo>k__BackingField")
+    Module:cache_and_update_array_value("equip_shell_info", equip_shell_info, "_ShellLv", -1)
 end
 
 return Module

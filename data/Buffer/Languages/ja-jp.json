@@ -1,6 +1,7 @@
 {
-    "_USE_FONT": "NotoSansSC-Regular.otf",
-    "_TRANSLATOR": "syarukasu, Ruri73",
+    "_TRANSLATOR": "syarukasu, Ruri73, 9c5s",
+    "_LANGUAGE_NAME": "日本語 (JP)",
+
     "window": {
         "toggle_button": "バッファGUIの切り替え",
         "title": "修飾子 & 設定",
@@ -12,6 +13,11 @@
         "author": "作者",
         "translator": "翻訳者",
         "version": "バージョン",
+        "options": "オプション",
+        "disable_all": "すべて無効化",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "キー設定",
             "keyboard": "キーボード",
@@ -40,9 +46,19 @@
             "instant_drive_gauge": "ドライブゲージ即時溜め",
             "gou_hadoken_max_level": "豪波動拳最大レベル"
         },
-        "water gun": {
+        "water_gun": {
             "title": "水鉄砲",
             "unlimited_ammo": "弾無限"
+        },
+        "pictomancy": {
+            "title": "ピクトマンサー",
+            "state": {
+                "title": "絵画魔法状態",
+                "pom": "ピクトポンポン",
+                "wing": "ピクトウィング",
+                "mog": "モーグリストリーム"
+            },
+            "instant_cooldown": "即時クールダウン"
         }
     },
     "character": {
@@ -85,6 +101,7 @@
                 "frenzy": "狂竜症",
                 "frozen": "氷結",
                 "bubble": "泡",
+                "hp_reduction": "最大HP減少",
                 "all": "すべて"
             }
         },
@@ -110,6 +127,7 @@
             "bonus_attack": "攻撃力ボーナス",
             "bonus_defence": "防御力ボーナス",
             "critical_chance": "クリティカルチャンス",
+            "bonus_elemental": "Bonus elemental (*)",
             "element": {
             "title": "属性",
             "none": "なし",
@@ -133,12 +151,14 @@
         "invincible_tooltip": "ダメージ、ノックバック、ひるみ、状態異常を受けない。",
         "unlimited_sharpness": "斬れ味無限",
         "unlimited_consumables": "消費アイテム無限",
-        "unlimited_slingers": "スリンガー弾無限"
+        "unlimited_slingers": "スリンガー弾無限",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
     "great_sword": {
         "title": "大剣",
         "true_charge_boost": "真・溜め斬り強化",
         "true_charge_boost_tooltip": "真・溜め斬りの初撃ダメージ増加",
+        "charge_level": "Charge level(*)",
         "instant_charge": "即時溜め"
     },
     "sword_and_shield": {
@@ -180,6 +200,8 @@
     },
     "hammer": {
         "title": "ハンマー",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "即時溜め"
     },
     "hunting_horn": {
@@ -189,17 +211,14 @@
     "lance": {
         "title": "ランス",
         "counter_charge_level": "カウンターチャージレベル",
-        "rush_level": "突進レベル",
-        "infinite_backstep": "無限バックステップ"
+        "rush_level": "突進レベル"
     },
     "gunlance": {
         "title": "ガンランス",
         "shell_level": "砲撃レベル",
         "infinite_wyvern_fire": "竜撃砲無限",
-        "infinite_backstep": "無限バックステップ",
         "instant_charge": "即時溜め",
-        "instant_charge_tooltip": "少し溜める必要があります",
-        "free_charge_shot": "チャージショット自由"
+        "unlimited_ammo": "弾無限"
     },
     "bow": {
         "title": "弓",
@@ -219,7 +238,10 @@
         "unlimited_ammo": "弾無限",
         "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
-        "no_recoil": "反動なし"
+        "no_recoil": "反動なし",
+        "no_knockback": "No knockback (*)",
+        "all_rapid_fire": "All rapid fire (*)",
+        "shell_level": "Shell level (*)"
     },
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
@@ -230,7 +252,9 @@
         "unlimited_ammo": "弾無限",
         "unlimited_bladescale": "無限刃鱗増装",
         "no_reload": "リロード不要",
-        "no_recoil": "反動なし"
+        "no_recoil": "反動なし",
+        "no_knockback": "No knockback (*)",
+        "shell_level": "Shell level (*)"
     },
     "charge_blade": {
         "title": "チャージアックス",

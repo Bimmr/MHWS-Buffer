@@ -2,6 +2,8 @@
 
 Buffs, Modifications, and Cheats for weapons and stats.
 
+<img src="https://staticdelivery.nexusmods.com/mods/6993/images/headers/299_1762869437.jpg" alt="Buffer Mods as of 0.1.3"></td>
+
 ## Download Mod
 
 <div style="display:flex;">
@@ -19,6 +21,9 @@ Buffs, Modifications, and Cheats for weapons and stats.
 3. Launch your game. <small>(The menu will show up when the "Script Generated UI" tab is open in REFramework.)</small>
 
 ## Features
+
+View screenshots of menu options on the [Nexus page](https://www.nexusmods.com/monsterhunterwilds/mods/299?tab=images).
+
 <details>
 <summary><strong>Character</strong></summary>
 
@@ -41,14 +46,17 @@ Buffs, Modifications, and Cheats for weapons and stats.
 
 **Stats**
 - Adjust attack damage
-- Element swapper
 - Adjust defence amount
+- Change element
+- Adjust element value
 - Adjust critical rate
 
-**Invincible**  
+**Other**
+- Invincible  
 - Unlimited Sharpness  
 - Unlimited Consumables  
 - Unlimited Slinger Ammo  
+- Unlimited Meal Timer  
 
 </td>
 <td style="vertical-align: top">
@@ -73,7 +81,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Sleep  
 - Sticky  
 - Frozen  
-- Bubble  
+- Bubble
+- HP Reduction
 - All  
 
 </td>
@@ -112,11 +121,16 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - **Watergun**
   - Unlimited Ammo 
 
+- **Pictomancy**
+  - State selection (Pom Motif, Wing Motif, Mog of the Ages)
+  - Instant cooldown
+
 </details>
 
 <details>
 <summary><strong>Great Sword</strong></summary>
 
+- Charge level  
 - True Charge boost  
 - Instant charge  
 
@@ -142,6 +156,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 <details>
 <summary><strong>Hammer</strong></summary>
 
+- Charge level  
+- Super charge level  
 - Instant charge  
 
 </details>
@@ -157,8 +173,7 @@ Buffs, Modifications, and Cheats for weapons and stats.
 <summary><strong>Lance</strong></summary>
 
 - Counter charge level  
-- Rush level  
-- Infinite backstep  
+- Rush level   
 
 </details>
 
@@ -166,10 +181,9 @@ Buffs, Modifications, and Cheats for weapons and stats.
 <summary><strong>Gunlance</strong></summary>
 
 - Instant charge  
-- Free charge shot  
+- Unlimited ammo
 - Shell level  
-- Infinite wyvern fire  
-- Infinite backstep  
+- Infinite wyvern fire
 
 </details>
 
@@ -232,6 +246,9 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Unlimited ammo  
 - No reload  
 - No recoil  
+- No knockback
+- All rapid fire ammo
+- Shell level adjustment
 - Bladescale support
 
 </details>
@@ -245,16 +262,8 @@ Buffs, Modifications, and Cheats for weapons and stats.
 - Unlimited ammo  
 - No reload  
 - No recoil  
+- No knockback
+- Shell level adjustment
 - Bladescale support
 
 </details>
-
-
-
-
-
-<table>
-   <tr>
-      <td><img src="https://staticdelivery.nexusmods.com/mods/6993/images/299/299-1749396791-912163015.jpeg" alt="Buffer Mods as of 0.1.3"></td>
-   </tr>
-</table>

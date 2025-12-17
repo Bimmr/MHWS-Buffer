@@ -1,3 +1,5 @@
+-- Bindings version 0.0.2
+
 local controller_bindings = {}
 local keyboard_bindings = {}
 local bindings = {}
@@ -321,14 +323,12 @@ end
 --- @return true/false if the keys are currently pressed
 function keyboard_bindings.is_down(data)
     local current = bindings.get_current()
+    local current_set = {}
+    for _, code in pairs(current) do
+        current_set[code] = true
+    end
     for _, code in pairs(data) do
-        local found = false
-        for _, current_code in pairs(current) do
-            if current_code == code then
-                found = true
-            end
-        end
-        if not found then
+        if not current_set[code] then
             return false
         end
     end
@@ -401,8 +401,8 @@ local to_replace_buttons = {
     ["RDown"] = {"X", "A"},
     ["RLeft"] = {"Square", "X"},
     ["RUp"] = {"Triangle", "Y"},
-    ["CLeft"] = {"Share", "Back"},
-    ["CRight"] = {"Start", "Start"},
+    ["CLeft"] = {"Share", "View"},
+    ["CRight"] = {"Start", "Menu"},
     ["CCenter"] = {"Touchpad", "Guide"},
     ["LTrigBottom"] = {"L2", "LT"},
     ["RTrigBottom"] = {"R2", "RT"},
@@ -585,19 +585,25 @@ function controller_bindings.is_triggered(data)
     local current = controller_bindings.get_current()
     local previous = controller_bindings.get_previous()
 
-    -- Check if in current all keys are pressed, and in previous either none or all but one
+    -- Create lookup tables for O(1) access
+    local current_set = {}
+    local previous_set = {}
+    for _, code in pairs(current) do
+        current_set[code] = true
+    end
+    for _, code in pairs(previous) do
+        previous_set[code] = true
+    end
+
+    -- Check if all keys are pressed in current, count matches in previous
     local matches = 0
     local previous_matches = 0
     for _, code in pairs(data) do
-        for _, current_code in pairs(current) do
-            if current_code == code then
-                matches = matches + 1
-            end
+        if current_set[code] then
+            matches = matches + 1
         end
-        for _, previous_code in pairs(previous) do
-            if previous_code == code then
-                previous_matches = previous_matches + 1
-            end
+        if previous_set[code] then
+            previous_matches = previous_matches + 1
         end
     end
 

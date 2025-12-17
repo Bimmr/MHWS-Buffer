@@ -1,4 +1,6 @@
 {
+    "_LANGUAGE_NAME": "English (US)",
+    
     "window": {
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",
@@ -10,6 +12,11 @@
         "author": "Author",
         "translator": "Translator",
         "version": "Version",
+        "options": "Options",
+        "disable_all": "Disable all",
+        "enabled_buffs": "Enabled buffs",
+        "nothing_enabled": "Nothing is enabled",
+        "disable": "Disable",
         "bindings": {
             "title": "Bindings",
             "keyboard": "Keyboard",
@@ -38,9 +45,19 @@
             "instant_drive_gauge": "Instant Drive Gauge",
             "gou_hadoken_max_level": "Gou Hadoken Max Level"
         },
-        "water gun": {
+        "water_gun": {
             "title": "Water Gun",
             "unlimited_ammo": "Unlimited ammo"
+        },
+        "pictomancy": {
+            "title": "Pictomancy",
+            "state": {
+                "title": "Active Pictomancy state",
+                "pom": "Pom Motif",
+                "wing": "Wing Motif",
+                "mog": "Mog of the ages"
+            },
+            "instant_cooldown": "Instant cooldown"
         }
     },
     "character": {
@@ -83,6 +100,7 @@
                 "frenzy": "Frenzy",
                 "frozen": "Frozen",
                 "bubble": "Bubble",
+                "hp_reduction": "HP Reduction",
                 "all": "All "
             }
         },
@@ -113,6 +131,7 @@
             "bonus_attack": "Bonus attack",
             "bonus_defence": "Bonus defence",
             "critical_chance": "Critical chance",
+            "bonus_elemental": "Bonus elemental",
             "element": {
                 "title": "Element",
                 "none": "None",
@@ -131,13 +150,15 @@
         "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.",
         "unlimited_sharpness": "Unlimited Sharpness",
         "unlimited_consumables": "Unlimited Consumables",
-        "unlimited_slingers": "Unlimited Slinger Ammo"
+        "unlimited_slingers": "Unlimited Slinger Ammo",
+        "unlimited_meal_timer": "Unlimited Meal Timer"
     },
 
     "great_sword": {
         "title": "Great Sword",
         "true_charge_boost": "True Charge boost",
         "true_charge_boost_tooltip": "Inital hit of true charge bonus",
+        "charge_level": "Charge level",
         "instant_charge": "Instant charge"
     },
     "sword_and_shield": {
@@ -180,6 +201,8 @@
 
     "hammer": {
         "title": "Hammer",
+        "charge_level": "Charge level",
+        "super_charge_level": "Super charge level",
         "instant_charge": "Instant charge"
     },
     "hunting_horn": {
@@ -190,17 +213,14 @@
     "lance": {
         "title": "Lance",
         "counter_charge_level": "Counter charge level",
-        "rush_level": "Rush level",
-        "infinite_backstep": "Infinite backstep"
+        "rush_level": "Rush level"
     },
     "gunlance": {
         "title": "Gunlance",
         "shell_level": "Shell level",
         "infinite_wyvern_fire": "Infinite wyvern fire",
-        "infinite_backstep": "Infinite backstep",
         "instant_charge": "Instant charge",
-        "instant_charge_tooltip": "Will require being held for a moment, then letting go to fire",
-        "free_charge_shot": "Free charge shot"
+        "unlimited_ammo": "Unlimited ammo"
     },
 
     "bow": {
@@ -221,7 +241,10 @@
         "unlimited_ammo": "Unlimited ammo",
         "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
-        "no_recoil": "No recoil"
+        "no_recoil": "No recoil",
+        "no_knockback": "No knockback",
+        "all_rapid_fire": "All rapid fire",
+        "shell_level": "Shell level"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -232,7 +255,9 @@
         "unlimited_ammo": "Unlimited ammo",
         "unlimited_bladescale": "Unlimited bladescale shots",
         "no_reload": "No reload",
-        "no_recoil": "No recoil"
+        "no_recoil": "No recoil",
+        "no_knockback": "No knockback",
+        "shell_level": "Shell level"
     },
 
     "charge_blade": {

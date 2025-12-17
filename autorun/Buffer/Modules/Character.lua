@@ -1,102 +1,157 @@
-local utils, config, language
-local Module = {
-    title = "character",
-    data = {
-        health = {
-            max = false,
-            unlimited = false,
-            healing = false
-        },
-        stamina = {
-            max = false,
-            unlimited = false
-        },
-        item_buffs = {
-            dash_juice = false,
-            hot_drink = false,
-            cool_drink = false,
-            imunizer = false,
-            might_seed = false, -- _Kairiki_Timer
-            might_pill = false, -- _Kairiki_G_Timer
-            adamant_seed = false, -- _Nintai_Timer
-            adamant_pill = false, -- _Nintai_G_Timer
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local language = require("Buffer.Misc.Language")
+local utils = require("Buffer.Misc.Utils")
 
-            demon_drug = false, -- _KijinDrink
-            mega_demondrug = false, -- _KijinDrink_G
-            armor_skin = false, -- _KoukaDrink
-            mega_armorskin = false, -- _KoukaDrink_G 
-
-            demon_powder = false, -- _KijinPowder_Timer
-            hardshell_powder = false -- _KoukaPowder_Timer
-        },
-        blights_and_conditions = {
-            blights = {
-                fire = false,
-                thunder = false,
-                water = false,
-                ice = false,
-                dragon = false,
-                all = false
-            },
-            conditions = {
-                poison = false,
-                stench = false,
-                blast = false,
-                bleed = false,
-                defense_down = false,
-                frenzy = false,
-                stun = false,
-                paralyze = false,
-                sleep = false,
-                sticky = false,
-                frozen = false,
-                bubble = false,
-                all = false
-            }
-        },
-        mantles = {
-            instant_cooldown = false,
-            unlimited_duration = false
-        },
-        stats = {
-            bonus_attack = -1,
-            bonus_defence = -1,
-            critical_chance = -1,
-            element = -1
-        },
-        invincible = false,
-        unlimited_sharpness = false,
-        unlimited_consumables = false,
-        unlimited_slingers = false,
+local Module = ModuleBase:new("character", {
+    health = {
+        max = false,
+        unlimited = false,
+        healing = false
     },
-    old = {
-        stats = {}
-    }
+    stamina = {
+        max = false,
+        unlimited = false
+    },
+    item_buffs = {
+        dash_juice = false,
+        hot_drink = false,
+        cool_drink = false,
+        imunizer = false,
+        might_seed = false, -- _Kairiki_Timer
+        might_pill = false, -- _Kairiki_G_Timer
+        adamant_seed = false, -- _Nintai_Timer
+        adamant_pill = false, -- _Nintai_G_Timer
+
+        demon_drug = false, -- _KijinDrink
+        mega_demondrug = false, -- _KijinDrink_G
+        armor_skin = false, -- _KoukaDrink
+        mega_armorskin = false, -- _KoukaDrink_G 
+
+        demon_powder = false, -- _KijinPowder_Timer
+        hardshell_powder = false -- _KoukaPowder_Timer
+    },
+    blights_and_conditions = {
+        blights = {
+            fire = false,
+            thunder = false,
+            water = false,
+            ice = false,
+            dragon = false,
+            all = false
+        },
+        conditions = {
+            poison = false,
+            stench = false,
+            blast = false,
+            bleed = false,
+            defense_down = false,
+            frenzy = false,
+            stun = false,
+            paralyze = false,
+            sleep = false,
+            sticky = false,
+            frozen = false,
+            bubble = false,
+            hp_reduction = false,
+            all = false
+        }
+    },
+    mantles = {
+        instant_cooldown = false,
+        unlimited_duration = false
+    },
+    stats = {
+        bonus_attack = -1,
+        bonus_defence = -1,
+        critical_chance = -1,
+        bonus_elemental = -1,
+        element = -1
+    },
+    invincible = false,
+    unlimited_sharpness = false,
+    unlimited_consumables = false,
+    unlimited_slingers = false,
+    unlimited_meal_timer = false,
+})
+
+-- Local variables
+local skip_consumable_use = false
+local skip_slinger_use = false
+
+-- Item Buffs
+local ITEM_BUFFS_DATA = {
+    dash_juice =       {field = "_DashJuice_Timer",     duration = 600},
+    hot_drink =        {field = "_HotDrink_Timer",      duration = 600},
+    cool_drink =       {field = "_CoolerDrink_Timer",   duration = 600},
+    imunizer =         {field = "_Immunizer_Timer",     duration = 300},
+    might_seed =       {field = "_Kairiki_Timer",       duration = 180},
+    might_pill =       {field = "_Kairiki_G_Timer",     duration = 90},
+    adamant_seed =     {field = "_Nintai_Timer",       duration = 180},
+    adamant_pill =     {field = "_Nintai_G_Timer",     duration = 90},
+    demon_powder =     {field = "_KijinPowder_Timer",   duration = 180},
+    hardshell_powder = {field = "_KoukaPowder_Timer",   duration = 180}
+    -- Demon Drug, Mega Demondrug, Armor Skin, Mega Armorskin are handled differently
 }
 
-local function updateDahliaFloatBox(key, field_name, managed, new_value)
-    if Module.old == nil then Module.old = {} end
-    if Module.old[key] == nil then Module.old[key] = {} end
-    if new_value >= 0 then 
-        if Module.old[key][field_name] == nil then 
-            Module.old[key][field_name] = managed:get_field(field_name):read()
+-- Conditions
+local CONDITIONS_DATA = {
+    poison =        {field = "_Poison",  duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    stench =        {field = "_Stench",  duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    blast =         {field = "_Blast",   duration_field = "_CureAccumerator",   method = "forceDeactivate"},
+    bleed =         {field = "_Bleed",   duration_field = "_CureTimer",         method = "forceDeactivate"},
+    defense_down =  {field = "_DefDown", duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    sleep =         {field = "_Sleep",   duration_field = "_DurationTime",      method = "forceDeactivate"},
+    bubble =        {field = "_Ex00",    duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    hp_reduction =  {field = "_Ex01",    duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    -- Frenzy, Stun, Paralyze, Sticky, Frozen are handled differently
+}
+local BLIGHTS_DATA = {
+    fire =          {field = "_Fire",    duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    thunder =       {field = "_Elec",    duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    water =         {field = "_Water",   duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    ice =           {field = "_Ice",     duration_field = "_DurationTimer",     method = "forceDeactivate"},
+    dragon =        {field = "_Dragon",  duration_field = "_DurationTimer",     method = "forceDeactivate"},
+}
+
+--- Updates a float field value with caching and restoration support
+--- @param key string Cache key for storing original values
+--- @param field_name string Name of the field to update
+--- @param managed userdata The managed object containing the field
+--- @param new_value number The new value to apply
+--- @param is_override boolean If true, replaces value; if false, adds to original
+local function updateDahliaFloatBox(key, field_name, managed, new_value, is_override)
+    if not managed then return end
+
+    -- Ensure cache table exists
+    Module.old[key] = Module.old[key] or {}
+    local cache = Module.old[key]
+    
+    -- Get field reference
+    local field = managed:get_field(field_name)
+    if not field then return end
+
+    -- Determine if feature is disabled
+    local disabled = (is_override and new_value < 0) or (not is_override and new_value <= 0)
+
+    if disabled then
+        -- Restore original value if cached
+        if cache[field_name] then
+            field:write(cache[field_name] + 0.0)
+            cache[field_name] = nil
         end
-        managed:get_field(field_name):write(new_value+0.0) 
-    elseif Module.old[key][field_name] ~= nil then
-        managed:get_field(field_name):write(Module.old[key][field_name]+0.0)
-        Module.old[key][field_name] = nil
-    end 
+        return
+    end
+
+    -- Cache original value on first use
+    cache[field_name] = cache[field_name] or field:read()
+    local original = cache[field_name]
+
+    -- Calculate and write new value (always as float)
+    local final_value = is_override and new_value or (original + new_value)
+    field:write(final_value + 0.0)
 end
 
-function Module.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    Module.init_hooks()
-end
-
-function Module.init_hooks()
+function Module.create_hooks() 
 
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -123,8 +178,8 @@ function Module.init_hooks()
             end
         end
 
-        if hunter_meal_effect ~= nil then
-            if Module.data.health.max then
+        if Module.data.health.max then
+            if hunter_meal_effect ~= nil then
                 if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
                     hunter_meal_effect:set_field("_IsEffectActive", true)
                 end
@@ -144,7 +199,7 @@ function Module.init_hooks()
                 if hunter_meal_effect:get_field("_IsEffectActive") ~= true then
                     hunter_meal_effect:set_field("_IsEffectActive", true)
                 end
-                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then -- Doesn't actually do anything, but it makes it look like stamina got increased by food
+                if hunter_meal_effect:get_field("_MaxStaminaAdd") < 50 then --* Doesn't actually do anything, but it makes it look like stamina got increased by food
                     hunter_meal_effect:set_field("_MaxStaminaAdd", 50)
                 end
                 if stamina:get_MaxStamina() < 150 then
@@ -153,99 +208,78 @@ function Module.init_hooks()
             end
         end
 
+        -- Meal Timer
+        if Module.data.unlimited_meal_timer then
+            if hunter_meal_effect ~= nil then
+                if hunter_meal_effect:get_field("_IsTimerActive") then
+                    hunter_meal_effect:set_field("_DurationTimer", hunter_meal_effect:get_field("_TimerMax"))
+                end
+            end
+        end
+
         -- Item Buffs
         if item_buffs ~= nil then
-            if Module.data.item_buffs.dash_juice then
-                item_buffs:set_field("_DashJuice_Timer", 600)
+
+            -- Basic item buffs
+            for buff_name, buff_data in pairs(ITEM_BUFFS_DATA) do
+                if Module.data.item_buffs[buff_name] then
+                    item_buffs:set_field(buff_data.field, buff_data.duration)
+                end
             end
-            if Module.data.item_buffs.hot_drink then
-                item_buffs:set_field("_HotDrink_Timer", 600)
-            end
-            if Module.data.item_buffs.cool_drink then
-                item_buffs:set_field("_CoolerDrink_Timer", 600)
-            end
-            if Module.data.item_buffs.imunizer then
-                item_buffs:set_field("_Immunizer_Timer", 300)
-            end
-            if Module.data.item_buffs.might_seed then
-                item_buffs:set_field("_Kairiki_Timer", 180)
-            end
-            if Module.data.item_buffs.might_pill then
-                item_buffs:set_field("_Kairiki_G_Timer", 90)
-            end
-            if Module.data.item_buffs.adamant_seed then
-                item_buffs:set_field("_Nintai_Timer", 180)
-            end
-            if Module.data.item_buffs.adamant_pill then
-                item_buffs:set_field("_Nintai_G_Timer", 90)
-            end
+            
+            -- Demon Drug is handled differently
             if Module.data.item_buffs.demon_drug then
                 local demon_drug = item_buffs:get_field("_KijinDrink")
                 if demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(4), 1.0, 1.0)   
                 end
             end
-            if Module.data.item_buffs.mega_demondrug then 
-                local demon_drug = item_buffs:get_field("_KijinDrink_G")
-                if demon_drug:get_field("_Timer") <= 0 then
+            -- Mega Demondrug is handled differently
+            if Module.data.item_buffs.mega_demondrug then
+                local mega_demon_drug = item_buffs:get_field("_KijinDrink_G")
+                if mega_demon_drug:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(5), 1.0, 1.0)
                 end
             end
+            -- Armor Skin is handled differently
             if Module.data.item_buffs.armor_skin then
                 local armor_skin = item_buffs:get_field("_KoukaDrink")
                 if armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(10), 1.0, 1.0)        
                 end
             end
+            -- Mega Armorskin is handled differently
             if Module.data.item_buffs.mega_armorskin then
-                local armor_skin = item_buffs:get_field("_KoukaDrink_G")
-                if armor_skin:get_field("_Timer") <= 0 then
+                local mega_armor_skin = item_buffs:get_field("_KoukaDrink_G")
+                if mega_armor_skin:get_field("_Timer") <= 0 then
                     item_buffs:activateItemBuff(sdk.to_ptr(11), 1.0, 1.0)
                 end
-            end
-
-            if Module.data.item_buffs.demon_powder then
-                item_buffs:set_field("_KijinPowder_Timer", 180)
-            end
-            if Module.data.item_buffs.hardshell_powder then
-                item_buffs:set_field("_KoukaPowder_Timer", 180)
             end
         end
 
         -- Conditions
-        if Module.data.blights_and_conditions.conditions.poison or Module.data.blights_and_conditions.conditions.all then
-            local poison = conditions:get_field("_Poison")
-            if poison:get_field("_DurationTimer") > 0 then
-                poison:set_field("_DurationTimer", 0)
+        for condition_name, condition_data in pairs(CONDITIONS_DATA) do
+            if Module.data.blights_and_conditions.conditions[condition_name] or Module.data.blights_and_conditions.conditions.all then
+                local condition = conditions:get_field(condition_data.field)
+                if condition:get_field(condition_data.duration_field) > 0 then
+                    condition:call(condition_data.method)
+                end
             end
         end
-        if Module.data.blights_and_conditions.conditions.stench or Module.data.blights_and_conditions.conditions.all then
-            local stench = conditions:get_field("_Stench")
-            if stench:get_field("_DurationTimer") > 0 then
-                stench:set_field("_DurationTimer", 0)
+        -- Blights
+        for blight_name, blight_data in pairs(BLIGHTS_DATA) do
+            if Module.data.blights_and_conditions.blights[blight_name] or Module.data.blights_and_conditions.blights.all then
+                local blight = conditions:get_field(blight_data.field)
+                if blight:get_field(blight_data.duration_field) > 0 then
+                    blight:call(blight_data.method)
+                end
             end
         end
-        if Module.data.blights_and_conditions.conditions.blast or Module.data.blights_and_conditions.conditions.all then
-            local blast = conditions:get_field("_Blast")
-            if blast:get_field("_CureAccumerator") > 0 then
-                blast:set_field("_CureAccumerator", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.conditions.bleed or Module.data.blights_and_conditions.conditions.all then
-            local bleed = conditions:get_field("_Bleed")
-            if bleed:get_field("_CureTimer") > 0 then
-                bleed:set_field("_CureTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.conditions.defense_down or Module.data.blights_and_conditions.conditions.all then
-            local def_Down = conditions:get_field("_DefDown")
-            if def_Down:get_field("_DurationTimer") > 0 then
-                def_Down:set_field("_DurationTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then -- Not far enough into story to know, will probably affect armor buff
+
+        -- Frenzy is handled different
+        if Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all then
             local frenzy = conditions:get_field("_Frenzy")
-             -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
+            -- _State (0 = Infect(Ready)), 1 = Outbreak(Bad)), 2 = Overcome(Good))
             -- _DurationTimer - counts down from _DurationTime
             -- _OvercomePoint - builds up on attack towards _OvercomeTargetPoint
             -- _PointReduceTimer - Builds up to 1 (Keeping at 0 stops _DurationTimer from counting down, if _State is 1)
@@ -253,33 +287,28 @@ function Module.init_hooks()
             if frenzy:get_field("_State") == 1 and frenzy:get_field("_DurationTimer") > 1.0 then
                 frenzy:set_field("_DurationTimer", 0.2)
             end
-           
-
-            frenzy:set_field("_IsImmune", true)
         end
+        -- Stun is handled differently
         if Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all then
             local stun = conditions:get_field("_Stun")
-            if stun:get_field("_ReduceTimer") < 6 then -- Maybe a Jewel or skill lowers this - not far enough to know
+            if stun:get_field("_ReduceTimer") < 6 then --? Maybe a Jewel or skill lowers this
                 stun:set_field("_ReduceTimer", 6)
             end
+            if stun:get_field("_Accumulator") > 0 then
+                stun:set_field("_Accumulator", 0)
+            end
         end
+        -- Paralyze is handled differently
         if Module.data.blights_and_conditions.conditions.paralyze or Module.data.blights_and_conditions.conditions.all then
             local paralyze = conditions:get_field("_Paralyze") -- Effect still plays
             if paralyze:get_field("_DurationTime") > 0 then
-                paralyze:set_field("_DurationTime", 0)
-                paralyze:set_field("_IsRestrainted", false)
+                paralyze:cure() --* cure stops more of the animation than forceDeactivate
             end
             if paralyze:get_field("_Accumulator") > 0 then
                 paralyze:set_field("_Accumulator", 0)
             end
         end
-        if Module.data.blights_and_conditions.conditions.sleep or Module.data.blights_and_conditions.conditions.all then
-            local sleep = conditions:get_field("_Sleep") -- Effect probably still plays
-            if sleep:get_field("_DurationTime") > 0 then
-                sleep:set_field("_DurationTime", 0)
-                sleep:set_field("_IsRestrainted", false)
-            end
-        end
+        -- Sticky is handled differently
         if Module.data.blights_and_conditions.conditions.sticky or Module.data.blights_and_conditions.conditions.all then
             local sticky = conditions:get_field("_Sticky") -- Effect probably still plays
             if sticky:get_field("_DurationTime") > 0 then
@@ -287,65 +316,32 @@ function Module.init_hooks()
                 sticky:set_field("_IsRestrainted", false)
             end
         end
+        -- Frozen is handled differently
         if Module.data.blights_and_conditions.conditions.frozen or Module.data.blights_and_conditions.conditions.all then
-            local frozen = conditions:get_field("_Frozen") -- Effect still plays
+            local frozen = conditions:get_field("_Frozen") -- Effect still partially plays
             if frozen:get_field("_DurationTime") > 0 then
-                frozen:set_field("_DurationTime", 0)
-                frozen:set_field("_IsRestrainted", false)
+                frozen:cure()
             end
             if frozen:get_field("_Accumulator") > 0 then
                 frozen:set_field("_Accumulator", 0)
             end
         end
-        if Module.data.blights_and_conditions.conditions.bubble or Module.data.blights_and_conditions.conditions.all then
-            local bubble = conditions:get_field("_Ex00") 
-            if bubble:get_field("_DurationTimer") > 0 then -- Uses _DurationTimer instead of _DurationTime like the other conditions
-                bubble:set_field("_DurationTimer", 0)
-                bubble:set_field("_Type", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.blights.fire or Module.data.blights_and_conditions.blights.all then
-            local fire = conditions:get_field("_Fire")
-            if fire:get_field("_DurationTimer") > 0 then
-                fire:set_field("_DurationTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.blights.thunder or Module.data.blights_and_conditions.blights.all then
-            local electric = conditions:get_field("_Elec")
-            if electric:get_field("_DurationTimer") > 0 then
-                electric:set_field("_DurationTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.blights.water or Module.data.blights_and_conditions.blights.all then
-            local water = conditions:get_field("_Water")
-            if water:get_field("_DurationTimer") > 0 then
-                water:set_field("_DurationTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.blights.ice or Module.data.blights_and_conditions.blights.all then
-            local ice = conditions:get_field("_Ice")
-            if ice:get_field("_DurationTimer") > 0 then
-                ice:set_field("_DurationTimer", 0)
-            end
-        end
-        if Module.data.blights_and_conditions.blights.dragon or Module.data.blights_and_conditions.blights.all then
-            local dragon = conditions:get_field("_Dragon")
-            if dragon:get_field("_DurationTimer") > 0 then
-                dragon:set_field("_DurationTimer", 0)
-            end
-        end
         
-        updateDahliaFloatBox("bonus_attack", "_WeaponAttackPower", managed:get_AttackPower(), Module.data.stats.bonus_attack)
-        updateDahliaFloatBox("bonus_defence", "_OriginalArmorDefencePower", managed:get_DefencePower(), Module.data.stats.bonus_defence)
-        updateDahliaFloatBox("critical_chance", "_OriginalCritical", managed:get_CriticalRate(), Module.data.stats.critical_chance)
+        -- Stats
+        updateDahliaFloatBox("bonus_attack",    "_WeaponAttackPower",           managed:get_AttackPower(),  Module.data.stats.bonus_attack, false)
+        updateDahliaFloatBox("bonus_defence",   "_OriginalArmorDefencePower",   managed:get_DefencePower(), Module.data.stats.bonus_defence, false)
+        updateDahliaFloatBox("critical_chance", "_OriginalCritical",            managed:get_CriticalRate(), Module.data.stats.critical_chance, true)
+        updateDahliaFloatBox("elemental_attack", "_WeaponAttrPower",            managed:get_AttackPower(), Module.data.stats.bonus_elemental > 0 and Module.data.stats.bonus_elemental / 10 or Module.data.stats.bonus_elemental, false)
 
+        -- Element
         if Module.data.stats.element ~= -1 then
             local attack_power = managed:get_field("_AttackPower")
+            if not Module.old.stats then Module.old.stats = {} end
             if Module.old.stats.element == nil then
                 Module.old.stats.element = attack_power:get_field("_WeaponAttrType")
             end
             attack_power:set_field("_WeaponAttrType", Module.data.stats.element)
-        elseif Module.old.stats.element ~= nil then
+        elseif Module.old.stats and Module.old.stats.element ~= nil then
             local attack_power = managed:get_field("_AttackPower")
             attack_power:set_field("_WeaponAttrType", Module.old.stats.element)
             Module.old.stats.element = nil
@@ -356,23 +352,19 @@ function Module.init_hooks()
 
     -- Unlimited Sharpness
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireajiFromAttack(app.HitInfo)"), function(args)
-
         if Module.data.unlimited_sharpness then
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
-
     end, function(retval) end)
 
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireaji(System.Int32, System.Boolean)"), function(args)
-
         if Module.data.unlimited_sharpness then
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
-       
     end, function(retval) end)
 
 
-    -- Hyper and Super Armor either don't work or I don't know what they do
+    -- Invincibility
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
@@ -386,7 +378,6 @@ function Module.init_hooks()
 
 
     -- Unlimited Consumables
-    local skip_consumable_use = false
     sdk.hook(sdk.find_type_definition("app.HunterCharacter.cHunterExtendBase"):get_method("useItem"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_IsMaster() then return end
@@ -394,19 +385,12 @@ function Module.init_hooks()
         if Module.data.unlimited_consumables then
             skip_consumable_use = true
         end
+
     end, function(retval)
         skip_consumable_use = false
         return retval
     end)
 
-    local skip_slinger_use = false
-    -- Used for consumables in both the slinger and item pouch
-    sdk.hook(sdk.find_type_definition("app.savedata.cItemParam"):get_method("changeItemPouchNum(app.ItemDef.ID, System.Int16, app.savedata.cItemParam.POUCH_CHANGE_TYPE)"), function(args)
-        if skip_consumable_use or skip_slinger_use then
-            return sdk.PreHookResult.SKIP_ORIGINAL
-        end
-    end, function(retval) return retval end)
-  
     -- Unlimited Slingers
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("useSlinger"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -420,6 +404,13 @@ function Module.init_hooks()
         return retval
     end)
     
+    -- Used for consumables in both the slinger and item pouch
+    sdk.hook(sdk.find_type_definition("app.savedata.cItemParam"):get_method("changeItemPouchNum(app.ItemDef.ID, System.Int16, app.savedata.cItemParam.POUCH_CHANGE_TYPE)"), function(args)
+        if skip_consumable_use or skip_slinger_use then
+            return sdk.PreHookResult.SKIP_ORIGINAL
+        end
+    end, function(retval) return retval end)
+    
     -- Pickupable slinger ammo
     sdk.hook(sdk.find_type_definition("app.cSlingerAmmo"):get_method("useAmmo"), function(args)
         if skip_slinger_use then
@@ -428,44 +419,35 @@ function Module.init_hooks()
     end, function(retval) return retval end)
 
 
+    -- Mantles
     sdk.hook(sdk.find_type_definition("app.mcActiveSkillController"):get_method("updateMain"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_field("_Hunter"):get_IsMaster() then return end
 
         local mantles = managed:get_field("_ActiveSkills")
-        if mantles == nil then return end
+        if not mantles or not (Module.data.mantles.instant_cooldown or Module.data.mantles.unlimited_duration) then return end
 
-        if Module.data.mantles.instant_cooldown or Module.data.mantles.unlimited_duration then
-            local managed = sdk.to_managed_object(args[2])
-            if not managed then return end
-            if not managed:get_field("_Hunter"):get_IsMaster() then return end
-    
-            local mantles = managed:get_field("_ActiveSkills")
-                for i, mantle in pairs(mantles) do
-    
-                    if not mantle:get_IsUse() and mantle:get_Timer() > 0 and Module.data.mantles.instant_cooldown then
-                        mantle:crearTime()
-                    elseif mantle:get_IsUse() and Module.data.mantles.unlimited_duration then
-                        mantle:setTime(mantle:get_MaxEffectiveTime())
-                    end
+        for i, mantle in pairs(mantles) do
+            if mantle then
+                if Module.data.mantles.instant_cooldown and not mantle:get_IsUse() and mantle:get_Timer() > 0 then
+                    mantle:crearTime()
+                elseif Module.data.mantles.unlimited_duration and mantle:get_IsUse() then
+                    mantle:setTime(mantle:get_MaxEffectiveTime())
                 end
+            end
         end
-        
+
     end, function(retval) end)
 
 end
 
-function Module.draw()
-    imgui.push_id(Module.title)
+function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-
-        languagePrefix = Module.title .. ".health."
-        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+    languagePrefix = Module.title .. ".health."
+    if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
             changed, Module.data.health.max = imgui.checkbox(language.get(languagePrefix .. "max"), Module.data.health.max)
             any_changed = any_changed or changed
@@ -496,160 +478,68 @@ function Module.draw()
         languagePrefix = Module.title .. ".blights_and_conditions."
 
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
-            utils.tooltip(language.get(languagePrefix .. "tooltip"))
 
             languagePrefix = Module.title .. ".blights_and_conditions.blights."
             if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
                 imgui.begin_table(Module.title .. "1", 2, nil, nil, nil)
                 imgui.table_next_row()
-                imgui.table_next_column()
 
-                changed, Module.data.blights_and_conditions.blights.fire = imgui.checkbox(language.get(languagePrefix .. "fire"), Module.data.blights_and_conditions.blights.fire)
-                any_changed = any_changed or changed
+                local BLIGHT_KEYS = {
+                    "fire", "thunder", "water", 
+                    "ice", "dragon", "all"
+                }
 
-                changed, Module.data.blights_and_conditions.blights.thunder = imgui.checkbox(language.get(languagePrefix .. "thunder"),
-                    Module.data.blights_and_conditions.blights.thunder)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.blights.water =
-                    imgui.checkbox(language.get(languagePrefix .. "water"), Module.data.blights_and_conditions.blights.water)
-                any_changed = any_changed or changed
-
-                imgui.table_next_column()
-
-                changed, Module.data.blights_and_conditions.blights.ice = imgui.checkbox(language.get(languagePrefix .. "ice"), Module.data.blights_and_conditions.blights.ice)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.blights.dragon = imgui.checkbox(language.get(languagePrefix .. "dragon"),
-                    Module.data.blights_and_conditions.blights.dragon)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.blights.all = imgui.checkbox(language.get(languagePrefix .. "all"), Module.data.blights_and_conditions.blights.all)
-                any_changed = any_changed or changed
+                for i, key in ipairs(BLIGHT_KEYS) do
+                    if i == 1 or i == math.ceil(#BLIGHT_KEYS / 2) + 1 then imgui.table_next_column() end
+                    changed, Module.data.blights_and_conditions.blights[key] = imgui.checkbox(language.get(languagePrefix .. key), Module.data.blights_and_conditions.blights[key])
+                    any_changed = any_changed or changed
+                end
 
                 imgui.end_table()
                 imgui.tree_pop()
             end
-
+                
             languagePrefix = Module.title .. ".blights_and_conditions.conditions."
             if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
                 imgui.begin_table(Module.title .. "2", 2, nil, nil, nil)
                 imgui.table_next_row()
-                imgui.table_next_column()
 
-                changed, Module.data.blights_and_conditions.conditions.poison = imgui.checkbox(language.get(languagePrefix .. "poison"),
-                    Module.data.blights_and_conditions.conditions.poison)
-                any_changed = any_changed or changed
+                local CONDITION_KEYS = {
+                    "poison", "stench", "blast", "bleed", "defense_down", "frenzy", "hp_reduction",
+                    "stun", "paralyze", "sleep", "sticky", "frozen", "bubble", "all"
+                }
 
-                changed, Module.data.blights_and_conditions.conditions.stench = imgui.checkbox(language.get(languagePrefix .. "stench"),
-                    Module.data.blights_and_conditions.conditions.stench)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.blast = imgui.checkbox(language.get(languagePrefix .. "blast"),
-                    Module.data.blights_and_conditions.conditions.blast)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.bleed = imgui.checkbox(language.get(languagePrefix .. "bleed"),
-                    Module.data.blights_and_conditions.conditions.bleed)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.defense_down = imgui.checkbox(language.get(languagePrefix .. "defense_down"),
-                    Module.data.blights_and_conditions.conditions.defense_down)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.frenzy = imgui.checkbox(language.get(languagePrefix .. "frenzy"),
-                    Module.data.blights_and_conditions.conditions.frenzy)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.all = imgui.checkbox(language.get(languagePrefix.."all"), Module.data.blights_and_conditions.conditions.all)
-                any_changed = any_changed or changed
-
-                imgui.table_next_column()
-
-                changed, Module.data.blights_and_conditions.conditions.stun = imgui.checkbox(language.get(languagePrefix .. "stun"),
-                    Module.data.blights_and_conditions.conditions.stun)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.paralyze = imgui.checkbox(language.get(languagePrefix .. "paralyze"),
-                    Module.data.blights_and_conditions.conditions.paralyze)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.sleep = imgui.checkbox(language.get(languagePrefix .. "sleep"),
-                    Module.data.blights_and_conditions.conditions.sleep)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.sticky = imgui.checkbox(language.get(languagePrefix .. "sticky"),
-                    Module.data.blights_and_conditions.conditions.sticky)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.frozen = imgui.checkbox(language.get(languagePrefix .. "frozen"),
-                    Module.data.blights_and_conditions.conditions.frozen)
-                any_changed = any_changed or changed
-
-                changed, Module.data.blights_and_conditions.conditions.bubble = imgui.checkbox(language.get(languagePrefix.."bubble"), Module.data.blights_and_conditions.conditions.bubble)
-                any_changed = any_changed or changed
-                
-                changed, Module.data.blights_and_conditions.conditions.all = imgui.checkbox(language.get(languagePrefix .. "all"), Module.data.blights_and_conditions.conditions.all)
-                any_changed = any_changed or changed
+                for i, key in ipairs(CONDITION_KEYS) do
+                   if i == 1 or i == math.ceil(#CONDITION_KEYS / 2) + 1 then imgui.table_next_column() end
+                   changed, Module.data.blights_and_conditions.conditions[key] = imgui.checkbox(language.get(languagePrefix .. key), Module.data.blights_and_conditions.conditions[key])
+                   any_changed = any_changed or changed
+                end
 
                 imgui.end_table()
                 imgui.tree_pop()
             end
             imgui.tree_pop()
         end
+        utils.tooltip(language.get(languagePrefix .. "tooltip"))
 
         languagePrefix = Module.title .. ".item_buffs."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
             imgui.begin_table(Module.title .. "3", 2, nil, nil, nil)
             imgui.table_next_row()
-            imgui.table_next_column()
 
-            changed, Module.data.item_buffs.might_seed = imgui.checkbox(language.get(languagePrefix .. "might_seed"), Module.data.item_buffs.might_seed)
-            any_changed = any_changed or changed
-            
-            changed, Module.data.item_buffs.might_pill = imgui.checkbox(language.get(languagePrefix .. "might_pill"), Module.data.item_buffs.might_pill)
-            any_changed = any_changed or changed
-            
-            changed, Module.data.item_buffs.demon_drug = imgui.checkbox(language.get(languagePrefix .. "demon_drug"), Module.data.item_buffs.demon_drug)
-            any_changed = any_changed or changed
+            local ITEM_KEYS = {
+                "might_seed", "might_pill", "demon_drug", "mega_demondrug", "demon_powder", "hot_drink", "dash_juice",
+                "adamant_seed", "adamant_pill", "armor_skin", "mega_armorskin", "hardshell_powder", "cool_drink", "imunizer"
+            }
 
-            changed, Module.data.item_buffs.mega_demondrug = imgui.checkbox(language.get(languagePrefix .. "mega_demondrug"), Module.data.item_buffs.mega_demondrug)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.demon_powder = imgui.checkbox(language.get(languagePrefix .. "demon_powder"), Module.data.item_buffs.demon_powder)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.hot_drink = imgui.checkbox(language.get(languagePrefix .. "hot_drink"), Module.data.item_buffs.hot_drink)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.dash_juice = imgui.checkbox(language.get(languagePrefix .. "dash_juice"), Module.data.item_buffs.dash_juice)
-            any_changed = any_changed or changed
-
-            imgui.table_next_column()
-            
-            changed, Module.data.item_buffs.adamant_seed = imgui.checkbox(language.get(languagePrefix .. "adamant_seed"), Module.data.item_buffs.adamant_seed)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.adamant_pill = imgui.checkbox(language.get(languagePrefix .. "adamant_pill"), Module.data.item_buffs.adamant_pill)
-            any_changed = any_changed or changed
-            
-            changed, Module.data.item_buffs.armor_skin = imgui.checkbox(language.get(languagePrefix .. "armor_skin"), Module.data.item_buffs.armor_skin)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.mega_armorskin = imgui.checkbox(language.get(languagePrefix .. "mega_armorskin"), Module.data.item_buffs.mega_armorskin)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.hardshell_powder = imgui.checkbox(language.get(languagePrefix .. "hardshell_powder"), Module.data.item_buffs.hardshell_powder)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.cool_drink = imgui.checkbox(language.get(languagePrefix .. "cool_drink"), Module.data.item_buffs.cool_drink)
-            any_changed = any_changed or changed
-
-            changed, Module.data.item_buffs.imunizer = imgui.checkbox(language.get(languagePrefix .. "imunizer"), Module.data.item_buffs.imunizer)
-            any_changed = any_changed or changed
+            for i, key in ipairs(ITEM_KEYS) do
+                if i == 1 or i == math.ceil(#ITEM_KEYS / 2) + 1 then imgui.table_next_column() end
+               changed, Module.data.item_buffs[key] = imgui.checkbox(language.get(languagePrefix .. key), Module.data.item_buffs[key])
+               any_changed = any_changed or changed
+            end
 
             imgui.end_table()
             imgui.tree_pop()
@@ -669,13 +559,16 @@ function Module.draw()
         languagePrefix = Module.title .. ".stats."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
-            changed, Module.data.stats.bonus_attack = imgui.slider_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, -1, 5000, Module.data.stats.bonus_attack == -1 and language.get("base.disabled") or "%d")
+            changed, Module.data.stats.bonus_attack = imgui.drag_int(language.get(languagePrefix .. "bonus_attack"), Module.data.stats.bonus_attack, 1, 0, 5000, Module.data.stats.bonus_attack <= 0 and language.get("base.disabled") or "%d")
             any_changed = any_changed or changed
 
-            changed, Module.data.stats.bonus_defence = imgui.slider_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, -1, 5000, Module.data.stats.bonus_defence == -1 and language.get("base.disabled") or "%d")
+            changed, Module.data.stats.bonus_defence = imgui.drag_int(language.get(languagePrefix .. "bonus_defence"), Module.data.stats.bonus_defence, 1, 0, 5000, Module.data.stats.bonus_defence <= 0 and language.get("base.disabled") or "%d")
             any_changed = any_changed or changed
 
             changed, Module.data.stats.critical_chance = imgui.slider_int(language.get(languagePrefix .. "critical_chance"), Module.data.stats.critical_chance, -1, 100, Module.data.stats.critical_chance == -1 and language.get("base.disabled") or "%d%%")
+            any_changed = any_changed or changed
+
+            changed, Module.data.stats.bonus_elemental = imgui.drag_int(language.get(languagePrefix .. "bonus_elemental"), Module.data.stats.bonus_elemental, 1, 0, 2000, Module.data.stats.bonus_elemental <= 0 and language.get("base.disabled") or "%d")
             any_changed = any_changed or changed
 
             languagePrefix = languagePrefix .. "element."
@@ -714,31 +607,16 @@ function Module.draw()
         
         changed, Module.data.unlimited_slingers = imgui.checkbox(language.get(languagePrefix .. "unlimited_slingers"), Module.data.unlimited_slingers)
         any_changed = any_changed or changed
-            
-        if any_changed then config.save_section(Module.create_config_section()) end
 
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-    imgui.pop_id()
+        changed, Module.data.unlimited_meal_timer = imgui.checkbox(language.get(languagePrefix .. "unlimited_meal_timer"), Module.data.unlimited_meal_timer)
+        any_changed = any_changed or changed
+            
+
+    return any_changed
 end
 
 function Module.reset()
     -- Implement reset functionality if needed
-end
-
-function Module.create_config_section()
-    return {
-        [Module.title] = Module.data
-    }
-end
-
-function Module.load_from_config(config_section)
-    if not config_section then
-        return
-    end
-    utils.update_table_with_existing_table(Module.data, config_section)
 end
 
 return Module

@@ -1,6 +1,7 @@
 {
-    "_USE_FONT": "NotoSansSC-Regular.otf",
     "_TRANSLATOR": "Paver",
+    "_LANGUAGE_NAME": "繁體中文 (TW)",
+    
     "window": {
         "toggle_button": "開關增益 GUI",
         "title": "修改器和設置",
@@ -12,6 +13,11 @@
         "author": "作者",
         "translator": "翻譯者",
         "version": "版本",
+        "options": "選項",
+        "disable_all": "全部停用",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)",
         "bindings": {
             "title": "快捷鍵",
             "keyboard": "鍵盤",
@@ -40,9 +46,19 @@
             "instant_drive_gauge": "最大豪鬼計量表",
             "gou_hadoken_max_level": "豪波動拳傷害最大化"
         },
-        "water gun": {
+        "water_gun": {
             "title": "Water Gun(*)",
             "unlimited_ammo": "Unlimited ammo(*)"
+        },
+        "pictomancy": {
+            "title": "Pictomancy(*)",
+            "state": {
+                "title": "Active Pictomancy state(*)",
+                "pom": "Pom Motif(*)",
+                "wing": "Wing Motif(*)",
+                "mog": "Mog of the ages(*)"
+            },
+            "instant_cooldown": "Instant cooldown(*)"
         }
     },
     "character": {
@@ -85,6 +101,7 @@
                 "frenzy": "狂龍症",
                 "frozen": "凍結",
                 "bubble": "泡沫",
+                "hp_reduction": "HP Reduction(*)",
                 "all": "全部 "
             }
         },
@@ -110,6 +127,7 @@
             "bonus_attack": "Bonus attack(*)",
             "bonus_defence": "Bonus defence(*)",
             "critical_chance": "Critical chance(*)",
+            "bonus_elemental": "Bonus elemental (*)",
             "element": {
                 "title": "Element(*)",
                 "none": "None(*)",
@@ -133,13 +151,15 @@
         "invincible_tooltip": "你不會受到任何傷害、擊退、畏縮，或被任何異常狀態影響",
         "unlimited_sharpness": "無限鋒利度",
         "unlimited_consumables": "無限消耗品",
-        "unlimited_slingers": "無限彈藥"
+        "unlimited_slingers": "無限彈藥",
+        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
     },
 
     "great_sword": {
         "title": "大劍",
         "true_charge_boost": "真蓄力提升",
         "true_charge_boost_tooltip": "真蓄力初始命中加成",
+        "charge_level": "Charge level(*)",
         "instant_charge": "瞬間續力"
     },
     "sword_and_shield": {
@@ -182,6 +202,8 @@
 
     "hammer": {
         "title": "大錘",
+        "charge_level": "Charge level(*)",
+        "super_charge_level": "Super charge level(*)",
         "instant_charge": "瞬間續力"
     },
     "hunting_horn": {
@@ -192,17 +214,14 @@
     "lance": {
         "title": "長槍",
         "counter_charge_level": "反擊續力等級",
-        "rush_level": "突進等級",
-        "infinite_backstep": "無限後跳"
+        "rush_level": "突進等級"
     },
     "gunlance": {
         "title": "銃槍",
         "shell_level": "炮擊威力等級",
         "infinite_wyvern_fire": "無限龍擊炮",
-        "infinite_backstep": "無限後跳",
         "instant_charge": "砲擊瞬間續力",
-        "instant_charge_tooltip": "需要稍微按住續力，然後放開發射",
-        "free_charge_shot": "無限續力射擊"
+        "unlimited_ammo": "無限彈藥"
     },
 
     "bow": {
@@ -223,7 +242,10 @@
         "unlimited_ammo": "無限彈藥",
         "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
-        "no_recoil": "無後座力"
+        "no_recoil": "無後座力",
+        "no_knockback": "No knockback (*)",
+        "shell_level": "Shell level (*)",
+        "all_rapid_fire": "All rapid fire (*)"
     },
     "heavy_bowgun": {
         "title": "重弩",
@@ -234,7 +256,9 @@
         "unlimited_ammo": "無限彈藥",
         "unlimited_bladescale": "Unlimited bladescale shots(*)",
         "no_reload": "無需裝填",
-        "no_recoil": "無後座力"
+        "no_recoil": "無後座力",
+        "no_knockback": "No knockback (*)",
+        "shell_level": "Shell level (*)"
     },
 
     "charge_blade": {
