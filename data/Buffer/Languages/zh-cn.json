@@ -15,9 +15,9 @@
         "version": "版本",
         "options": "选项",
         "disable_all": "全部禁用",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "启用的增益",
+        "nothing_enabled": "无增益被启用",
+        "disable": "禁用",
         "bindings": {
             "title": "快捷键",
             "keyboard": "键盘",
@@ -47,18 +47,18 @@
             "gou_hadoken_max_level": "豪波动拳最大等级"
         },
         "water_gun": {
-            "title": "Water Gun(*)",
-            "unlimited_ammo": "Unlimited ammo(*)"
+            "title": "水枪",
+            "unlimited_ammo": "无限弹药"
         },
         "pictomancy": {
-            "title": "Pictomancy(*)",
+            "title": "绘灵魔法",
             "state": {
-                "title": "Active Pictomancy state(*)",
-                "pom": "Pom Motif(*)",
-                "wing": "Wing Motif(*)",
-                "mog": "Mog of the ages(*)"
+                "title": "激活的绘灵魔法",
+                "pom": "绒球彩绘",
+                "wing": "翅膀彩绘",
+                "mog": "莫古力激流"
             },
-            "instant_cooldown": "Instant cooldown(*)"
+            "instant_cooldown": "立即冷却"
         }
     },
     "character": {
@@ -100,37 +100,37 @@
                 "sticky": "黏着",
                 "frenzy": "狂龙症",
                 "frozen": "冻结",
-                "bubble": "Bubble (*)",
-                "hp_reduction": "HP Reduction(*)",
+                "bubble": "泡沫",
+                "hp_reduction": "最大体力减少",
                 "all": "全部 "
             }
         },
         "item_buffs": {
             "title": "道具增益",
-            "might_seed": "Might seed (TN)",
+            "might_seed": "怪力种子",
             "might_pill": "怪力药丸",
-            "adamant_seed": "Adamant seed (TN)",
-            "adamant_pill": "硬化药丸",
-            "demon_drug": "Demon drug (TN)",
+            "adamant_seed": "忍耐种子",
+            "adamant_pill": "忍耐药丸",
+            "demon_drug": "鬼人药",
             "demon_powder": "鬼人粉尘",
             "hardshell_powder": "硬化粉尘",
             "mega_demondrug": "鬼人药G",
-            "armor_skin": "Armor skin (TN)",
+            "armor_skin": "硬化药",
             "mega_armorskin": "硬化药G",
             "cool_drink": "冷饮",
             "hot_drink": "热饮",
             "dash_juice": "强走药",
-            "imunizer": "免疫剂"
+            "imunizer": "活力剂"
         },
         "stats": {
-            "title": "Stats(*)",
-            "bonus_attack": "Bonus attack(*)",
-            "bonus_defence": "Bonus defence(*)",
-            "critical_chance": "Critical chance(*)",
-            "bonus_elemental": "Bonus elemental (*)",
+            "title": "状态数值",
+            "bonus_attack": "额外攻击力",
+            "bonus_defence": "额外防御力",
+            "critical_chance": "暴击率",
+            "bonus_elemental": "额外属性值",
             "element": {
-                "title": "Element(*)",
-                "none": "None(*)",
+                "title": "武器属性",
+                "none": "无",
                 "fire": "火属性",
                 "water": "水属性",
                 "ice": "冰属性",
@@ -143,22 +143,22 @@
             }
         },
         "mantles": {
-            "title": "Mantles(TN)",
-            "instant_cooldown": "Instant cooldown(TN)",
-            "unlimited_duration": "Unlimited duration(TN)"
+            "title": "衣装",
+            "instant_cooldown": "立即冷却",
+            "unlimited_duration": "无限持续"
         },
-        "invincible": "Invincible(*)",
-        "invincible_tooltip": "You will not take any damage, knockback, flinch, or be affected by any status ailments.(*)",
+        "invincible": "无敌",
+        "invincible_tooltip": "免疫所有伤害、击退、硬直和异常状态。",
         "unlimited_sharpness": "无限锋利度",
         "unlimited_consumables": "无限消耗品",
-        "unlimited_slingers": "无限弹药",
-        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
+        "unlimited_slingers": "无限投射器弹药",
+        "unlimited_meal_timer": "无限餐点计时"
     },
     "great_sword": {
         "title": "大剑",
         "true_charge_boost": "真蓄力强化",
         "true_charge_boost_tooltip": "真蓄力斩首次命中加成",
-        "charge_level": "Charge level(*)",
+        "charge_level": "蓄力等级",
         "instant_charge": "立即蓄力"
     },
     "sword_and_shield": {
@@ -200,13 +200,13 @@
     },
     "hammer": {
         "title": "锤子",
-        "charge_level": "Charge level(*)",
-        "super_charge_level": "Super charge level(*)",
+        "charge_level": "蓄力等级",
+        "super_charge_level": "浑身蓄力等级",
         "instant_charge": "立即蓄力"
     },
     "hunting_horn": {
         "title": "狩猎笛",
-        "unlimited_echo_bubbles": "Unlimited echo bubbles"
+        "unlimited_echo_bubbles": "无限响玉"
     },
     "lance": {
         "title": "长枪",
@@ -215,7 +215,7 @@
     },
     "gunlance": {
         "title": "铳枪",
-        "shell_level": "炮击等级",
+        "shell_level": "炮击力等级",
         "infinite_wyvern_fire": "无限龙击炮",
         "instant_charge": "立即蓄力",
         "unlimited_ammo": "无限弹药"
@@ -226,22 +226,22 @@
         "all_arrow_types": "全强化瓶解锁",
         "unlimited_bottles": "强化瓶无限使用",
         "tetrad_shot_active": "Tetrad shot support active",
-        "unlimited_bladescale": "Unlimited bladescale bottles(*)",
+        "unlimited_bladescale": "无限刃鳞瓶",
         "max_trick_arrow_gauge": "特殊箭计量槽全满"
     },
     "light_bowgun": {
         "title": "轻弩",
         "max_special_ammo": "无限特殊弹药",
         "max_rapid_shot": "速射最大连发数",
-        "max_eagle_shot": "无限特殊射击",
-        "instant_eagle_shot_charge": "特殊射击无需蓄力",
+        "max_eagle_shot": "无限集中特效弹",
+        "instant_eagle_shot_charge": "集中特效弹无需蓄力",
         "unlimited_ammo": "无限弹药",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "无限刃鳞弹",
         "no_reload": "无需装填",
         "no_recoil": "无后座力",
-        "no_knockback": "No knockback (*)",
-        "shell_level": "Shell level (*)",
-        "all_rapid_fire": "All rapid fire (*)"
+        "no_knockback": "无后退",
+        "shell_level": "弹药等级",
+        "all_rapid_fire": "全弹种速射"
     },
     "heavy_bowgun": {
         "title": "重弩",
@@ -250,11 +250,11 @@
         "max_gatling_hits": "最大命中数",
         "max_gatling_hits_tooltip": "仅对龙热穿甲弹生效",
         "unlimited_ammo": "无限弹药",
-        "unlimited_bladescale": "Unlimited bladescale shots(*)",
+        "unlimited_bladescale": "无限刃鳞弹",
         "no_reload": "无需装填",
         "no_recoil": "无后座力",
-        "no_knockback": "No knockback (*)",
-        "shell_level": "Shell level (*)"
+        "no_knockback": "无后退",
+        "shell_level": "弹药等级"
     },
     "charge_blade": {
         "title": "盾斧",
