@@ -40,7 +40,7 @@ function Module.create_hooks()
             ammo:setLoadedAmmo(ammo:get_LimitAmmo())
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

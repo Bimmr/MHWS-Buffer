@@ -31,7 +31,7 @@ function Module.create_hooks()
             managed:set_field("_ChargeTimer", 3) 
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

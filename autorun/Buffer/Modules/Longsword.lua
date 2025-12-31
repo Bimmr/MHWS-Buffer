@@ -35,7 +35,7 @@ function Module.create_hooks()
         --? <KabutowariAuraLevel>k__BackingField -- The dropping from the sky attack, not sure what it does besides that it's associated with that
         --? _KijinChargeLv -- Not sure
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

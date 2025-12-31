@@ -21,7 +21,7 @@ function Module.create_hooks()
         if not Module:weapon_hook_guard(managed, "app.cHunterWp09Handling") then return end
 
         if not Module:should_execute_staggered("charge_blade_handling_update") then return end
-        
+
         -- Max Phials
         if Module.data.max_phials then
             managed:get_field("_SwordBinNum"):set_field("_Value", 10)
@@ -48,7 +48,7 @@ function Module.create_hooks()
             managed:set_field("_AxeEnhancedTimer", 120)
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

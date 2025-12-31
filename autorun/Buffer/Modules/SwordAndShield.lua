@@ -11,7 +11,7 @@ local Module = ModuleBase:new("sword_and_shield", {})
 --         if not Module:weapon_hook_guard(managed, "app.cHunterWp11Handling") then return end
 
 
---     end, function(retval) end)
+--     end)
 -- end
 
 -- function Module.add_ui()

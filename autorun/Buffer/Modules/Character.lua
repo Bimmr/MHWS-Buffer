@@ -217,7 +217,7 @@ function Module.create_hooks()
         if not managed:get_IsMaster() then return end
 
         Module.reset_stat_changes()
-    end, function(retval) end)
+    end)
     
     -- Watch for reserve weapon changes
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("changeWeaponFromReserve"), function(args) 
@@ -226,7 +226,7 @@ function Module.create_hooks()
         if not managed:get_IsMaster() then return end
 
         Module.reset_stat_changes()
-    end, function(retval) end)
+    end)
 
 
     Module:init_stagger("character_status_update", 5)
@@ -428,21 +428,20 @@ function Module.create_hooks()
         -- Element
         Module:cache_and_update_field("element", managed:get_field("_AttackPower"), "_WeaponAttrType", Module.data.stats.element)
 
-    end, function(retval)
-    end)
+   end)
 
     -- Unlimited Sharpness
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireajiFromAttack(app.HitInfo)"), function(args)
         if Module.data.unlimited_sharpness then
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
-    end, function(retval) end)
+    end)
 
     sdk.hook(sdk.find_type_definition("app.cHunterWeaponHandlingBase"):get_method("consumeKireaji(System.Int32, System.Boolean)"), function(args)
         if Module.data.unlimited_sharpness then
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
-    end, function(retval) end)
+    end)
 
 
     -- Invincibility
@@ -455,7 +454,7 @@ function Module.create_hooks()
             managed:makeInvincible()
         end
 
-    end, function(retval) end)
+    end)
 
 
     -- Unlimited Consumables
@@ -548,7 +547,7 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval) end)
+    end)
 
 end
 

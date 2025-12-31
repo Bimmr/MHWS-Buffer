@@ -50,7 +50,7 @@ function Module.create_hooks()
 
         -- Reset kinsect stats when weapon changes
         Module:reset()
-    end, function(retval) end)
+    end)
 
     -- Weapon modifications
     Module:init_stagger("insect_glaive_handling_update", 10)
@@ -109,7 +109,7 @@ function Module.create_hooks()
             shouldSkip = true
         end
 
-    end, function(retval) end)
+    end)
 
     sdk.hook(sdk.find_type_definition("app.cHunterWp10Handling"):get_method("updateCharge"), updateChargeHook, nil)
 

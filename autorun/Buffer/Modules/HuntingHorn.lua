@@ -22,7 +22,7 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

@@ -14,7 +14,7 @@ function Module.create_hooks()
         if not Module:weapon_hook_guard(managed, "app.cHunterWp02Handling") then return end
 
         if not Module:should_execute_staggered("dual_blades_handling_update") then return end
-        
+
         -- Demon Gauge
         if Module.data.demon_gauge then 
             managed:get_field("<KijinGauge>k__BackingField"):set_field("_Value", 1.0)  
@@ -25,7 +25,7 @@ function Module.create_hooks()
             managed:set_field("_MikiriBuffTimer", 20.0)
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

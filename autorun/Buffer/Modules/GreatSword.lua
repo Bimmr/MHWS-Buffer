@@ -33,7 +33,7 @@ function Module.create_hooks()
             managed:set_field("_ChargeLevel", Module.data.charge_level)
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

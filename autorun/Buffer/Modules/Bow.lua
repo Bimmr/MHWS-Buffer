@@ -24,7 +24,7 @@ function Module.create_hooks()
         if not managed:get_IsMaster() then return end
         
         Module:reset()
-    end, function(retval) end)
+    end)
     
     
     -- Watch for reserve weapon changes
@@ -34,7 +34,7 @@ function Module.create_hooks()
         if not managed:get_IsMaster() then return end
 
         Module:reset()
-    end, function(retval) end)
+    end)
 
     -- Weapon changes
     
@@ -89,7 +89,7 @@ function Module.create_hooks()
             end
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()

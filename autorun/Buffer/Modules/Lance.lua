@@ -26,7 +26,7 @@ function Module.create_hooks()
             managed:set_field("_RushLevelTimer", 1.4)
         end
 
-    end, function(retval) end)
+    end)
 end
 
 function Module.add_ui()
