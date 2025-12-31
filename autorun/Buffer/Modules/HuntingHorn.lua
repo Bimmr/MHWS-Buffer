@@ -7,9 +7,12 @@ local Module = ModuleBase:new("hunting_horn", {
 
 function Module.create_hooks()
     
+    Module:init_stagger("hunting_horn_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp05Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp05Handling") then return end
+
+        if not Module:should_execute_staggered("hunting_horn_handling_update") then return end
 
         -- Unlimited Echo Bubbles
         if Module.data.unlimited_echo_bubbles then

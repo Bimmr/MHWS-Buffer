@@ -8,9 +8,12 @@ local Module = ModuleBase:new("lance", {
 
 function Module.create_hooks()
     
+    Module:init_stagger("lance_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp06Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp06Handling") then return end
+
+        if not Module:should_execute_staggered("lance_handling_update") then return end
 
         -- Counter charge level
         if Module.data.counter_charge_level ~= -1 then 

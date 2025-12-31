@@ -17,11 +17,13 @@ local Module = ModuleBase:new("miscellaneous", {
 
 function Module.create_hooks()
 
-
+    Module:init_stagger("misc_hunter_update", 10)
     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
         if not managed:get_IsMaster() then return end    
+
+        if not Module:should_execute_staggered("misc_hunter_update") then return end
 
         -- Akuma 
         local akuma = managed:get_ExEmote00()

@@ -39,6 +39,34 @@ function ModuleBase:init()
     self:create_hooks()
 end
 
+--- Initialize a stagger counter for a specific hook
+--- @param hook_name string Unique identifier for the hook
+--- @param threshold number Number of calls to skip before executing (default: 5)
+function ModuleBase:init_stagger(hook_name, threshold)
+    self.stagger_counters = self.stagger_counters or {}
+    self.stagger_counters[hook_name] = {
+        count = 0,
+        threshold = threshold or 5
+    }
+end
+
+--- Check if a staggered hook should execute
+--- Increments the counter and returns true only when threshold is reached
+--- @param hook_name string Unique identifier for the hook
+--- @return boolean True if the hook should execute, false otherwise
+function ModuleBase:should_execute_staggered(hook_name)
+    local counter = self.stagger_counters and self.stagger_counters[hook_name]
+    if not counter then return true end -- No stagger configured, always execute
+    
+    counter.count = counter.count + 1
+    if counter.count < counter.threshold then 
+        return false 
+    end
+    
+    counter.count = 0
+    return true
+end
+
 -- To be overridden in child modules
 function ModuleBase:create_hooks() end
 function ModuleBase:add_ui() end

@@ -11,10 +11,12 @@ local Module = ModuleBase:new("gunlance", {
 
 function Module.create_hooks()
     
-    -- Weapon changes
+    Module:init_stagger("gunlance_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp07Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp07Handling") then return end
+
+        if not Module:should_execute_staggered("gunlance_handling_update") then return end
 
         local ammo = managed:get_field("_Ammo")
 

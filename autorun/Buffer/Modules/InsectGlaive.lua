@@ -53,9 +53,12 @@ function Module.create_hooks()
     end, function(retval) end)
 
     -- Weapon modifications
+    Module:init_stagger("insect_glaive_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp10Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp10Handling") then return end
+
+        if not Module:should_execute_staggered("insect_glaive_handling_update") then return end
 
         -- Kinsect
         local kinsect = managed:get_Insect()

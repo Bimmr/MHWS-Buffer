@@ -8,10 +8,13 @@ local Module = ModuleBase:new("dual_blades", {
 
 function Module.create_hooks()
     
+    Module:init_stagger("dual_blades_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp02Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp02Handling") then return end
 
+        if not Module:should_execute_staggered("dual_blades_handling_update") then return end
+        
         -- Demon Gauge
         if Module.data.demon_gauge then 
             managed:get_field("<KijinGauge>k__BackingField"):set_field("_Value", 1.0)  

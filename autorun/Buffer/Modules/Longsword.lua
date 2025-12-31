@@ -10,9 +10,12 @@ local Module = ModuleBase:new("long_sword", {
 
 function Module.create_hooks()
     
+    Module:init_stagger("long_sword_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp03Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp03Handling") then return end
+
+        if not Module:should_execute_staggered("long_sword_handling_update") then return end
 
         -- Aura level
         if Module.data.aura_level ~= -1 then

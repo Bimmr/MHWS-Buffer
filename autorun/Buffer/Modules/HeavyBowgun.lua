@@ -37,10 +37,13 @@ function Module.create_hooks()
         Module:reset()
     end, function(retval) end)
     
+    Module:init_stagger("heavy_bowgun_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp12Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp12Handling") then return end
         local weapon_id = managed:get_Hunter():get_WeaponID()
+
+        if not Module:should_execute_staggered("heavy_bowgun_handling_update") then return end
 
         -- Energy Bullet Info
         local energy_bullet_info = managed:get_field("_EnergyBulletInfo")

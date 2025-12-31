@@ -15,10 +15,13 @@ end
 
 function Module.create_hooks()
     
+    Module:init_stagger("charge_blade_handling_update", 10)
     sdk.hook(sdk.find_type_definition("app.cHunterWp09Handling"):get_method("doUpdate"), function(args) 
         local managed = sdk.to_managed_object(args[2])
         if not Module:weapon_hook_guard(managed, "app.cHunterWp09Handling") then return end
 
+        if not Module:should_execute_staggered("charge_blade_handling_update") then return end
+        
         -- Max Phials
         if Module.data.max_phials then
             managed:get_field("_SwordBinNum"):set_field("_Value", 10)

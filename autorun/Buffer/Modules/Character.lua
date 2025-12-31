@@ -229,10 +229,13 @@ function Module.create_hooks()
     end, function(retval) end)
 
 
+    Module:init_stagger("character_status_update", 5)
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.cHunterStatus") then return end
         if managed:get_IsMaster() == false then return end
+
+        if not Module:should_execute_staggered("character_status_update") then return end
 
         -- Managers
         local health = managed:get_field("_Health")
@@ -524,10 +527,13 @@ function Module.create_hooks()
     end)
 
     -- Mantles
+    Module:init_stagger("character_mantles_update", 10)
     sdk.hook(sdk.find_type_definition("app.mcActiveSkillController"):get_method("updateMain"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_field("_Hunter"):get_IsMaster() then return end
+
+        if not Module:should_execute_staggered("character_mantles_update") then return end
 
         local mantles = managed:get_field("_ActiveSkills")
         if not mantles or not (Module.data.mantles.instant_cooldown or Module.data.mantles.unlimited_duration) then return end
