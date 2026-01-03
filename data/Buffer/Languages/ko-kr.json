@@ -17,8 +17,8 @@
         "disable_all": "모두 비활성화",
         "enabled_buffs": "활성화된 버프",
         "nothing_enabled": "아무것도 활성화되지 않음",
-        "character_bonus_stats": "Use bonus mode for character stats(*)",
-        "character_bonus_stats_tooltip": "In bonus mode, the values set will be treated as bonus values added to the base stats, rather than setting the stats directly.(*)",
+        "character_bonus_stats": "캐릭터 스탯에 보너스 모드를 사용하세요",
+        "character_bonus_stats_tooltip": "보너스 모드에서는 설정한 값이 기본 능력치에 추가되는 보너스 값으로 처리되며, 능력치를 직접 설정하는 방식이 아닙니다",
         "disable": "비활성화",
         "bindings": {
             "title": "키 설정",
@@ -126,18 +126,18 @@
         },
         "stats": {
             "title": "능력치",
-            "attack": "공격력",
-            "defence": "방어력",
-            "critical_chance": "최심율 증가",
-            "elemental_attack": "속성 공격력",
+            "bonus_attack": "공격력",
+            "bonus_defence": "방어력",
+            "critical_chance": "회심율 증가",
+            "bonus_elemental": "속성 공격력",
             "defence_attributes": {
-                "title": "Elemental Resistances(*)",
-                "value": "%s value(*)",
-                "fire_enable": "Fire elemental resistance(*)",
-                "water_enable": "Water elemental resistance(*)",
-                "ice_enable": "Ice elemental resistance(*)",
-                "thunder_enable": "Thunder elemental resistance(*)",
-                "dragon_enable": "Dragon elemental resistance(*)"
+                "title": "속성 저항 수치",
+                "value": "%s 저항력",
+                "fire_enable": "불 속성 저항",
+                "water_enable": "물 속성 저항",
+                "ice_enable": "얼음 속성 저항",
+                "thunder_enable": "번개 속성 저항",
+                "dragon_enable": "용 속성 저항"
             },
             "element": {
             "title": "속성",
@@ -283,3 +283,4 @@
         "powered_axe": "고출력 상태"
     }
 }
+
