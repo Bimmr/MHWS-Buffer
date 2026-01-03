@@ -126,10 +126,10 @@
         },
         "stats": {
             "title": "능력치",
-            "bonus_attack": "공격력",
-            "bonus_defence": "방어력",
+            "attack": "공격력",
+            "defence": "방어력",
             "critical_chance": "회심율 증가",
-            "bonus_elemental": "속성 공격력",
+            "elemental_attack": "속성 공격력",
             "defence_attributes": {
                 "title": "속성 저항 수치",
                 "value": "%s 저항력",
@@ -283,4 +283,5 @@
         "powered_axe": "고출력 상태"
     }
 }
+
 
