@@ -17,8 +17,8 @@
         "disable_all": "全部禁用",
         "enabled_buffs": "启用的增益",
         "nothing_enabled": "无增益被启用",
-        "character_bonus_stats": "Use bonus mode for character stats(*)",
-        "character_bonus_stats_tooltip": "In bonus mode, the values set will be treated as bonus values added to the base stats, rather than setting the stats directly.(*)",
+        "character_bonus_stats": "在角色状态数值中使用附加模式",
+        "character_bonus_stats_tooltip": "在附加模式中，设定的数值将额外附加到基础数值上，而不是直接设定基础数值。",
         "disable": "禁用",
         "bindings": {
             "title": "快捷键",
@@ -45,7 +45,7 @@
         "title": "杂项",
         "akuma": {
             "title": "豪鬼",
-            "instant_drive_gauge": "即时驱动计量表",
+            "instant_drive_gauge": "瞬满斗气槽",
             "gou_hadoken_max_level": "豪波动拳最大等级"
         },
         "water_gun": {
@@ -71,11 +71,11 @@
             "unlimited": "无限耐力"
         },
         "health": {
-            "title": "生命值",
-            "max": "最大生命值",
-            "unlimited": "无限生命值",
+            "title": "体力",
+            "max": "最大体力",
+            "unlimited": "无限体力",
             "healing": "自动恢复",
-            "healing_tooltip": "任何损失的生命值将可恢复。"
+            "healing_tooltip": "任何损失的体力将可恢复。"
         },
         "blights_and_conditions": {
             "title": "属性异常与负面状态",
@@ -124,6 +124,11 @@
             "dash_juice": "强走药",
             "imunizer": "活力剂"
         },
+        "mantles": {
+            "title": "衣装",
+            "instant_cooldown": "立即冷却",
+            "unlimited_duration": "无限持续"
+        },
         "stats": {
             "title": "状态数值",
             "attack": "攻击力",
@@ -131,32 +136,27 @@
             "critical_chance": "暴击率",
             "elemental_attack": "属性攻击力",
             "defence_attributes": {
-                "title": "Elemental Resistances(*)",
-                "value": "%s value(*)",
-                "fire_enable": "Fire elemental resistance(*)",
-                "water_enable": "Water elemental resistance(*)",
-                "ice_enable": "Ice elemental resistance(*)",
-                "thunder_enable": "Thunder elemental resistance(*)",
-                "dragon_enable": "Dragon elemental resistance(*)"
+                "title": "属性耐性",
+                "value": "%s耐性值",
+                "fire_enable": "火耐性",
+                "water_enable": "水耐性",
+                "ice_enable": "冰耐性",
+                "thunder_enable": "雷耐性",
+                "dragon_enable": "龙耐性"
             },
             "element": {
                 "title": "武器属性",
                 "none": "无",
-                "fire": "火属性",
-                "water": "水属性",
-                "ice": "冰属性",
-                "thunder": "雷属性",
-                "dragon": "龙属性",
-                "poison": "中毒",
+                "fire": "火",
+                "water": "水",
+                "ice": "冰",
+                "thunder": "雷",
+                "dragon": "龙",
+                "poison": "毒",
                 "paralyze": "麻痹",
                 "sleep": "睡眠",
                 "blast": "爆破"
             }
-        },
-        "mantles": {
-            "title": "衣装",
-            "instant_cooldown": "立即冷却",
-            "unlimited_duration": "无限持续"
         },
         "invincible": "无敌",
         "invincible_tooltip": "免疫所有伤害、击退、硬直和异常状态。",
@@ -165,6 +165,7 @@
         "unlimited_slingers": "无限投射器弹药",
         "unlimited_meal_timer": "无限餐点计时"
     },
+
     "great_sword": {
         "title": "大剑",
         "true_charge_boost": "真蓄力强化",
@@ -173,16 +174,17 @@
         "instant_charge": "立即蓄力"
     },
     "sword_and_shield": {
-        "title": "剑盾"
+        "title": "单手剑"
     },
     "dual_blades": {
-        "title": "双刀",
+        "title": "双剑",
         "demon_gauge": "鬼人槽全满",
-        "demon_boost": "激活鬼人强化"
+        "demon_boost": "激活鬼人闪身"
     },
     "long_sword": {
         "title": "太刀",
         "aura_level": "气刃等级",
+        "aura_level_tooltip": "若从0级设置为1级，需填满气刃槽激活",
         "max_aura_gauge": "最大气刃槽",
         "max_spirit_gauge": "最大练气槽"
     },
@@ -198,9 +200,9 @@
             "charge_time": "猎虫充能时间%",
             "charge_time_tooltip": "\"充能时间%\"表示最大充能所需时间占原始充能时间的百分比。数值越小，充能越快。"
         },
-        "red": "红灯",
-        "orange": "橙灯",
-        "white": "白灯",
+        "red": "红色精华",
+        "orange": "橙色精华",
+        "white": "白色精华",
         "infinite_air_attacks": "无限空中攻击",
         "fast_charge": "快速充能",
         "charge_time": "充能时间%",
@@ -208,8 +210,9 @@
         "unrestricted_charge": "无限制充能",
         "unrestricted_charge_tooltip": "可以在某些原本不允许充能的动作中充能（如蓄力攻击中，收刀状态）"
     },
+
     "hammer": {
-        "title": "锤子",
+        "title": "大锤",
         "charge_level": "蓄力等级",
         "super_charge_level": "浑身蓄力等级",
         "instant_charge": "立即蓄力"
@@ -218,9 +221,10 @@
         "title": "狩猎笛",
         "unlimited_echo_bubbles": "无限响玉"
     },
+
     "lance": {
         "title": "长枪",
-        "counter_charge_level": "防御冲锋等级",
+        "counter_charge_level": "蓄力反击等级",
         "rush_level": "突进等级"
     },
     "gunlance": {
@@ -230,17 +234,18 @@
         "instant_charge": "立即蓄力",
         "unlimited_ammo": "无限弹药"
     },
+
     "bow": {
         "title": "弓",
         "charge_level": "锁定蓄力等级",
         "all_arrow_types": "全强化瓶解锁",
         "unlimited_bottles": "强化瓶无限使用",
-        "tetrad_shot_active": "Tetrad shot support active (*)",
+        "tetrad_shot_active": "强四射击辅助激活",
         "unlimited_bladescale": "无限刃鳞瓶",
-        "max_trick_arrow_gauge": "特殊箭计量槽全满"
+        "max_trick_arrow_gauge": "巧工箭槽全满"
     },
     "light_bowgun": {
-        "title": "轻弩",
+        "title": "轻弩炮",
         "max_special_ammo": "无限特殊弹药",
         "max_rapid_shot": "速射最大连发数",
         "max_eagle_shot": "无限集中特效弹",
@@ -248,14 +253,14 @@
         "unlimited_ammo": "无限弹药",
         "unlimited_bladescale": "无限刃鳞弹",
         "no_reload": "无需装填",
-        "tetrad_shot_active": "Tetrad shot support active (*)",
+        "tetrad_shot_active": "强四射击辅助激活",
         "no_recoil": "无后座力",
         "no_knockback": "无后退",
-        "shell_level": "弹药等级",
-        "all_rapid_fire": "全弹种速射"
+        "all_rapid_fire": "全弹种速射",
+        "shell_level": "弹药等级"
     },
     "heavy_bowgun": {
-        "title": "重弩",
+        "title": "重弩炮",
         "max_special_ammo": "无限特殊弹药",
         "max_wyvern_howl": "无限龙热机关龙弹",
         "max_gatling_hits": "最大命中数",
@@ -263,11 +268,12 @@
         "unlimited_ammo": "无限弹药",
         "unlimited_bladescale": "无限刃鳞弹",
         "no_reload": "无需装填",
-        "tetrad_shot_active": "Tetrad shot support active (*)",
+        "tetrad_shot_active": "强四射击辅助激活",
         "no_recoil": "无后座力",
         "no_knockback": "无后退",
         "shell_level": "弹药等级"
     },
+
     "charge_blade": {
         "title": "盾斧",
         "max_phials": "最大瓶数",
@@ -277,7 +283,7 @@
         "axe_enhanced": "强化斧形态"
     },
     "switch_axe": {
-        "title": "斩击斧",
+        "title": "斩斧",
         "max_charge": "最大充能",
         "max_sword_charge": "剑形态最大充能",
         "powered_axe": "强化斧形态"
