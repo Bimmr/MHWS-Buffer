@@ -13,11 +13,13 @@ local Module = ModuleBase:new("light_bowgun", {
     no_knockback = false,
     unlimited_bladescale = false,
     all_rapid_fire = false,
-    shell_level = -1
+    shell_level = -1,
+    full_auto = false,
 })
 
 -- Local variables
 local tetrad_shot_active = false
+local on_trigger_lbg = false
 
 function Module.create_hooks()
 
@@ -46,6 +48,8 @@ function Module.create_hooks()
         local weapon_id = managed:get_Hunter():get_WeaponID()
 
         if not Module:should_execute_staggered("light_bowgun_handling_update") then return end
+
+        on_trigger_lbg = not on_trigger_lbg -- Toggle trigger state for full-auto
 
         -- Update cached values
         Module:update_cached_modifications(managed)
@@ -202,6 +206,61 @@ function Module.create_hooks()
         end
         return retval
     end)
+
+    -- Full Auto for Light Bowgun (Controller)
+    sdk.hook(sdk.find_type_definition('ace.cGameInput'):get_method('applyFromPad'), nil, function(retval)
+        if not Module.data.full_auto then return retval end
+
+        local hunter = Utils.get_master_character()
+        if not hunter then return retval end
+        if hunter:get_WeaponType() ~= 13 then return retval end
+        if not hunter:get_IsWeaponOn() then return retval end
+
+        local game_input_manager = sdk.get_managed_singleton('app.GameInputManager')
+        if not game_input_manager then return retval end
+        
+        local player_input = game_input_manager:get_PlayerInput()
+        if not player_input then return retval end
+
+        local trigger = player_input:call("getKey", 2)-- R2 trigger for controller
+        if not trigger then return retval end
+        
+        if trigger:get_field("_On") then
+            trigger:set_field("_On", on_trigger_lbg)
+            trigger:set_field("_OnTrigger", on_trigger_lbg)
+            trigger:set_field("_Repeat", on_trigger_lbg)
+            trigger:set_field("_OffTrigger", not on_trigger_lbg)
+        end
+        
+        return retval
+    end)
+    -- Full Auto for Light Bowgun (Controller)
+    sdk.hook(sdk.find_type_definition('ace.cGameInput'):get_method('applyFromMouseKeyboard'), nil, function(retval)
+        if not Module.data.full_auto then return retval end
+
+        local hunter = Utils.get_master_character()
+        if not hunter then return retval end
+        if hunter:get_WeaponType() ~= 13 then return retval end
+        if not hunter:get_IsWeaponOn() then return retval end
+
+        local game_input_manager = sdk.get_managed_singleton('app.GameInputManager')
+        if not game_input_manager then return retval end
+        
+        local player_input = game_input_manager:get_PlayerInput()
+        if not player_input then return retval end
+
+        local trigger = player_input:call("getKey", 15) -- Left Mouse Button
+        if not trigger then return retval end
+        
+        if trigger:get_field("_On") then
+            trigger:set_field("_On", on_trigger_lbg)
+            trigger:set_field("_OnTrigger", on_trigger_lbg)
+            trigger:set_field("_Repeat", on_trigger_lbg)
+            trigger:set_field("_OffTrigger", not on_trigger_lbg)
+        end
+        
+        return retval
+    end)
 end
 
 function Module:update_cached_modifications(managed)
@@ -295,6 +354,9 @@ function Module.add_ui()
     imgui.end_table()
 
     changed, Module.data.all_rapid_fire = imgui.checkbox(Language.get(languagePrefix .. "all_rapid_fire"), Module.data.all_rapid_fire)
+    any_changed = any_changed or changed
+
+    changed, Module.data.full_auto = imgui.checkbox(Language.get(languagePrefix .. "full_auto"), Module.data.full_auto)
     any_changed = any_changed or changed
 
     if any_changed then
