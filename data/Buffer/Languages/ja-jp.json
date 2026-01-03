@@ -3,7 +3,7 @@
     "_LANGUAGE_NAME": "日本語 (JP)",
 
     "window": {
-        "toggle_button": "バッファGUIの切り替え",
+        "toggle_button": "バフGUIの切り替え",
         "title": "修飾子 & 設定",
         "settings": "設定",
         "language": "言語",
@@ -17,8 +17,8 @@
         "disable_all": "すべて無効化",
         "enabled_buffs": "有効なバフ",
         "nothing_enabled": "有効なものはありません",
-        "character_bonus_stats": "Use bonus mode for character stats(*)",
-        "character_bonus_stats_tooltip": "In bonus mode, the values set will be treated as bonus values added to the base stats, rather than setting the stats directly.(*)",
+        "character_bonus_stats": "キャラクターステータスにボーナスモードを使用する",
+        "character_bonus_stats_tooltip": "ボーナスモードでは、設定した値はステータスを直接設定するのではなく、基本ステータスに加算されるボーナス値として扱われます。",
         "disable": "無効化",
         "bindings": {
             "title": "キー設定",
@@ -78,8 +78,8 @@
             "healing_tooltip": "不足している体力が回復可能になります。"
         },
         "blights_and_conditions": {
-            "title": "属性や状態異常",
-            "tooltip": "属性異常や状態異常を防ぐ",
+            "title": "属性・状態異常",
+            "tooltip": "属性や状態異常を無効化します",
             "blights": {
                 "title": "属性異常",
                 "fire": "火",
@@ -128,16 +128,16 @@
             "title": "ステータス",
             "attack": "攻撃力",
             "defence": "防御力",
-            "critical_chance": "クリティカルチャンス",
+            "critical_chance": "会心率",
             "elemental_attack": "属性攻撃力",
             "defence_attributes": {
-                "title": "Elemental Resistances(*)",
-                "value": "%s value(*)",
-                "fire_enable": "Fire elemental resistance(*)",
-                "water_enable": "Water elemental resistance(*)",
-                "ice_enable": "Ice elemental resistance(*)",
-                "thunder_enable": "Thunder elemental resistance(*)",
-                "dragon_enable": "Dragon elemental resistance(*)"
+                "title": "属性耐性",
+                "value": "耐性値 %s",
+                "fire_enable": "火属性耐性",
+                "water_enable": "水属性耐性",
+                "ice_enable": "氷属性耐性",
+                "thunder_enable": "雷属性耐性",
+                "dragon_enable": "龍属性耐性"
             },
             "element": {
             "title": "属性",
@@ -159,17 +159,17 @@
             "unlimited_duration": "持続時間無制限"
         },
         "invincible": "無敵",
-        "invincible_tooltip": "ダメージ、ノックバック、ひるみ、状態異常を受けない。",
+        "invincible_tooltip": "ダメージ、ノックバック、ひるみ、状態異常を受けません。",
         "unlimited_sharpness": "斬れ味無限",
         "unlimited_consumables": "消費アイテム無限",
         "unlimited_slingers": "スリンガー弾無限",
-        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
+        "unlimited_meal_timer": "食事効果時間無制限"
     },
     "great_sword": {
         "title": "大剣",
         "true_charge_boost": "真・溜め斬り強化",
         "true_charge_boost_tooltip": "真・溜め斬りの初撃ダメージ増加",
-        "charge_level": "Charge level(*)",
+        "charge_level": "溜め段階",
         "instant_charge": "即時溜め"
     },
     "sword_and_shield": {
@@ -210,13 +210,13 @@
     },
     "hammer": {
         "title": "ハンマー",
-        "charge_level": "Charge level(*)",
-        "super_charge_level": "Super charge level(*)",
+        "charge_level": "溜め段階",
+        "super_charge_level": "最大溜め",
         "instant_charge": "即時溜め"
     },
     "hunting_horn": {
         "title": "狩猟笛",
-        "unlimited_echo_bubbles": "無限の旋律効果"
+        "unlimited_echo_bubbles": "旋律効果無限"
     },
     "lance": {
         "title": "ランス",
@@ -233,7 +233,7 @@
     "bow": {
         "title": "弓",
         "charge_level": "溜めレベル",
-        "all_arrow_types": "全ての矢タイプ",
+        "all_arrow_types": "全矢種使用可能",
         "unlimited_bottles": "ビン無限",
         "tetrad_shot_active": "四連射サポート有効",
         "unlimited_bladescale": "無限刃鱗増装",
@@ -250,9 +250,9 @@
         "no_reload": "リロード不要",
         "tetrad_shot_active": "四連射サポート有効",
         "no_recoil": "反動なし",
-        "no_knockback": "No knockback (*)",
-        "all_rapid_fire": "All rapid fire (*)",
-        "shell_level": "Shell level (*)"
+        "no_knockback": "のけぞり無効",
+        "all_rapid_fire": "全弾速射",
+        "shell_level": "砲撃レベル"
     },
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
@@ -265,8 +265,8 @@
         "no_reload": "リロード不要",
         "tetrad_shot_active": "四連射サポート有効",
         "no_recoil": "反動なし",
-        "no_knockback": "No knockback (*)",
-        "shell_level": "Shell level (*)"
+        "no_knockback": "のけぞり無効",
+        "shell_level": "砲撃レベル"
     },
     "charge_blade": {
         "title": "チャージアックス",
@@ -283,5 +283,3 @@
         "powered_axe": "斧モード強化"
     }
 }
-
-
