@@ -257,7 +257,8 @@
         "no_recoil": "无后座力",
         "no_knockback": "无后退",
         "all_rapid_fire": "全弹种速射",
-        "shell_level": "弹药等级"
+        "shell_level": "弹药等级",
+        "full_auto": "Full auto (*)"
     },
     "heavy_bowgun": {
         "title": "重弩炮",
@@ -271,7 +272,8 @@
         "tetrad_shot_active": "强四射击辅助激活",
         "no_recoil": "无后座力",
         "no_knockback": "无后退",
-        "shell_level": "弹药等级"
+        "shell_level": "弹药等级",
+        "full_auto": "Full auto (*)"
     },
 
     "charge_blade": {

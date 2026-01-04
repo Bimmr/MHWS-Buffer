@@ -256,7 +256,8 @@
         "no_recoil": "無後座力",
         "no_knockback": "No knockback (*)",
         "shell_level": "Shell level (*)",
-        "all_rapid_fire": "All rapid fire (*)"
+        "all_rapid_fire": "All rapid fire (*)",
+        "full_auto": "Full auto (*)"
     },
     "heavy_bowgun": {
         "title": "重弩",
@@ -270,7 +271,8 @@
         "tetrad_shot_active": "啟用第四射擊",
         "no_recoil": "無後座力",
         "no_knockback": "No knockback (*)",
-        "shell_level": "Shell level (*)"
+        "shell_level": "Shell level (*)",
+        "full_auto": "Full auto (*)"
     },
 
     "charge_blade": {

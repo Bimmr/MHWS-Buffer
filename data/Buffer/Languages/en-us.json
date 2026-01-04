@@ -255,7 +255,8 @@
         "no_recoil": "No recoil",
         "no_knockback": "No knockback",
         "all_rapid_fire": "All rapid fire",
-        "shell_level": "Shell level"
+        "shell_level": "Shell level",
+        "full_auto": "Full auto"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -269,7 +270,8 @@
         "tetrad_shot_active": "Tetrad shot support active",
         "no_recoil": "No recoil",
         "no_knockback": "No knockback",
-        "shell_level": "Shell level"
+        "shell_level": "Shell level",
+        "full_auto": "Full auto"
     },
 
     "charge_blade": {

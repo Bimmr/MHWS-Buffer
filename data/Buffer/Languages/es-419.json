@@ -255,7 +255,8 @@
         "no_recoil": "Sin retroceso",
         "no_knockback": "Sin derribo",
         "all_rapid_fire": "Todos disparo rápido",
-        "shell_level": "Nivel de cargas"
+        "shell_level": "Nivel de cargas",
+        "full_auto": "Full auto (*)"
     },
     "heavy_bowgun": {
         "title": "Ballesta Pesada",
@@ -269,7 +270,8 @@
         "tetrad_shot_active": "Disparo Tétrado activo",
         "no_recoil": "Sin retroceso",
         "no_knockback": "Sin derribo",
-        "shell_level": "Nivel de cargas"
+        "shell_level": "Nivel de cargas",
+        "full_auto": "Full auto (*)"
     },
 
     "charge_blade": {

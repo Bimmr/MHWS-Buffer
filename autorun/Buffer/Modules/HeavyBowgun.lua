@@ -11,11 +11,13 @@ local Module = ModuleBase:new("heavy_bowgun", {
     no_recoil = false,
     no_knockback = false,
     unlimited_bladescale = false,
-    shell_level = -1
+    shell_level = -1,
+    full_auto = false,
 })
 
 -- Local variables
 local tetrad_shot_active = false
+local on_trigger_hbg = false
 
 function Module.create_hooks()
 
@@ -172,6 +174,43 @@ function Module.create_hooks()
         return retval
     end)
 
+    -- Helper function for full auto logic
+    local function apply_full_auto(key_id)
+        if not Module.data.full_auto then return end
+
+        local hunter = Utils.get_master_character()
+        if not hunter then return end
+        if hunter:get_WeaponType() ~= 12 then return end
+        if not hunter:get_IsWeaponOn() then return end
+
+        local _, player_input = Utils.get_player_input()
+        if not player_input then return end
+
+        local trigger = player_input:call("getKey", key_id)
+        if not trigger then return end
+        
+        -- Only toggle when trigger is actually being held down
+        if trigger:get_field("_On") then
+            on_trigger_hbg = not on_trigger_hbg
+            trigger:set_field("_On", on_trigger_hbg)
+            trigger:set_field("_OnTrigger", on_trigger_hbg)
+            trigger:set_field("_Repeat", on_trigger_hbg)
+            trigger:set_field("_OffTrigger", not on_trigger_hbg)
+        end
+    end
+
+    -- Full Auto for Heavy Bowgun (Controller: R2 trigger)
+    sdk.hook(sdk.find_type_definition('ace.cGameInput'):get_method('applyFromPad'), nil, function(retval)
+        apply_full_auto(2)
+        return retval
+    end)
+    
+    -- Full Auto for Heavy Bowgun (Mouse/Keyboard: Left Mouse Button)
+    sdk.hook(sdk.find_type_definition('ace.cGameInput'):get_method('applyFromMouseKeyboard'), nil, function(retval)
+        apply_full_auto(15)
+        return retval
+    end)
+
 end
 
 function Module:update_cached_modifications(managed)
@@ -244,6 +283,9 @@ function Module.add_ui()
     any_changed = any_changed or changed
 
     imgui.end_table()
+
+    changed, Module.data.full_auto = imgui.checkbox(Language.get(languagePrefix .. "full_auto"), Module.data.full_auto)
+    any_changed = any_changed or changed
 
     if any_changed then
         Module:update_cached_modifications()

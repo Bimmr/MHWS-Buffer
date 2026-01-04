@@ -252,7 +252,8 @@
         "no_recoil": "反動なし",
         "no_knockback": "のけぞり無効",
         "all_rapid_fire": "全弾速射",
-        "shell_level": "砲撃レベル"
+        "shell_level": "砲撃レベル",
+        "full_auto": "Full auto (*)"
     },
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
@@ -266,7 +267,8 @@
         "tetrad_shot_active": "四連射サポート有効",
         "no_recoil": "反動なし",
         "no_knockback": "のけぞり無効",
-        "shell_level": "砲撃レベル"
+        "shell_level": "砲撃レベル",
+        "full_auto": "Full auto (*)"
     },
     "charge_blade": {
         "title": "チャージアックス",
