@@ -213,6 +213,7 @@ function Module.create_hooks()
         if not hunter then return end
         if hunter:get_WeaponType() ~= 13 then return end
         if not hunter:get_IsWeaponOn() then return end
+        if hunter:get_WeaponHandling():get_field("_IsRapidShotBoost") then return end -- Don't allow on rapid shot (Full auto makes it shoot slower)
 
         local _, player_input = Utils.get_player_input()
         if not player_input then return end
