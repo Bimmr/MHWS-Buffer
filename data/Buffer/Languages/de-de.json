@@ -15,11 +15,11 @@
         "version": "Version",
         "options": "Optionen",
         "disable_all": "Alle deaktivieren",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "character_bonus_stats": "Use bonus mode for character stats(*)",
-        "character_bonus_stats_tooltip": "In bonus mode, the values set will be treated as bonus values added to the base stats, rather than setting the stats directly.(*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "Aktivierte Buffs",
+        "nothing_enabled": "Nichts ist aktiviert",
+        "character_bonus_stats": "Verwende den Bonusmodus fuer Charakterstatistiken",
+        "character_bonus_stats_tooltip": "Im Bonusmodus werden die eingestellten Werte als Bonuswerte behandelt, die zu den Basiswerten addiert werden, anstatt die Werte direkt festzulegen.",
+        "disable": "Deaktivieren",
         "bindings": {
             "title": "Belegung",
             "keyboard": "Tastatur",
@@ -53,14 +53,14 @@
             "unlimited_ammo": "Unbegrenzte Munition"
         },
         "pictomancy": {
-            "title": "Pictomancy(*)",
+            "title": "Bilddeutung",
             "state": {
-                "title": "Active Pictomancy state(*)",
-                "pom": "Pom Motif(*)",
-                "wing": "Wing Motif(*)",
-                "mog": "Mog of the ages(*)"
+                "title": "Aktiver Zustand der Bilddeutung",
+                "pom": "Pom-Motiv",
+                "wing": "Fluegelmotiv",
+                "mog": "Mog aller Zeiten"
             },
-            "instant_cooldown": "Instant cooldown(*)"
+            "instant_cooldown": "Sofortige Abklingzeit"
         }
     },
     "character": {
@@ -103,7 +103,7 @@
                 "frenzy": "Wahnsinn",
                 "frozen": "Gefroren",
                 "bubble": "Blase",
-                "hp_reduction": "HP Reduction(*)",
+                "hp_reduction": "HP Reduzierung",
                 "all": "Alle "
             }
         },
@@ -136,13 +136,13 @@
             "critical_chance": "Kritische Trefferchance",
             "elemental_attack": "Elementarangriff",
             "defence_attributes": {
-                "title": "Elemental Resistances(*)",
-                "value": "%s value(*)",
-                "fire_enable": "Fire elemental resistance(*)",
-                "water_enable": "Water elemental resistance(*)",
-                "ice_enable": "Ice elemental resistance(*)",
-                "thunder_enable": "Thunder elemental resistance(*)",
-                "dragon_enable": "Dragon elemental resistance(*)"
+                "title": "Elementarwiderstaende",
+                "value": "%s Wert",
+                "fire_enable": "Feuerelementar-Widerstand",
+                "water_enable": "Wasserelementar-Widerstand",
+                "ice_enable": "Ice-Wiederstand",
+                "thunder_enable": " Blitz-Elementare-Widerstand",
+                "dragon_enable": "Drachen-Elementare-Widerstand"
             },
             "element": {
                 "title": "Element",
@@ -163,14 +163,14 @@
         "unlimited_sharpness": "Unbegrenzte Schaerfe",
         "unlimited_consumables": "Unbegrenzte Verbrauchsmaterialien",
         "unlimited_slingers": "Unbegrenzte Schleudermunition",
-        "unlimited_meal_timer": "Unlimited Meal Timer(*)"
+        "unlimited_meal_timer": "Unbegrenzter Essens-Timer"
     },
 
     "great_sword": {
         "title": "Grossschwert",
         "true_charge_boost": "Echter Ladungsboost",
         "true_charge_boost_tooltip": "Anfaenglicher Bonus fuer echte Aufladung",
-        "charge_level": "Charge level(*)",
+        "charge_level": "Ladezustand",
         "instant_charge": "Sofortige Aufladung"
     },
     "sword_and_shield": {
@@ -212,8 +212,8 @@
 
     "hammer": {
         "title": "Hammer",
-        "charge_level": "Charge level(*)",
-        "super_charge_level": "Super charge level(*)",
+        "charge_level": "Ladezustand",
+        "super_charge_level": "Super Ladezustand",
         "instant_charge": "Sofortige Aufladung"
     },
     "hunting_horn": {
@@ -254,10 +254,10 @@
         "no_reload": "Kein Nachladen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
         "no_recoil": "Kein Rueckstoss",
-        "no_knockback": "No knockback (*)",
-        "all_rapid_fire": "All rapid fire (*)",
-        "shell_level": "Shell level (*)",
-        "full_auto": "Full auto (*)"
+        "no_knockback": "Kein Rückstoß",
+        "all_rapid_fire": "Alle Schnellfeuer",
+        "shell_level": "Schalenebene",
+        "full_auto": "Vollautomatisch"
     },
     "heavy_bowgun": {
         "title": "Schweres Bogengewehr",
@@ -270,9 +270,9 @@
         "no_reload": "Kein Nachladen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
         "no_recoil": "Kein Rueckstoss",
-        "no_knockback": "No knockback (*)",
-        "shell_level": "Shell level (*)",
-        "full_auto": "Full auto (*)"
+        "no_knockback": "Kein Rückstoß",
+        "shell_level": "Schalenebene",
+        "full_auto": "Vollautomatisch"
     },
 
     "charge_blade": {
