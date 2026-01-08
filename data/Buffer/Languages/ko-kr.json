@@ -252,8 +252,8 @@
         "no_recoil": "반동 없음",
         "no_knockback": "움찔 없음",
         "shell_level": "탄 레벨",
-        "all_rapid_fire": "모든 종류 속사",
-        "full_auto": "Full auto (*)"
+        "all_rapid_fire": "모든 탄약 속사",
+        "full_auto": "모든 탄약 연사"
     },
     "heavy_bowgun": {
         "title": "헤비 보우건",
@@ -268,7 +268,7 @@
         "no_recoil": "반동 없음",
         "no_knockback": "움찔 없음",
         "shell_level": "탄 레벨",
-        "full_auto": "Full auto (*)"
+        "full_auto": "모든 탄약 연사"
     },
     "charge_blade": {
         "title": "차지 액스",
@@ -285,5 +285,6 @@
         "powered_axe": "고출력 상태"
     }
 }
+
 
 
