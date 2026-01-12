@@ -15,11 +15,11 @@
         "version": "Versión",
         "options": "Opciones",
         "disable_all": "Desactivar todo",
-        "enabled_buffs": "Enabled buffs (*)",
-        "nothing_enabled": "Nothing is enabled (*)",
-        "character_bonus_stats": "Use bonus mode for character stats(*)",
-        "character_bonus_stats_tooltip": "In bonus mode, the values set will be treated as bonus values added to the base stats, rather than setting the stats directly.(*)",
-        "disable": "Disable (*)",
+        "enabled_buffs": "Mejoras activadas",
+        "nothing_enabled": "Nada activado",
+        "character_bonus_stats": "Usar modo de mejora para las estadísticas del personaje",
+        "character_bonus_stats_tooltip": "En modo de mejora, los valores establecidos se tratarán como valores adicionales sumados a las estadísticas base, en lugar de establecer las estadísticas directamente.",
+        "disable": "Desactivar",
         "bindings": {
             "title": "Asignaciones",
             "keyboard": "Teclado",
@@ -126,7 +126,7 @@
         },
         "mantles": {
             "title": "Mantos",
-            "instant_cooldown": "Enfriamiento instantánea",
+            "instant_cooldown": "Enfriamiento instantáneo",
             "unlimited_duration": "Duración ilimitada"
         },
         "stats": {
@@ -136,13 +136,13 @@
             "critical_chance": "Probabilidad crítica",
             "elemental_attack": "Ataque elemental",
             "defence_attributes": {
-                "title": "Elemental Resistances(*)",
-                "value": "%s value(*)",
-                "fire_enable": "Fire elemental resistance(*)",
-                "water_enable": "Water elemental resistance(*)",
-                "ice_enable": "Ice elemental resistance(*)",
-                "thunder_enable": "Thunder elemental resistance(*)",
-                "dragon_enable": "Dragon elemental resistance(*)"
+                "title": "Resistencias elementales",
+                "value": "%s valor",
+                "fire_enable": "Resistencia elemental al fuego",
+                "water_enable": "Resistencia elemental al agua",
+                "ice_enable": "Resistencia elemental al hielo",
+                "thunder_enable": "Resistencia elemental al rayo",
+                "dragon_enable": "Resistencia elemental al draco"
             },
             "element": {
                 "title": "Elemento",
@@ -159,9 +159,9 @@
             }
         },
         "meals": {
-            "title": "Meals(*)",
-            "no_ticket_consumption": "No ticket consumption(*)",
-            "no_ingredient_consumption": "No ingredient consumption(*)",
+            "title": "Comidas",
+            "no_ticket_consumption": "Sin gasto de vales",
+            "no_ingredient_consumption": "Sin gasto de ingredientes",
             "unlimited_timer": "Bono de comida ilimitado"
         },
         "invincible": "Invencible",
@@ -261,7 +261,7 @@
         "no_knockback": "Sin derribo",
         "all_rapid_fire": "Todos disparo rápido",
         "shell_level": "Nivel de cargas",
-        "full_auto": "Full auto (*)"
+        "full_auto": "Totalmente automático"
     },
     "heavy_bowgun": {
         "title": "Ballesta Pesada",
@@ -276,7 +276,7 @@
         "no_recoil": "Sin retroceso",
         "no_knockback": "Sin derribo",
         "shell_level": "Nivel de cargas",
-        "full_auto": "Full auto (*)"
+        "full_auto": "Totalmente automático"
     },
 
     "charge_blade": {
