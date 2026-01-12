@@ -159,9 +159,9 @@
             }
         },
         "meals": {
-            "title": "Meals(*)",
-            "no_ticket_consumption": "No ticket consumption(*)",
-            "no_ingredient_consumption": "No ingredient consumption(*)",
+            "title": "Mahlzeiten",
+            "no_ticket_consumption": "Kein Ticketverbrauch",
+            "no_ingredient_consumption": "Kein Verbrauch von Zutaten",
             "unlimited_timer": "Unbegrenzter Essens-Timer"
         },
         "invincible": "Unverwundbar",
