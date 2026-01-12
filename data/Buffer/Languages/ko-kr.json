@@ -159,9 +159,9 @@
             "unlimited_duration": "복장 지속시간 무제한"
         },
         "meals": {
-            "title": "Meals(*)",
-            "no_ticket_consumption": "No ticket consumption(*)",
-            "no_ingredient_consumption": "No ingredient consumption(*)",
+            "title": "식사",
+            "no_ticket_consumption": "티켓 소모 없음",
+            "no_ingredient_consumption": "식재료 소모 없음",
             "unlimited_timer": "식사 효과 무한"
         },
         "invincible": "무적",
@@ -290,6 +290,7 @@
         "powered_axe": "고출력 상태"
     }
 }
+
 
 
 
