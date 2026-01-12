@@ -1,5 +1,5 @@
 {
-    "_TRANSLATOR": "Jeffrey13131",
+    "_TRANSLATOR": "Jeffrey13131,Adolink",
     "_LANGUAGE_NAME": "简体中文 (CN)",
     
     "window": {
@@ -95,10 +95,10 @@
                 "sleep": "睡眠",
                 "paralyze": "麻痹",
                 "blast": "爆破",
-                "stun": "眩晕",
-                "defense_down": "防御下降",
+                "stun": "昏厥",
+                "defense_down": "防御力下降",
                 "bleed": "裂伤",
-                "stench": "臭气",
+                "stench": "恶臭",
                 "sticky": "黏着",
                 "frenzy": "狂龙症",
                 "frozen": "冻结",
@@ -159,9 +159,9 @@
             }
         },
         "meals": {
-            "title": "Meals(*)",
-            "no_ticket_consumption": "No ticket consumption(*)",
-            "no_ingredient_consumption": "No ingredient consumption(*)",
+            "title": "餐点",
+            "no_ticket_consumption": "不消耗餐卷",
+            "no_ingredient_consumption": "不消耗食材",
             "unlimited_timer": "无限餐点计时"
         },
         "invincible": "无敌",
@@ -252,7 +252,7 @@
     "light_bowgun": {
         "title": "轻弩炮",
         "max_special_ammo": "无限特殊弹药",
-        "max_rapid_shot": "速射最大连发数",
+        "max_rapid_shot": "无限速射",
         "max_eagle_shot": "无限集中特效弹",
         "instant_eagle_shot_charge": "集中特效弹无需蓄力",
         "unlimited_ammo": "无限弹药",
@@ -260,10 +260,10 @@
         "no_reload": "无需装填",
         "tetrad_shot_active": "强四射击辅助激活",
         "no_recoil": "无后座力",
-        "no_knockback": "无后退",
+        "no_knockback": "无后仰",
         "all_rapid_fire": "全弹种速射",
         "shell_level": "弹药等级",
-        "full_auto": "Full auto (*)"
+        "full_auto": "全自动"
     },
     "heavy_bowgun": {
         "title": "重弩炮",
@@ -276,9 +276,9 @@
         "no_reload": "无需装填",
         "tetrad_shot_active": "强四射击辅助激活",
         "no_recoil": "无后座力",
-        "no_knockback": "无后退",
+        "no_knockback": "无后仰",
         "shell_level": "弹药等级",
-        "full_auto": "Full auto (*)"
+        "full_auto": "全自动"
     },
 
     "charge_blade": {
