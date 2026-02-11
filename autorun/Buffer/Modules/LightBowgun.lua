@@ -229,6 +229,8 @@ function Module.create_hooks()
         if trigger:get_field("_On") then
             trigger:set_field("_On", on_trigger_lbg)
             trigger:set_field("_OnTrigger", on_trigger_lbg)
+            trigger:set_field("_Repeat", on_trigger_lbg)
+            trigger:set_field("_OffTrigger", not on_trigger_lbg)
         end
     end
 
