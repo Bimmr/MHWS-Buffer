@@ -204,7 +204,12 @@
             "enabled": "Darkside",
             "no_cooldown": "No Cooldown"
         },
-        "luck": "Luck"
+        "luck": "Luck",
+        "burst": {
+            "enabled": "Burst",
+            "infinite_interval": "Infinite Interval",
+            "infinite_timer": "Infinite Timer"
+        }
     },
 
     "great_sword": {

@@ -36,6 +36,11 @@ local Module = ModuleBase:new("skills",
             enabled = false,
             no_cooldown = false
         },
+        burst = { -- Requires skill
+            enabled = false,
+            infinite_interval = false,
+            infinite_timer = false,
+        },
         luck = false, -- Doesn't require skill
     }
 )
@@ -276,6 +281,34 @@ function Module.create_hooks()
             end
         end
 
+        -- Burst
+        -- Multiple hits within a time window increases attack
+        local burst_info = nil
+        if Module.data.burst.enabled or Module.data.burst.infinite_interval or Module.data.burst.infinite_timer then
+            burst_info = hunter_skill_params:get_field("_ContinuousAttackInfo")
+        end
+        -- Burst Enabled
+        if Module.data.burst.enabled then
+            if not hunter_skill_params:get_IsContinuousAttackActive() then
+                burst_info:set_field("_HitCount", 5)
+            end
+        end
+        -- Burst Infinite Interval
+        if Module.data.burst.infinite_interval then
+            if burst_info:get_field("_HitCount") > 0 and burst_info:get_field("_HitCount") < 5 and hunter_skill_params:get_IsCanContinuousAttackActive() then
+                if burst_info:get_field("_Timer") < 15.0 then
+                    burst_info:set_field("_Timer", 30.0)
+                end
+            end
+        end
+        -- Burst Infinite Timer
+         if Module.data.burst.infinite_timer then
+            if burst_info:get_field("_HitCount") == 5 and hunter_skill_params:get_IsContinuousAttackActive() then
+                if burst_info:get_field("_Timer") < 30.0 then
+                    burst_info:set_field("_Timer", 60.0)
+                end
+            end
+        end
 
     end, function(retval) end)
 
@@ -400,6 +433,30 @@ function Module.add_ui()
 
     changed, Module.data.luck = imgui.checkbox(Language.get(languagePrefix .. "luck"), Module.data.luck)
     any_changed = any_changed or changed
+
+    imgui.begin_table(Module.title .. "burst", 3, 0)
+    local burst_enabled_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "burst.enabled")).x
+    local column_1_width = burst_enabled_text_size + 24 + 10
+    imgui.table_setup_column("1", 16 + 4096, column_1_width)
+    local burst_infinite_interval_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "burst.infinite_interval")).x
+    local column_2_width = burst_infinite_interval_text_size + 24 + 10
+    imgui.table_setup_column("2", 16 + 4096, column_2_width)
+    imgui.table_next_column()
+
+    changed, Module.data.burst.enabled = imgui.checkbox(Language.get(languagePrefix .. "burst.enabled"), Module.data.burst.enabled)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.burst.infinite_interval = imgui.checkbox(Language.get(languagePrefix .. "burst.infinite_interval"), Module.data.burst.infinite_interval)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.burst.infinite_timer = imgui.checkbox(Language.get(languagePrefix .. "burst.infinite_timer"), Module.data.burst.infinite_timer)
+    any_changed = any_changed or changed
+
+    imgui.end_table()
 
     return any_changed
 end
