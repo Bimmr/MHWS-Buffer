@@ -169,6 +169,39 @@
         "unlimited_consumables": "Unlimited Consumables",
         "unlimited_slingers": "Unlimited Slinger Ammo"
     },
+    "skills": {
+        "title": "Skills",
+        "tooltip": "This just removes the activation condition. You still need the skill equipped for most.",
+        "protective_polish": "Protective Polish",
+        "jin_dahaads_revolt": "Jin Dahaad's Revolt",
+        "doshagumas_might": "Doshaguma's Might",
+        "xu_wus_vigor": "Xu Wu's Vigor",
+        "latent_power": "Latent Power",
+        "guardians_pulse": "Guardian's Pulse",
+        "offensive_guard": {
+            "enabled": "Offensive Guard",
+            "always_perfectly_timed": "Always Perfectly Timed"
+        },
+        "scale_layering": "Scale Layering",
+        "buttery_leathercraft": "Buttery Leathercraft",
+        "lords_fury": "Lord's Fury",
+        "agitator": "Agitator",
+        "counterstrike": "Counterstrike",
+        "coalescence": "Coalescence",
+        "uth_dans_cover": "Uth Dan's Cover",
+        "maximum_might": "Maximum Might",
+        "ambush": "Ambush",
+        "lords_favor": "Lord's Favor",
+        "adrenaline_rush": "Adrenaline Rush",
+        "peak_performance": "Peak Performance",
+        "seregios_tenacity": "Seregios Tenacity",
+        "synthetic_shield": "Synthetic Shield",
+        "darkside": {
+            "enabled": "Darkside",
+            "no_cooldown": "No Cooldown"
+        },
+        "luck": "Luck"
+    },
 
     "great_sword": {
         "title": "Great Sword",
