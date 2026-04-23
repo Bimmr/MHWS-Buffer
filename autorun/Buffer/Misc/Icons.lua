@@ -96,7 +96,6 @@ function Icons.draw_icon(icon)
             -- Draw the character with current color
             imgui.set_cursor_pos(pos)
             imgui.text_colored(char, current_color)
-            log.debug("Drawing Icon for '" .. icon .. "' with color: " .. string.format("0x%X", current_color))
 
             i = i + char_len
         end
