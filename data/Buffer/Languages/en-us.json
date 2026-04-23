@@ -171,7 +171,7 @@
     },
     "skills": {
         "title": "Skills",
-        "tooltip": "This just removes the activation condition. You still need the skill equipped for most.",
+        "tooltip": "This just removes the activation condition.\n   You still need the skill equipped for most.",
         "protective_polish": "Protective Polish",
         "jin_dahaads_revolt": "Jin Dahaad's Revolt",
         "doshagumas_might": "Doshaguma's Might",
