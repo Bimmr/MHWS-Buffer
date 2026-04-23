@@ -209,7 +209,8 @@
             "enabled": "Burst",
             "infinite_interval": "Infinite Interval",
             "infinite_timer": "Infinite Timer"
-        }
+        },
+        "blackest_night_no_cooldown": "Blackest Night No Cooldown"
     },
 
     "great_sword": {

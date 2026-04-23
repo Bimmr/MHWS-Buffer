@@ -41,7 +41,8 @@ local Module = ModuleBase:new("skills",
             infinite_interval = false,
             infinite_timer = false,
         },
-        luck = false, -- Doesn't require skill
+        luck = false, -- Doesn't require skill,
+        blackest_night_no_cooldown = false,
     }
 )
 
@@ -312,6 +313,14 @@ function Module.create_hooks()
             end
         end
 
+        -- Blackest Night No Cooldown
+        if Module.data.blackest_night_no_cooldown then
+            local exemote03 = managed:get_ExEmote03()
+            if exemote03:get_field("<BarrierItemCDTimer>k__BackingField") > 0.0 then
+                exemote03:set_field("<BarrierItemCDTimer>k__BackingField", 0.0)
+            end
+        end
+
     end, function(retval) end)
 
 end
@@ -459,6 +468,10 @@ function Module.add_ui()
     any_changed = any_changed or changed
 
     imgui.end_table()
+
+    changed, Module.data.blackest_night_no_cooldown = imgui.checkbox(Language.get(languagePrefix .. "blackest_night_no_cooldown"), Module.data.blackest_night_no_cooldown)
+    any_changed = any_changed or changed
+
 
     return any_changed
 end
