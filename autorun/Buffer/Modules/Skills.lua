@@ -6,16 +6,16 @@ local Module = ModuleBase:new("skills",
     {
         protective_polish = false, -- Doesn't require skill
         jin_dahaads_revolt = false, -- Requires skill
-        doshagumas_might = false, -- Untested, probably requires skill
-        xu_wus_vigor = false, --  Untested, probably requires skill
-        latent_power = false, --  Untested, probably requires skill
-        guardians_pulse = false, --  Untested, probably requires skill
-        offensive_guard = {
+        doshagumas_might = false, -- Requires skill
+        xu_wus_vigor = false, --  Requires skill
+        latent_power = false, --  Requires skill
+        guardians_pulse = false, --  Requires skill
+        offensive_guard = { -- Requires skill
             enabled = false,
             always_perfectly_timed = false
         },
-        scale_layering = false, --  Untested, probably requires skill
-        buttery_leathercraft = false, --  Untested, probably requires skill
+        scale_layering = false, --  Requires skill
+        buttery_leathercraft = false, --  Requires skill
         lords_fury = false, --  Untested, probably requires skill
         agitator = false, -- Requires skill
         counterstrike = false, -- Requires skill
@@ -107,9 +107,9 @@ function Module.create_hooks()
         -- Offensive Guard - Always Perfectly Timed
         if Module.data.offensive_guard.always_perfectly_timed then
             local knight_info = hunter_skill_params:get_KnightInfo()
-            if knight_info:get_field("<JustGuardTimer>k__BackingField") > 0.30 then
-                knight_info:set_field("<JustGuardTimer>k__BackingField", 0.30)
-            end
+            knight_info:set_field("<IsNormalGuard>k__BackingField", false)
+            knight_info:set_field("<IsSpGuard>k__BackingField", true)
+            knight_info:set_field("<JustGuardTimer>k__BackingField", 0.35)
         end
 
         -- Scale Layering (Adrenaline)
@@ -284,10 +284,10 @@ function Module.add_ui()
     changed, Module.data.guardians_pulse = imgui.checkbox(Language.get(languagePrefix .. "guardians_pulse"), Module.data.guardians_pulse)
     any_changed = any_changed or changed
 
-    imgui.begin_table(Module.title .. "2", 2, 0)
+    imgui.begin_table(Module.title .. "offensive_guard", 2, 0)
     local offensive_guard_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "offensive_guard.enabled")).x
     local column_1_width = offensive_guard_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
-    imgui.table_setup_column("Enabled", 16 + 4096, column_1_width)
+    imgui.table_setup_column("1", 16 + 4096, column_1_width)
     imgui.table_next_column()
     
     changed, Module.data.offensive_guard.enabled = imgui.checkbox(Language.get(languagePrefix .. "offensive_guard.enabled"), Module.data.offensive_guard.enabled)
@@ -342,11 +342,11 @@ function Module.add_ui()
     changed, Module.data.synthetic_shield = imgui.checkbox(Language.get(languagePrefix .. "synthetic_shield"), Module.data.synthetic_shield)
     any_changed = any_changed or changed
 
-    imgui.begin_table(Module.title .. "1", 2, 0)
+    imgui.begin_table(Module.title .. "darkside", 2, 0)
     local fast_charge_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "darkside.enabled")).x
 
     local column_1_width = fast_charge_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
-    imgui.table_setup_column("Enabled", 16 + 4096, column_1_width)
+    imgui.table_setup_column("1", 16 + 4096, column_1_width)
     imgui.table_next_column()
 
     changed, Module.data.darkside.enabled = imgui.checkbox(Language.get(languagePrefix .. "darkside.enabled"), Module.data.darkside.enabled)
