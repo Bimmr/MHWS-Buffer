@@ -26,6 +26,10 @@ local Module = ModuleBase:new("skills",
         lords_favor = false, --  Untested, probably requires skill
         adrenaline_rush = false, --  Untested, probably requires skill
         peak_performance = false, -- Requires skill
+        azure_bolt = { -- Requires skill
+            enabled = false,
+            no_cooldown = false
+        },
         seregios_tenacity = false, -- Blade Sharp_Dodge
         synthetic_shield = false, -- Doesn't require skill
         darkside = { -- Requires skill
@@ -216,6 +220,23 @@ function Module.create_hooks()
             end
         end
 
+        -- Azure Bolt
+        -- Increases affinity and deal extra thunder damage
+        if Module.data.azure_bolt.enabled then
+            local azure_bolt = hunter_skill_params:get_field("_DischargeInfo")
+            if not hunter_skill_params:get_IsDischargActive() then -- Spelling mistake in game's code
+                azure_bolt:set_field("_DischargeValue", 100.0)
+            end
+        end
+
+        -- Azure Bolt No Cooldown
+        if Module.data.azure_bolt.no_cooldown then
+            local azure_bolt = hunter_skill_params:get_field("_DischargeInfo")
+            if azure_bolt:get_field("_CoolTime") > 0.0 then
+                azure_bolt:set_field("_CoolTime", 0.0)
+            end
+        end
+
         -- Seregios Tenacity
         -- Level 1 - Extends Adrenaline Rush duration. 
         -- Level 2 - Further increases attack
@@ -335,6 +356,22 @@ function Module.add_ui()
     
     changed, Module.data.peak_performance = imgui.checkbox(Language.get(languagePrefix .. "peak_performance"), Module.data.peak_performance)
     any_changed = any_changed or changed
+
+    imgui.begin_table(Module.title .. "azure_bolt", 2, 0)
+    local azure_bolt_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "azure_bolt.enabled")).x
+    local column_1_width = azure_bolt_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
+    imgui.table_setup_column("1", 16 + 4096, column_1_width)
+    imgui.table_next_column()
+
+    changed, Module.data.azure_bolt.enabled = imgui.checkbox(Language.get(languagePrefix .. "azure_bolt.enabled"), Module.data.azure_bolt.enabled)
+    any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
+    changed, Module.data.azure_bolt.no_cooldown = imgui.checkbox(Language.get(languagePrefix .. "azure_bolt.no_cooldown"), Module.data.azure_bolt.no_cooldown)
+    any_changed = any_changed or changed
+
+    imgui.end_table()
 
     changed, Module.data.seregios_tenacity = imgui.checkbox(Language.get(languagePrefix .. "seregios_tenacity"), Module.data.seregios_tenacity)
     any_changed = any_changed or changed

@@ -194,6 +194,10 @@
         "lords_favor": "Lord's Favor",
         "adrenaline_rush": "Adrenaline Rush",
         "peak_performance": "Peak Performance",
+        "azure_bolt": {
+            "enabled": "Azure Bolt",
+            "no_cooldown": "No Cooldown"
+        },
         "seregios_tenacity": "Seregios Tenacity",
         "synthetic_shield": "Synthetic Shield",
         "darkside": {
