@@ -19,6 +19,7 @@ local Icons = {
 
         character = "\u{e901}", -- "{black}\u{e900}{white}\u{e901}"
         miscellaneous = "\u{e903}\u{e904}\u{e905}", -- "{black}\u{e902}{white}\u{e903}\u{e904}\u{e905}"
+        skills = "{white}\u{e93a}", -- "{white}\u{e93a}{black}\u{e93b}"
 
     },
     font = nil,
@@ -59,7 +60,7 @@ function Icons.draw_icon(icon)
     local pos = imgui.get_cursor_pos()
     
     -- Apply 3-point offset for character and miscellaneous icons
-    if icon == "character" or icon == "miscellaneous" then
+    if icon == "character" or icon == "miscellaneous" or icon == "skills" then
         pos.x = pos.x + 3
     end
     
@@ -95,6 +96,7 @@ function Icons.draw_icon(icon)
             -- Draw the character with current color
             imgui.set_cursor_pos(pos)
             imgui.text_colored(char, current_color)
+            log.debug("Drawing Icon for '" .. icon .. "' with color: " .. string.format("0x%X", current_color))
 
             i = i + char_len
         end
