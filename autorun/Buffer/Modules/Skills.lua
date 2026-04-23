@@ -227,18 +227,20 @@ function Module.create_hooks()
 
         -- Azure Bolt
         -- Increases affinity and deal extra thunder damage
+        local azure_bolt_info = nil
+        if Module.data.azure_bolt.enabled or Module.data.azure_bolt.no_cooldown then
+            azure_bolt_info = hunter_skill_params:get_field("_DischargeInfo")
+        end
+        -- Azure Bolt Enabled
         if Module.data.azure_bolt.enabled then
-            local azure_bolt = hunter_skill_params:get_field("_DischargeInfo")
             if not hunter_skill_params:get_IsDischargActive() then -- Spelling mistake in game's code
-                azure_bolt:set_field("_DischargeValue", 100.0)
+                azure_bolt_info:set_field("_DischargeValue", 100.0)
             end
         end
-
         -- Azure Bolt No Cooldown
         if Module.data.azure_bolt.no_cooldown then
-            local azure_bolt = hunter_skill_params:get_field("_DischargeInfo")
-            if azure_bolt:get_field("_CoolTime") > 0.0 then
-                azure_bolt:set_field("_CoolTime", 0.0)
+            if azure_bolt_info:get_field("_CoolTime") > 0.0 then
+                azure_bolt_info:set_field("_CoolTime", 0.0)
             end
         end
 
