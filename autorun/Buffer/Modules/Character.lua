@@ -249,6 +249,30 @@ function Module.create_hooks()
     end)
 
 
+    -- Check conditions and apply immunities to certain conditions that are handled differently
+    -- Driven from re.on_frame (matching how this was verified to work in DevTester) rather than
+    -- the cHunterStatus:update hook, since the hook's "this" did not reliably behave the same way
+    re.on_frame(function()
+        local character = Utils.get_master_character()
+        if not character then return end
+        local status = character:get_HunterStatus()
+        if not status then return end
+        local conditions = status:get_BadConditions()
+        if not conditions then return end
+
+    end)
+
+    -- Animation related conditions need to be set as immune otherwise the animation will still play
+     sdk.hook(sdk.find_type_definition("app.HunterCharacter"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
+        if not managed:get_IsMaster() then return end
+
+        -- This is in the HunterCharacter update so it runs every tick since the HunterStatus update only runs every other
+        Module.check_conditions_with_animations(managed:get_HunterStatus():get_BadConditions())
+
+     end)
+
     Module:init_stagger("character_status_update", 5)
     sdk.hook(sdk.find_type_definition("app.cHunterStatus"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -257,7 +281,7 @@ function Module.create_hooks()
         if managed:get_IsNpc() then return end -- get_IsMaster returns true for NPCs too regardless of player or NPC...
 
         if not Module:should_execute_staggered("character_status_update") then return end
-
+        
         -- Managers
         local health = managed:get_field("_Health")
         local hunter_meal_effect = managed:get_field("_MealEffect")
@@ -388,44 +412,6 @@ function Module.create_hooks()
                 frenzy:set_field("_DurationTimer", 0.2)
             end
         end
-        -- Stun is handled differently
-        if Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all then
-            local stun = conditions:get_field("_Stun")
-            if stun:get_field("_ReduceTimer") < 6 then --? Maybe a Jewel or skill lowers this
-                stun:set_field("_ReduceTimer", 6)
-            end
-            if stun:get_Accumulator() > 0 then
-                stun:resetAccumulator()
-            end
-        end
-        -- Paralyze is handled differently
-        if Module.data.blights_and_conditions.conditions.paralyze or Module.data.blights_and_conditions.conditions.all then
-            local paralyze = conditions:get_field("_Paralyze") -- Effect still plays
-            if paralyze:call("get_IsActive") then
-                paralyze:cure() --* cure stops more of the animation than forceDeactivate
-            end
-            if paralyze:get_Accumulator() > 0 then
-                paralyze:resetAccumulator()
-            end
-        end
-        -- Sticky is handled differently
-        if Module.data.blights_and_conditions.conditions.sticky or Module.data.blights_and_conditions.conditions.all then
-            local sticky = conditions:get_field("_Sticky") -- Effect probably still plays
-            if sticky:call("get_IsActive") then
-                sticky:set_field("_DurationTime", 0)
-                sticky:set_field("_IsRestrainted", false)
-            end
-        end
-        -- Frozen is handled differently
-        if Module.data.blights_and_conditions.conditions.frozen or Module.data.blights_and_conditions.conditions.all then
-            local frozen = conditions:get_field("_Frozen") -- Effect still partially plays
-            if frozen:call("get_IsActive") then
-                frozen:cure()
-            end
-            if frozen:get_Accumulator() > 0 then
-                frozen:resetAccumulator()
-            end
-        end
         
         -- Run in function so they can be updated from the UI as well
         Module:update_cached_modifications(managed)
@@ -462,6 +448,36 @@ function Module.create_hooks()
         -- Element
         Module:cache_and_update_field("element", managed:get_field("_AttackPower"), "_WeaponAttrType", Module.data.stats.element)
 
+   end
+
+
+   --- Check conditions and apply immunities to certain conditions that are handled differently
+   --- These need to be checked per game tick because the game will set to false afterwards
+   function Module.check_conditions_with_animations(conditions)
+         -- Stun is handled differently
+        if Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all then
+            local stun = conditions:get_field("_Stun")
+            log.debug("Setting Stun to immune")
+            stun:set_IsImmune(true)
+        end
+        -- Paralyze is handled differently
+        if Module.data.blights_and_conditions.conditions.paralyze or Module.data.blights_and_conditions.conditions.all then
+            local paralyze = conditions:get_field("_Paralyze")
+            log.debug("Setting Paralyze to immune")
+            paralyze:set_IsImmune(true)
+        end
+        -- Sticky is handled differently
+        if Module.data.blights_and_conditions.conditions.sticky or Module.data.blights_and_conditions.conditions.all then
+            local sticky = conditions:get_field("_Sticky")
+            log.debug("Setting Sticky to immune")
+            sticky:set_IsImmune(true)
+        end
+        -- Frozen is handled differently
+        if Module.data.blights_and_conditions.conditions.frozen or Module.data.blights_and_conditions.conditions.all then
+            local frozen = conditions:get_field("_Frozen")
+            log.debug("Setting Frozen to immune")
+            frozen:set_IsImmune(true)
+        end
    end
 
     -- Unlimited Sharpness
