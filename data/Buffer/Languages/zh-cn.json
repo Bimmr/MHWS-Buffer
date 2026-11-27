@@ -246,7 +246,9 @@
         "unlimited_bottles": "强化瓶无限使用",
         "tetrad_shot_active": "强四射击辅助激活",
         "unlimited_bladescale": "无限刃鳞瓶",
-        "max_trick_arrow_gauge": "巧工箭槽全满"
+        "max_trick_arrow_gauge": "巧工箭槽全满",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "轻弩炮",
@@ -262,7 +264,8 @@
         "no_knockback": "无后仰",
         "all_rapid_fire": "全弹种速射",
         "shell_level": "弹药等级",
-        "full_auto": "全自动"
+        "full_auto": "全自动",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "重弩炮",
@@ -277,7 +280,8 @@
         "no_recoil": "无后座力",
         "no_knockback": "无后仰",
         "shell_level": "弹药等级",
-        "full_auto": "全自动"
+        "full_auto": "全自动",
+        "always_critical_distance": "Always critical distance (*)"
     },
 
     "charge_blade": {

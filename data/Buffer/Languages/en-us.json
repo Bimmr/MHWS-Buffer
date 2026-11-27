@@ -295,7 +295,9 @@
         "unlimited_bottles": "Unlimited bottles",
         "tetrad_shot_active": "Tetrad shot support active",
         "unlimited_bladescale": "Unlimited bladescale bottles",
-        "max_trick_arrow_gauge": "Max trick arrow gauge"
+        "max_trick_arrow_gauge": "Max trick arrow gauge",
+        "always_critical_distance": "Always critical distance",
+        "unlimited_tracer_duration": "Unlimited tracer duration"
     },
     "light_bowgun": {
         "title": "Light Bowgun",
@@ -311,7 +313,8 @@
         "no_knockback": "No knockback",
         "all_rapid_fire": "All rapid fire",
         "shell_level": "Shell level",
-        "full_auto": "Full auto"
+        "full_auto": "Full auto",
+        "always_critical_distance": "Always critical distance"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -326,7 +329,8 @@
         "no_recoil": "No recoil",
         "no_knockback": "No knockback",
         "shell_level": "Shell level",
-        "full_auto": "Full auto"
+        "full_auto": "Full auto",
+        "always_critical_distance": "Always critical distance"
     },
 
     "charge_blade": {

@@ -245,7 +245,9 @@
         "unlimited_bottles": "Frascos ilimitados",
         "tetrad_shot_active": "Disparo Tétrado activo",
         "unlimited_bladescale": "Frascos Filoescama ilimitados",
-        "max_trick_arrow_gauge": "Medidor de flecha truco al máximo"
+        "max_trick_arrow_gauge": "Medidor de flecha truco al máximo",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "Ballesta Ligera",
@@ -261,7 +263,8 @@
         "no_knockback": "Sin derribo",
         "all_rapid_fire": "Todos disparo rápido",
         "shell_level": "Nivel de cargas",
-        "full_auto": "Totalmente automático"
+        "full_auto": "Totalmente automático",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "Ballesta Pesada",
@@ -276,7 +279,8 @@
         "no_recoil": "Sin retroceso",
         "no_knockback": "Sin derribo",
         "shell_level": "Nivel de cargas",
-        "full_auto": "Totalmente automático"
+        "full_auto": "Totalmente automático",
+        "always_critical_distance": "Always critical distance (*)"
     },
 
     "charge_blade": {

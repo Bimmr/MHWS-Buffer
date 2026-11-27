@@ -8,7 +8,9 @@ local Module = ModuleBase:new("bow",
         all_arrow_types = false,
         unlimited_bottles = false,
         max_trick_arrow_gauge = false,
-        unlimited_bladescale = false
+        unlimited_bladescale = false,
+        always_critical_distance = false,
+        unlimited_tracer_duration = false
     }
 )
 
@@ -89,6 +91,24 @@ function Module.create_hooks()
         end
 
     end)
+
+    -- Tracer arrow (Tsugiya) that is attached to a monster
+    sdk.hook(sdk.find_type_definition("app.mcShellPlWp11ArrowTsugiyaAttach"):get_method("update"), function(args)
+        if not Module.data.unlimited_tracer_duration then return end
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+
+        local shell = managed:get_Shell()
+        if not shell then return end
+
+        -- Only modify tracers shot by the master player
+        if not shell:get_field("IsMasterShell") then return end
+
+        -- Unlimited tracer duration (_LifeTimer is a struct, so it needs to be set back on the shell)
+        local life_timer = shell:get_field("_LifeTimer")
+        life_timer:set_field("_Timer", 0.0)
+        shell:set_field("_LifeTimer", life_timer)
+    end)
 end
 
 function Module:update_cached_modifications(managed)
@@ -105,6 +125,10 @@ function Module:update_cached_modifications(managed)
     -- All arrow types
     local bottle_infos = managed:get_field("<BottleInfos>k__BackingField")
     Module:cache_and_update_array_toggle("bottle_infos_" .. weapon_id, bottle_infos, "<CanLoading>k__BackingField", Module.data.all_arrow_types)
+
+    -- Unlimited critical distance
+    local shell_list = managed:get_field("_ShellList")
+    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlWp11Arrow", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0 }, Module.data.always_critical_distance)
 end
 
 function Module.add_ui()
@@ -137,6 +161,12 @@ function Module.add_ui()
     changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(Language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
     any_changed = any_changed or changed
 
+    changed, Module.data.always_critical_distance = imgui.checkbox(Language.get(languagePrefix .. "always_critical_distance"), Module.data.always_critical_distance)
+    any_changed = any_changed or changed
+
+    changed, Module.data.unlimited_tracer_duration = imgui.checkbox(Language.get(languagePrefix .. "unlimited_tracer_duration"), Module.data.unlimited_tracer_duration)
+    any_changed = any_changed or changed
+
     if any_changed then
         Module:update_cached_modifications()
     end
@@ -149,6 +179,10 @@ local function reset_weapon(weapon)
     -- Restore original arrow types
     local bottle_infos = weapon:get_field("<BottleInfos>k__BackingField")
     Module:cache_and_update_array_toggle("bottle_infos_" .. weapon_id, bottle_infos, "<CanLoading>k__BackingField", false)
+
+    -- Restore original critical distances
+    local shell_list = weapon:get_field("_ShellList")
+    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlWp11Arrow", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0 }, false)
 end
 
 function Module.reset()

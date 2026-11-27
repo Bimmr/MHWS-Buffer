@@ -13,6 +13,7 @@ local Module = ModuleBase:new("heavy_bowgun", {
     unlimited_bladescale = false,
     shell_level = -1,
     full_auto = false,
+    always_critical_distance = false,
 })
 
 -- Local variables
@@ -236,6 +237,10 @@ function Module:update_cached_modifications(managed)
     -- Shell Level (Valid values are 0, 1, 2. Anything over 2 does 1 damage)
     local equip_shell_list = managed:get_EquipShellInfo()
     Module:cache_and_update_array_value("equip_shell_list_" .. weapon_id, equip_shell_list, "_ShellLv", Module.data.shell_level)
+
+    -- Unlimited critical distance
+    local shell_list = managed:get_ShellList()
+    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlGun", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0, _Critical_Begin_Dist_Light = 0.0, _Critical_End_Dist_Light = 9999.0 }, Module.data.always_critical_distance)
 end
 
 function Module.add_ui()
@@ -296,6 +301,9 @@ function Module.add_ui()
     changed, Module.data.full_auto = imgui.checkbox(Language.get(languagePrefix .. "full_auto"), Module.data.full_auto)
     any_changed = any_changed or changed
 
+    changed, Module.data.always_critical_distance = imgui.checkbox(Language.get(languagePrefix .. "always_critical_distance"), Module.data.always_critical_distance)
+    any_changed = any_changed or changed
+
     if any_changed then
         Module:update_cached_modifications()
     end
@@ -309,16 +317,20 @@ local function reset_weapon(weapon)
     -- Restore original shell levels
     local equip_shell_list = weapon:get_EquipShellInfo()
     Module:cache_and_update_array_value("equip_shell_list_" .. weapon_id, equip_shell_list, "_ShellLv", -1)
+
+    -- Restore original critical distances
+    local shell_list = weapon:get_ShellList()
+    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlGun", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0, _Critical_Begin_Dist_Light = 0.0, _Critical_End_Dist_Light = 9999.0 }, false)
 end
 
 function Module.reset()
     local player = Utils.get_master_character()
     if not player then return end
 
-    if player:get_WeaponType() == 13 then 
+    if player:get_WeaponType() == 12 then
         reset_weapon(player:get_WeaponHandling())
     end
-    if player:get_ReserveWeaponType() == 13 then 
+    if player:get_ReserveWeaponType() == 12 then
         reset_weapon(player:get_ReserveWeaponHandling())
     end
 

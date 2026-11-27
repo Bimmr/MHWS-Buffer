@@ -246,7 +246,9 @@
         "unlimited_bottles": "Fioles illimitées",
         "tetrad_shot_active": "Quatrième tir actif",
         "unlimited_bladescale": "Fioles lamécaille illimitées",
-        "max_trick_arrow_gauge": "Jauge de flèches spéciales au max"
+        "max_trick_arrow_gauge": "Jauge de flèches spéciales au max",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "Fusarbalète léger",
@@ -262,7 +264,8 @@
         "no_knockback": "Sans projection",
         "all_rapid_fire": "Tir rapide pour toutes les munitions",
         "shell_level": "Niveau d'obus",
-        "full_auto": "Tir automatique"
+        "full_auto": "Tir automatique",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "Fusarbalète lourd",
@@ -277,7 +280,8 @@
         "no_recoil": "Sans recul",
         "no_knockback": "Sans projection",
         "shell_level": "Niveau d'obus",
-        "full_auto": "Tir automatique"
+        "full_auto": "Tir automatique",
+        "always_critical_distance": "Always critical distance (*)"
     },
 
     "charge_blade": {
