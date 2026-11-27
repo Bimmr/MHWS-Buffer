@@ -5,44 +5,89 @@ local Utils = require("Buffer.Misc.Utils")
 local Module = ModuleBase:new("skills",
     {
         protective_polish = false, -- Doesn't require skill
-        jin_dahaads_revolt = false, -- Requires skill
-        doshagumas_might = false, -- Requires skill
-        xu_wus_vigor = false, --  Requires skill
-        latent_power = false, --  Requires skill
+            -- Keeps the whetstone sharpness boost (no sharpness loss) active
+        jin_dahaads_revolt = false, -- Requires skill, but forces it at all times
+            -- Attack boost normally gained after recovering from webbed, frostblight, being pinned, or a Power Clash
+        doshagumas_might = false, -- Requires skill, Need to re-test
+            -- Attack boost normally gained after a successful Power Clash or Offset attack
+        latent_power = false, -- Requires skill, but forces it at all times
+            -- Increases affinity and reduces stamina depletion
         guardians_pulse = false, --  Requires skill
-        offensive_guard = { -- Requires skill
-            enabled = false,
-            always_perfectly_timed = false
+            -- Faster stamina and red health recovery, normally only near Wylkrystals
+        offensive_guard = { -- Requires skill to actually get the boost
+            enabled = false, -- Forces the attack boost to be active at all times
+                -- Attack boost normally gained after a perfectly timed guard
+            always_perfectly_timed = false -- Forces every guard to be considered perfectly timed
+                -- Makes every guard count as perfectly timed
         },
-        scale_layering = false, --  Requires skill
-        buttery_leathercraft = false, --  Requires skill
-        lords_fury = false, --  Untested, probably requires skill
-        agitator = false, -- Requires skill
-        counterstrike = false, -- Requires skill
-        coalescence = false, --  Untested, probably requires skill
-        uth_dans_cover = false, -- Requires skill
-        maximum_might = false, -- Requires skill
-        ambush = false, --  Untested, probably requires skill
-        lords_favor = false, --  Untested, probably requires skill
-        adrenaline_rush = false, --  Untested, probably requires skill
+        scale_layering = false, --  Requires skill, but forces it at all times
+            -- Reduced stamina depletion, normally only at 40% health or lower
+        buttery_leathercraft = false, --  Requires skill, but forces it at all times
+            -- Affinity boost normally gained when sliding on terrain
+
+
+
+
+        lords_fury = false, --  UNTESTED, probably requires skill
+            -- Attack boost normally gained while inflicted with an ailment
+        agitator = false, -- Requires skill, but forces it at all times
+            -- Attack and affinity boost normally only while the monster is enraged
+        counterstrike = false, -- Requires skill, but forces it at all times
+            -- Attack boost normally gained after being knocked back
+        coalescence = false, --  Requires skill, but forces it at all times
+            -- Elemental boost normally gained after recovering from a condition
+        uth_dans_cover = false, -- Requires skill, but forces it at all times
+            -- Defense boost normally only while wearing a mantle
+        maximum_might = false, -- Requires skill, but forces it at all times
+            -- Affinity boost normally gained after keeping stamina full for a while
+        ambush = false, --  Requires skill, but forces it at all times
+            -- Attack boost normally gained after a sneak attack
+        lords_favor = false, --  UNTESTED, probably requires skill
+            -- Attack boost normally gained after using ranged support items or Melody Effects on allies
+        adrenaline_rush = false, --  UNTESTED, probably requires skill
+            -- Attack boost normally gained after a perfectly timed evade
         peak_performance = false, -- Requires skill
+            -- Attack boost while health is full (re-activates whenever health is full)
         azure_bolt = { -- Requires skill
             enabled = false,
+                -- Fills the Azure Bolt gauge for its affinity boost and extra thunder damage
             no_cooldown = false
+                -- Removes the cooldown between Azure Bolt activations
         },
         seregios_tenacity = false, -- Blade Sharp_Dodge
+            -- Extends Adrenaline Rush and, at level 2, further increases attack
         synthetic_shield = false, -- Doesn't require skill
+            -- Defense boost from the shield effect, with a long duration
         darkside = { -- Requires skill
             enabled = false,
+                -- Keeps the Darkside attack boost from charged attacks active
             no_cooldown = false
+                -- Removes the Darkside cooldown
         },
         burst = { -- Requires skill
             enabled = false,
+                -- Starts Burst at full hit count for its attack boost
             infinite_interval = false,
+                -- Keeps the window between hits from expiring while building up Burst
             infinite_timer = false,
+                -- Keeps Burst from expiring once at full hit count
         },
         luck = false, -- Doesn't require skill,
+            -- Increases quest rewards
         blackest_night_no_cooldown = false,
+            -- Removes the cooldown on the Blackest Night barrier item emote
+        critical_draw = false, --  Untested, probably requires skill
+            -- Affinity boost for draw attacks
+        punishing_draw = false, --  Untested, probably requires skill
+            -- Draw attacks deal extra damage and stun
+        convert_element_no_cooldown = false, --  Untested, probably requires skill
+            -- Removes the Convert Element cooldown (still triggers normally)
+        capture_master = false, --  Untested
+            -- Increases capture rewards
+        carving_master = false, --  Untested
+            -- Increases carving rewards
+        bubble_whetstone = false, --  Untested, probably requires skill (Mizutsune)
+            -- Activates the bubble state from the Mizutsune skill
     }
 )
 
@@ -53,13 +98,22 @@ function Module.create_hooks()
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("app.HunterCharacter") then return end
         if not managed:get_IsMaster() then return end
+        local hunter_status = managed:get_HunterStatus()
+        if hunter_status:get_IsNpc() then return end -- get_IsMaster returns true for NPC hunters too
+        local hunter_skills = hunter_status:get_HunterSkill()
+        local hunter_skill_params = hunter_skills:get_field("_HunterSkillParamInfo")
+
+        -- Offensive Guard - Always Perfectly Timed (runs every frame, not staggered)
+        -- JustGuardTimer starts at 0.35 when guarding and counts down; blocking while it's above 0 counts as perfectly timed.
+        -- Keeping it at 0.35 makes every block count as perfectly timed.
+        if Module.data.offensive_guard.always_perfectly_timed then
+            local knight_info = hunter_skill_params:get_KnightInfo()
+            if knight_info and knight_info:get_field("<JustGuardTimer>k__BackingField") < 0.35 then
+                knight_info:set_field("<JustGuardTimer>k__BackingField", 0.35)
+            end
+        end
 
         if not Module:should_execute_staggered("hunter_skill_update") then return end
-
-        local hunter_status = managed:get_HunterStatus()
-        local hunter_skills = hunter_status:get_HunterSkill()
-
-        local hunter_skill_params = hunter_skills:get_field("_HunterSkillParamInfo")
 
         if Module.data.protective_polish then
             if not hunter_skill_params:get_IsToishiBoostActive() then
@@ -114,13 +168,7 @@ function Module.create_hooks()
                 hunter_skill_params:beginKnight(true) -- Not sure what true/false does
             end
         end
-        -- Offensive Guard - Always Perfectly Timed
-        if Module.data.offensive_guard.always_perfectly_timed then
-            local knight_info = hunter_skill_params:get_KnightInfo()
-            knight_info:set_field("<IsNormalGuard>k__BackingField", false)
-            knight_info:set_field("<IsSpGuard>k__BackingField", true)
-            knight_info:set_field("<JustGuardTimer>k__BackingField", 0.35)
-        end
+        -- Offensive Guard - Always Perfectly Timed is handled above, before the stagger check
 
         -- Scale Layering (Adrenaline)
         -- Reduces stamina depletion when health is at 40% or lower.
@@ -249,7 +297,7 @@ function Module.create_hooks()
         -- Level 1 - Extends Adrenaline Rush duration. 
         -- Level 2 - Further increases attack
         if Module.data.seregios_tenacity then
-            if not hunter_skill_params:get_IsTechnicalAttackActive() then
+            if not hunter_skill_params:get_IsBladeSharp_DodgeTime() then
                 hunter_skill_params:beginSkillBladeSharp_Dodge(300.0)
             end
         end
@@ -271,7 +319,7 @@ function Module.create_hooks()
             if dark_blade:get_field("_CoolTime") > 0.0 and Module.data.darkside.no_cooldown then
                 dark_blade:set_field("_CoolTime", 0.0)
             end
-            if Module.data.darkside.enabled then
+            if not hunter_skill_params:get_IsDarkBladeActive() then
                 hunter_skill_params:beginSkillDarkBlade(0, 300.0)
             end
         end
@@ -321,9 +369,104 @@ function Module.create_hooks()
             end
         end
 
+        -- Critical Draw (BattoWaza)
+        -- Increases affinity for draw attacks
+        if Module.data.critical_draw then
+            if not hunter_skill_params:get_IsBattoWazaActive() then
+                hunter_skill_params:beginBattoWaza(300.0)
+            end
+        end
+
+        -- Punishing Draw (BattoPower)
+        -- Draw attacks deal extra damage and stun
+        if Module.data.punishing_draw then
+            if not hunter_skill_params:get_IsCanBattoPower() then
+                hunter_skill_params:setBattoPowerFlag(true)
+            end
+        end
+
+        -- Convert Element - No Cooldown
+        -- Element conversion still triggers normally, this just removes the cooldown
+        if Module.data.convert_element_no_cooldown then
+            local element_convert_info = hunter_skill_params:get_field("_ElementConvertInfo")
+            if element_convert_info and element_convert_info:get_field("_CoolTime") > 0.0 then
+                element_convert_info:set_field("_CoolTime", 0.0)
+            end
+        end
+
+        -- Capture Master
+        -- Increases capture rewards
+        if Module.data.capture_master then
+            if not hunter_skill_params:get_IsCaptureMasterActive() then
+                hunter_skill_params:setCaptureMasterActive(true)
+            end
+        end
+
+        -- Carving Master
+        -- Increases carving rewards
+        if Module.data.carving_master then
+            if not hunter_skill_params:get_IsHagitoriMasterActive() then
+                hunter_skill_params:setHagitoriMasterActive(true)
+            end
+        end
+
+        -- Bubble Whetstone (BubbleToishi)
+        -- Activates the bubble state from the Mizutsune skill (0 = WATER, 1 = BUBBLE)
+        if Module.data.bubble_whetstone then
+            if not hunter_skill_params:get_IsBubbleToishiActive_Bubble() then
+                hunter_skill_params:beginBabbleToishi(1) -- Spelling mistake in game's code
+            end
+        end
+
     end, function(retval) end)
 
 end
+
+-- Skills that work without having the skill equipped, these get a (?) tooltip saying so
+local NO_SKILL_REQUIRED = {
+    protective_polish = true,
+    synthetic_shield = true,
+    luck = true,
+}
+
+-- Single toggle skills, shown in a two column grid
+local SIMPLE_SKILLS = {
+    "protective_polish",
+    "jin_dahaads_revolt",
+    "doshagumas_might",
+    "latent_power",
+    "guardians_pulse",
+    "scale_layering",
+    "buttery_leathercraft",
+    "lords_fury",
+    "agitator",
+    "counterstrike",
+    "coalescence",
+    "uth_dans_cover",
+    "maximum_might",
+    "ambush",
+    "lords_favor",
+    "adrenaline_rush",
+    "peak_performance",
+    "seregios_tenacity",
+    "synthetic_shield",
+    "luck",
+    "blackest_night_no_cooldown",
+    "critical_draw",
+    "punishing_draw",
+    "convert_element_no_cooldown",
+    "capture_master",
+    "carving_master",
+    "bubble_whetstone",
+}
+
+-- Skills with extra options, each shown on its own row with the options lined up in columns
+local OPTION_SKILLS = {
+    { key = "offensive_guard", options = { "enabled", "always_perfectly_timed" } },
+    { key = "azure_bolt", options = { "enabled", "no_cooldown" } },
+    { key = "darkside", options = { "enabled", "no_cooldown" } },
+    { key = "burst", options = { "enabled", "infinite_interval", "infinite_timer" } },
+}
 
 function Module.add_ui()
     local changed, any_changed = false, false
@@ -331,147 +474,50 @@ function Module.add_ui()
 
     Utils.tooltip(Language.get(languagePrefix .. "tooltip"))
 
-    changed, Module.data.protective_polish = imgui.checkbox(Language.get(languagePrefix .. "protective_polish"), Module.data.protective_polish)
-    any_changed = any_changed or changed
+    local function skill_checkbox(label_key, data_table, field, no_skill_required)
+        changed, data_table[field] = imgui.checkbox(Language.get(languagePrefix .. label_key), data_table[field])
+        any_changed = any_changed or changed
+        if no_skill_required then
+            Utils.tooltip(Language.get(languagePrefix .. "no_skill_required"))
+        end
+    end
 
-    changed, Module.data.jin_dahaads_revolt = imgui.checkbox(Language.get(languagePrefix .. "jin_dahaads_revolt"), Module.data.jin_dahaads_revolt)
-    any_changed = any_changed or changed
-
-    changed, Module.data.doshagumas_might = imgui.checkbox(Language.get(languagePrefix .. "doshagumas_might"), Module.data.doshagumas_might)
-    any_changed = any_changed or changed
-
-    changed, Module.data.xu_wus_vigor = imgui.checkbox(Language.get(languagePrefix .. "xu_wus_vigor"), Module.data.xu_wus_vigor)
-    any_changed = any_changed or changed
-
-    changed, Module.data.latent_power = imgui.checkbox(Language.get(languagePrefix .. "latent_power"), Module.data.latent_power)
-    any_changed = any_changed or changed
-
-    changed, Module.data.guardians_pulse = imgui.checkbox(Language.get(languagePrefix .. "guardians_pulse"), Module.data.guardians_pulse)
-    any_changed = any_changed or changed
-
-    imgui.begin_table(Module.title .. "offensive_guard", 2, 0)
-    local offensive_guard_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "offensive_guard.enabled")).x
-    local column_1_width = offensive_guard_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
-    imgui.table_setup_column("1", 16 + 4096, column_1_width)
-    imgui.table_next_column()
-    
-    changed, Module.data.offensive_guard.enabled = imgui.checkbox(Language.get(languagePrefix .. "offensive_guard.enabled"), Module.data.offensive_guard.enabled)
-    any_changed = any_changed or changed
-
-    imgui.table_next_column()
-
-    changed, Module.data.offensive_guard.always_perfectly_timed = imgui.checkbox(Language.get(languagePrefix .. "offensive_guard.always_perfectly_timed"), Module.data.offensive_guard.always_perfectly_timed)
-    any_changed = any_changed or changed
-
+    -- Single toggle skills
+    imgui.begin_table(Module.title .. "_simple", 2, 0)
+    for _, key in ipairs(SIMPLE_SKILLS) do
+        imgui.table_next_column()
+        skill_checkbox(key, Module.data, key, NO_SKILL_REQUIRED[key])
+    end
     imgui.end_table()
 
-    changed, Module.data.scale_layering = imgui.checkbox(Language.get(languagePrefix .. "scale_layering"), Module.data.scale_layering)
-    any_changed = any_changed or changed
+    imgui.spacing()
+    imgui.separator()
+    imgui.spacing()
 
-    changed, Module.data.buttery_leathercraft = imgui.checkbox(Language.get(languagePrefix .. "buttery_leathercraft"), Module.data.buttery_leathercraft)
-    any_changed = any_changed or changed
+    -- Skills with options, size the first two columns to their widest label so everything lines up
+    local column_widths = { 0, 0 }
+    for _, skill in ipairs(OPTION_SKILLS) do
+        for i = 1, 2 do
+            local width = imgui.calc_text_size(Language.get(languagePrefix .. skill.key .. "." .. skill.options[i])).x + 24 + 10 -- Text length + Checkbox sizing + padding
+            if width > column_widths[i] then column_widths[i] = width end
+        end
+    end
 
-    changed, Module.data.lords_fury = imgui.checkbox(Language.get(languagePrefix .. "lords_fury"), Module.data.lords_fury)
-    any_changed = any_changed or changed
-
-    changed, Module.data.agitator = imgui.checkbox(Language.get(languagePrefix .. "agitator"), Module.data.agitator)
-    any_changed = any_changed or changed
-
-    changed, Module.data.counterstrike = imgui.checkbox(Language.get(languagePrefix .. "counterstrike"), Module.data.counterstrike)
-    any_changed = any_changed or changed
-
-    changed, Module.data.coalescence = imgui.checkbox(Language.get(languagePrefix .. "coalescence"), Module.data.coalescence)
-    any_changed = any_changed or changed
-
-    changed, Module.data.uth_dans_cover = imgui.checkbox(Language.get(languagePrefix .. "uth_dans_cover"), Module.data.uth_dans_cover)
-    any_changed = any_changed or changed
-
-    changed, Module.data.maximum_might = imgui.checkbox(Language.get(languagePrefix .. "maximum_might"), Module.data.maximum_might)
-    any_changed = any_changed or changed
-
-    changed, Module.data.ambush = imgui.checkbox(Language.get(languagePrefix .. "ambush"), Module.data.ambush)
-    any_changed = any_changed or changed
-
-    changed, Module.data.lords_favor = imgui.checkbox(Language.get(languagePrefix .. "lords_favor"), Module.data.lords_favor)
-    any_changed = any_changed or changed
-
-    changed, Module.data.adrenaline_rush = imgui.checkbox(Language.get(languagePrefix .. "adrenaline_rush"), Module.data.adrenaline_rush)
-    any_changed = any_changed or changed
-    
-    changed, Module.data.peak_performance = imgui.checkbox(Language.get(languagePrefix .. "peak_performance"), Module.data.peak_performance)
-    any_changed = any_changed or changed
-
-    imgui.begin_table(Module.title .. "azure_bolt", 2, 0)
-    local azure_bolt_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "azure_bolt.enabled")).x
-    local column_1_width = azure_bolt_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
-    imgui.table_setup_column("1", 16 + 4096, column_1_width)
-    imgui.table_next_column()
-
-    changed, Module.data.azure_bolt.enabled = imgui.checkbox(Language.get(languagePrefix .. "azure_bolt.enabled"), Module.data.azure_bolt.enabled)
-    any_changed = any_changed or changed
-
-    imgui.table_next_column()
-
-    changed, Module.data.azure_bolt.no_cooldown = imgui.checkbox(Language.get(languagePrefix .. "azure_bolt.no_cooldown"), Module.data.azure_bolt.no_cooldown)
-    any_changed = any_changed or changed
-
+    imgui.begin_table(Module.title .. "_options", 3, 0)
+    imgui.table_setup_column("1", 16 + 4096, column_widths[1])
+    imgui.table_setup_column("2", 16 + 4096, column_widths[2])
+    for _, skill in ipairs(OPTION_SKILLS) do
+        imgui.push_id(skill.key) -- Options like "No Cooldown" share labels, so keep their IDs unique
+        for i = 1, 3 do
+            imgui.table_next_column()
+            local option = skill.options[i]
+            if option then
+                skill_checkbox(skill.key .. "." .. option, Module.data[skill.key], option, false)
+            end
+        end
+        imgui.pop_id()
+    end
     imgui.end_table()
-
-    changed, Module.data.seregios_tenacity = imgui.checkbox(Language.get(languagePrefix .. "seregios_tenacity"), Module.data.seregios_tenacity)
-    any_changed = any_changed or changed
-
-    changed, Module.data.synthetic_shield = imgui.checkbox(Language.get(languagePrefix .. "synthetic_shield"), Module.data.synthetic_shield)
-    any_changed = any_changed or changed
-
-    imgui.begin_table(Module.title .. "darkside", 2, 0)
-    local fast_charge_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "darkside.enabled")).x
-
-    local column_1_width = fast_charge_text_size + 24 + 10  -- Text length + Checkbox sizing + padding
-    imgui.table_setup_column("1", 16 + 4096, column_1_width)
-    imgui.table_next_column()
-
-    changed, Module.data.darkside.enabled = imgui.checkbox(Language.get(languagePrefix .. "darkside.enabled"), Module.data.darkside.enabled)
-    any_changed = any_changed or changed
-    
-    imgui.table_next_column()
-
-    changed, Module.data.darkside.no_cooldown = imgui.checkbox(Language.get(languagePrefix .. "darkside.no_cooldown"), Module.data.darkside.no_cooldown)
-    any_changed = any_changed or changed
-
-    imgui.end_table()
-
-
-
-    changed, Module.data.luck = imgui.checkbox(Language.get(languagePrefix .. "luck"), Module.data.luck)
-    any_changed = any_changed or changed
-
-    imgui.begin_table(Module.title .. "burst", 3, 0)
-    local burst_enabled_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "burst.enabled")).x
-    local column_1_width = burst_enabled_text_size + 24 + 10
-    imgui.table_setup_column("1", 16 + 4096, column_1_width)
-    local burst_infinite_interval_text_size = imgui.calc_text_size(Language.get(languagePrefix .. "burst.infinite_interval")).x
-    local column_2_width = burst_infinite_interval_text_size + 24 + 10
-    imgui.table_setup_column("2", 16 + 4096, column_2_width)
-    imgui.table_next_column()
-
-    changed, Module.data.burst.enabled = imgui.checkbox(Language.get(languagePrefix .. "burst.enabled"), Module.data.burst.enabled)
-    any_changed = any_changed or changed
-
-    imgui.table_next_column()
-
-    changed, Module.data.burst.infinite_interval = imgui.checkbox(Language.get(languagePrefix .. "burst.infinite_interval"), Module.data.burst.infinite_interval)
-    any_changed = any_changed or changed
-
-    imgui.table_next_column()
-
-    changed, Module.data.burst.infinite_timer = imgui.checkbox(Language.get(languagePrefix .. "burst.infinite_timer"), Module.data.burst.infinite_timer)
-    any_changed = any_changed or changed
-
-    imgui.end_table()
-
-    changed, Module.data.blackest_night_no_cooldown = imgui.checkbox(Language.get(languagePrefix .. "blackest_night_no_cooldown"), Module.data.blackest_night_no_cooldown)
-    any_changed = any_changed or changed
-
 
     return any_changed
 end

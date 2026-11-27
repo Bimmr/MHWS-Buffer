@@ -171,7 +171,8 @@
     },
     "skills": {
         "title": "Skills",
-        "tooltip": "This just removes the activation condition.\n   You still need the skill equipped for most.",
+        "tooltip": "This just removes the activation condition.\n   You still need the skill equipped for most.\n   Skills with a (?) work without the skill equipped.",
+        "no_skill_required": "Works without the skill equipped",
         "protective_polish": "Protective Polish",
         "jin_dahaads_revolt": "Jin Dahaad's Revolt",
         "doshagumas_might": "Doshaguma's Might",
@@ -210,7 +211,13 @@
             "infinite_interval": "Infinite Interval",
             "infinite_timer": "Infinite Timer"
         },
-        "blackest_night_no_cooldown": "Blackest Night No Cooldown"
+        "blackest_night_no_cooldown": "Blackest Night No Cooldown",
+        "critical_draw": "Critical Draw",
+        "punishing_draw": "Punishing Draw",
+        "convert_element_no_cooldown": "Convert Element No Cooldown",
+        "capture_master": "Capture Master",
+        "carving_master": "Carving Master",
+        "bubble_whetstone": "Bubble Whetstone (Mizutsune)"
     },
 
     "great_sword": {
