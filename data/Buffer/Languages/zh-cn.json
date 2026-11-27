@@ -189,7 +189,6 @@
     "long_sword": {
         "title": "太刀",
         "aura_level": "气刃等级",
-        "aura_level_tooltip": "若从0级设置为1级，需填满气刃槽激活",
         "max_aura_gauge": "最大气刃槽",
         "max_spirit_gauge": "最大练气槽"
     },
