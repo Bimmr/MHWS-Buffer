@@ -86,7 +86,7 @@ local Module = ModuleBase:new("skills",
             -- Increases capture rewards
         carving_master = false, --  Untested
             -- Increases carving rewards
-        bubble_whetstone = false, --  Untested, probably requires skill (Mizutsune)
+        slicked_blade = false, --  Requires skill (Weapon only), but forces it at all times
             -- Activates the bubble state from the Mizutsune skill
     }
 )
@@ -410,9 +410,9 @@ function Module.create_hooks()
             end
         end
 
-        -- Bubble Whetstone (BubbleToishi)
+        -- Slicked Blade (BubbleToishi)
         -- Activates the bubble state from the Mizutsune skill (0 = WATER, 1 = BUBBLE)
-        if Module.data.bubble_whetstone then
+        if Module.data.slicked_blade then
             if not hunter_skill_params:get_IsBubbleToishiActive_Bubble() then
                 hunter_skill_params:beginBabbleToishi(1) -- Spelling mistake in game's code
             end
@@ -457,7 +457,7 @@ local SIMPLE_SKILLS = {
     "convert_element_no_cooldown",
     "capture_master",
     "carving_master",
-    "bubble_whetstone",
+    "slicked_blade",
 }
 
 -- Skills with extra options, each shown on its own row with the options lined up in columns
