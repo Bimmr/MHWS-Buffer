@@ -245,7 +245,8 @@
         "unlimited_bottles": "Unlimited bottles",
         "tetrad_shot_active": "Tetrad shot support active",
         "unlimited_bladescale": "Unlimited bladescale bottles",
-        "max_trick_arrow_gauge": "Max trick arrow gauge"
+        "max_trick_arrow_gauge": "Max trick arrow gauge",
+        "unlimited_tracer_duration": "Unlimited tracer duration"
     },
     "light_bowgun": {
         "title": "Light Bowgun",

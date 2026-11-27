@@ -8,7 +8,8 @@ local Module = ModuleBase:new("bow",
         all_arrow_types = false,
         unlimited_bottles = false,
         max_trick_arrow_gauge = false,
-        unlimited_bladescale = false
+        unlimited_bladescale = false,
+        unlimited_tracer_duration = false
     }
 )
 
@@ -89,6 +90,24 @@ function Module.create_hooks()
         end
 
     end)
+
+    -- Tracer arrow (Tsugiya) that is attached to a monster
+    sdk.hook(sdk.find_type_definition("app.mcShellPlWp11ArrowTsugiyaAttach"):get_method("update"), function(args)
+        if not Module.data.unlimited_tracer_duration then return end
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+
+        local shell = managed:get_Shell()
+        if not shell then return end
+
+        -- Only modify tracers shot by the master player
+        if not shell:get_field("IsMasterShell") then return end
+
+        -- Unlimited tracer duration (_LifeTimer is a struct, so it needs to be set back on the shell)
+        local life_timer = shell:get_field("_LifeTimer")
+        life_timer:set_field("_Timer", 0.0)
+        shell:set_field("_LifeTimer", life_timer)
+    end)
 end
 
 function Module:update_cached_modifications(managed)
@@ -135,6 +154,9 @@ function Module.add_ui()
     imgui.end_table()
 
     changed, Module.data.max_trick_arrow_gauge = imgui.checkbox(Language.get(languagePrefix .. "max_trick_arrow_gauge"), Module.data.max_trick_arrow_gauge)
+    any_changed = any_changed or changed
+    
+    changed, Module.data.unlimited_tracer_duration = imgui.checkbox(Language.get(languagePrefix .. "unlimited_tracer_duration"), Module.data.unlimited_tracer_duration)
     any_changed = any_changed or changed
 
     if any_changed then
