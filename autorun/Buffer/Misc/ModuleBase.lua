@@ -247,6 +247,73 @@ function ModuleBase:cache_and_update_array_value(cache_key, array, field_name, n
     end
 end
 
+--- Cache and update fields on every shell mini param of a type inside a ShellList
+--- Caches the original field values for each matching mini param, then updates them.
+--- Pass false as enabled to restore originals.
+--- @param cache_key string The cache key to store the original values under
+--- @param shell_list userdata The ace.user_data.ShellList to search
+--- @param param_type string The mini param type to update (e.g., "app.cShellminiParamPlGun")
+--- @param values table The fields and values to set, as { [field_name] = value }
+--- @param enabled boolean True to cache and set the values, false to restore originals
+function ModuleBase:cache_and_update_shell_params(cache_key, shell_list, param_type, values, enabled)
+    if not shell_list then return end
+    if not enabled and not self.old[cache_key] then return end
+
+    local data_list = shell_list:get_field("_DataList")
+    if not data_list then return end
+
+    -- Cache originals once
+    local should_cache = enabled and not self.old[cache_key]
+    if should_cache then
+        self.old[cache_key] = {}
+    end
+
+    for i = 0, data_list:get_Count() - 1 do
+        local data = data_list:get_Item(i)
+        local shell_package = data and data:get_field("_ShellPackage")
+        local main_param = shell_package and shell_package:get_field("_MainParam")
+        local mini_params = main_param and main_param:get_field("_ShellMiniParams")
+
+        if mini_params then
+            for j = 0, mini_params:get_Count() - 1 do
+                local mini_param = mini_params:get_Item(j)
+
+                if mini_param and mini_param:get_type_definition():get_full_name() == param_type then
+                    local param_key = i .. "_" .. j
+
+                    if enabled then
+                        if should_cache then
+                            local original = {}
+                            for field_name, _ in pairs(values) do
+                                original[field_name] = mini_param:get_field(field_name)
+                            end
+                            self.old[cache_key][param_key] = original
+                        end
+                        -- Always update to the new values
+                        for field_name, value in pairs(values) do
+                            mini_param:set_field(field_name, value)
+                        end
+                    else
+                        -- Restore originals
+                        local original = self.old[cache_key][param_key]
+                        if original then
+                            for field_name, value in pairs(original) do
+                                mini_param:set_field(field_name, value)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if should_cache then
+        self:save_cache()
+    elseif not enabled then
+        self:clear_cache(cache_key)
+    end
+end
+
 
 --- Save current configuration
 function ModuleBase:save_config()
