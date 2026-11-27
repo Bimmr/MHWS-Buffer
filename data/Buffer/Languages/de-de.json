@@ -246,7 +246,9 @@
         "unlimited_bottles": "Unbegrenzte Flaschen",
         "tetrad_shot_active": "Unterstuetzung fuer Tetradschuesse aktiv",
         "unlimited_bladescale": "Unbegrenzte Anzahl an Bladescale-Flaschen",
-        "max_trick_arrow_gauge": "Max Trick Pfeilstaerke"
+        "max_trick_arrow_gauge": "Max Trick Pfeilstaerke",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "Leichtes Bogengewehr",
@@ -262,7 +264,8 @@
         "no_knockback": "Kein Rückstoß",
         "all_rapid_fire": "Alle Schnellfeuer",
         "shell_level": "Schalenebene",
-        "full_auto": "Vollautomatisch"
+        "full_auto": "Vollautomatisch",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "Schweres Bogengewehr",
@@ -277,7 +280,8 @@
         "no_recoil": "Kein Rueckstoss",
         "no_knockback": "Kein Rückstoß",
         "shell_level": "Schalenebene",
-        "full_auto": "Vollautomatisch"
+        "full_auto": "Vollautomatisch",
+        "always_critical_distance": "Always critical distance (*)"
     },
 
     "charge_blade": {

@@ -246,7 +246,9 @@
         "unlimited_bottles": "無限瓶",
         "tetrad_shot_active": "啟用第四射擊",
         "unlimited_bladescale": "Unlimited bladescale bottles (*)",
-        "max_trick_arrow_gauge": "無限特殊箭計量表"
+        "max_trick_arrow_gauge": "無限特殊箭計量表",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "輕弩",
@@ -262,7 +264,8 @@
         "no_knockback": "No knockback (*)",
         "shell_level": "Shell level (*)",
         "all_rapid_fire": "All rapid fire (*)",
-        "full_auto": "Full auto (*)"
+        "full_auto": "Full auto (*)",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "重弩",
@@ -277,7 +280,8 @@
         "no_recoil": "無後座力",
         "no_knockback": "No knockback (*)",
         "shell_level": "Shell level (*)",
-        "full_auto": "Full auto (*)"
+        "full_auto": "Full auto (*)",
+        "always_critical_distance": "Always critical distance (*)"
     },
 
     "charge_blade": {

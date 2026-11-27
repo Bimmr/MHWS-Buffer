@@ -242,7 +242,9 @@
         "unlimited_bottles": "병 장전 무제한",
         "tetrad_shot_active": "4중 연사 활성화",
         "unlimited_bladescale": "칼날비늘 병 무제한",
-        "max_trick_arrow_gauge": "3중 화살 게이지 최대"
+        "max_trick_arrow_gauge": "3중 화살 게이지 최대",
+        "always_critical_distance": "Always critical distance (*)",
+        "unlimited_tracer_duration": "Unlimited tracer duration (*)"
     },
     "light_bowgun": {
         "title": "라이트 보우건",
@@ -258,7 +260,8 @@
         "no_knockback": "움찔 없음",
         "shell_level": "탄 레벨",
         "all_rapid_fire": "모든 탄약 속사",
-        "full_auto": "모든 탄약 연사"
+        "full_auto": "모든 탄약 연사",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "heavy_bowgun": {
         "title": "헤비 보우건",
@@ -273,7 +276,8 @@
         "no_recoil": "반동 없음",
         "no_knockback": "움찔 없음",
         "shell_level": "탄 레벨",
-        "full_auto": "모든 탄약 연사"
+        "full_auto": "모든 탄약 연사",
+        "always_critical_distance": "Always critical distance (*)"
     },
     "charge_blade": {
         "title": "차지 액스",
