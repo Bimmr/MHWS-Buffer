@@ -265,7 +265,8 @@
         "all_rapid_fire": "全弹种速射",
         "shell_level": "弹药等级",
         "full_auto": "全自动",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "heavy_bowgun": {
         "title": "重弩炮",
@@ -281,7 +282,8 @@
         "no_knockback": "无后仰",
         "shell_level": "弹药等级",
         "full_auto": "全自动",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
 
     "charge_blade": {

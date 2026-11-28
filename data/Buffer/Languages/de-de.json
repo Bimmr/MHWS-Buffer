@@ -265,7 +265,8 @@
         "all_rapid_fire": "Alle Schnellfeuer",
         "shell_level": "Schalenebene",
         "full_auto": "Vollautomatisch",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "heavy_bowgun": {
         "title": "Schweres Bogengewehr",
@@ -281,7 +282,8 @@
         "no_knockback": "Kein Rückstoß",
         "shell_level": "Schalenebene",
         "full_auto": "Vollautomatisch",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
 
     "charge_blade": {

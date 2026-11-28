@@ -1,6 +1,7 @@
 local ModuleBase = require("Buffer.Misc.ModuleBase")
 local Language = require("Buffer.Misc.Language")
 local Utils = require("Buffer.Misc.Utils")
+local BowgunUtils = require("Buffer.Misc.BowgunUtils")
 
 local Module = ModuleBase:new("heavy_bowgun", {
     max_special_ammo = false,
@@ -14,11 +15,27 @@ local Module = ModuleBase:new("heavy_bowgun", {
     shell_level = -1,
     full_auto = false,
     always_critical_distance = false,
+    all_ammo_types = false,
 })
 
 -- Local variables
 local tetrad_shot_active = false
 local on_trigger_hbg = false
+local all_ammo_types_applied = nil
+local max_ammo = {}
+local ammo_to_load = {}
+
+-- All ammo types - Shell levels are shared weapon data, so they're updated for every Heavy Bowgun when toggled
+local function update_all_ammo_types_weapon_data()
+    if all_ammo_types_applied == Module.data.all_ammo_types then return end
+    local weapon_data = BowgunUtils.get_weapon_data("_WeaponHeavyBowgun")
+    if not weapon_data then return end -- Weapon data isn't loaded yet
+
+    local max_levels
+    max_levels, max_ammo = BowgunUtils.get_max_ammo(weapon_data)
+    BowgunUtils.cache_and_update_shell_levels(Module, "all_ammo_types_weapon_data", weapon_data, max_levels, Module.data.all_ammo_types)
+    all_ammo_types_applied = Module.data.all_ammo_types
+end
 
 function Module.create_hooks()
 
@@ -224,6 +241,9 @@ function Module.create_hooks()
 end
 
 function Module:update_cached_modifications(managed)
+    -- All ammo types (Weapon data, doesn't need the Heavy Bowgun equipped)
+    update_all_ammo_types_weapon_data()
+
     if not managed then
         local player = Utils.get_master_character()
         if not player then return end
@@ -238,9 +258,38 @@ function Module:update_cached_modifications(managed)
     local equip_shell_list = managed:get_EquipShellInfo()
     Module:cache_and_update_array_value("equip_shell_list_" .. weapon_id, equip_shell_list, "_ShellLv", Module.data.shell_level)
 
-    -- Unlimited critical distance
-    local shell_list = managed:get_ShellList()
-    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlGun", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0, _Critical_Begin_Dist_Light = 0.0, _Critical_End_Dist_Light = 9999.0 }, Module.data.always_critical_distance)
+    -- Always critical distance (Heavy Bowgun uses the non _Light fields)
+    local gun_params = Utils.get_shell_params(managed:get_ShellList(), "app.cShellminiParamPlGun")
+    Module:cache_and_update_array_value("critical_begin_dist_" .. weapon_id, gun_params, "_Critical_Begin_Dist", Module.data.always_critical_distance and 0.0 or -1)
+    Module:cache_and_update_array_value("critical_end_dist_" .. weapon_id, gun_params, "_Critical_End_Dist", Module.data.always_critical_distance and 9999.0 or -1)
+
+    -- All ammo types (Ammo without a capacity can't be reloaded or shot, so give it the highest capacity any Heavy Bowgun has)
+    local ammo_types = 19
+    for i = 0, ammo_types - 1 do
+        local equip_shell_info = equip_shell_list[i]
+        local cache_key = "all_ammo_types_" .. weapon_id .. "_" .. i
+        if equip_shell_info and (Module.old[cache_key] ~= nil or equip_shell_info:get_Num() == 0) then
+            local previous_num = equip_shell_info:get_Num()
+            Module:cache_and_update_field(cache_key, equip_shell_info, "<Num>k__BackingField", Module.data.all_ammo_types and max_ammo[i] or -1)
+
+            -- Rebuild the ammo when its capacity changes, and load it when it becomes available
+            if equip_shell_info:get_Num() ~= previous_num then
+                managed:setUpAmmo(i)
+                if previous_num == 0 then
+                    ammo_to_load[i] = 3
+                end
+            end
+        end
+    end
+
+    -- Load newly available ammo (Kept for a few updates, as the ammo can be emptied again after setting it up)
+    for i, updates_left in pairs(ammo_to_load) do
+        local ammo = managed:call("getAmmo(System.Int32)", i)
+        if ammo and ammo:get_LoadedAmmo() == 0 then
+            ammo:setLoadedAmmo(ammo:get_LimitAmmo())
+        end
+        ammo_to_load[i] = updates_left > 1 and updates_left - 1 or nil
+    end
 end
 
 function Module.add_ui()
@@ -248,6 +297,9 @@ function Module.add_ui()
     local languagePrefix = Module.title .. "."
 
     changed, Module.data.shell_level = imgui.slider_int(Language.get(languagePrefix .. "shell_level"), Module.data.shell_level, -1, 2, Module.data.shell_level == -1 and Language.get("base.disabled") or tostring(Module.data.shell_level + 1))
+    any_changed = any_changed or changed
+
+    changed, Module.data.all_ammo_types = imgui.checkbox(Language.get(languagePrefix .. "all_ammo_types"), Module.data.all_ammo_types)
     any_changed = any_changed or changed
 
     changed, Module.data.max_special_ammo = imgui.checkbox(Language.get(languagePrefix .. "max_special_ammo"), Module.data.max_special_ammo)
@@ -319,8 +371,19 @@ local function reset_weapon(weapon)
     Module:cache_and_update_array_value("equip_shell_list_" .. weapon_id, equip_shell_list, "_ShellLv", -1)
 
     -- Restore original critical distances
-    local shell_list = weapon:get_ShellList()
-    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlGun", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0, _Critical_Begin_Dist_Light = 0.0, _Critical_End_Dist_Light = 9999.0 }, false)
+    local gun_params = Utils.get_shell_params(weapon:get_ShellList(), "app.cShellminiParamPlGun")
+    Module:cache_and_update_array_value("critical_begin_dist_" .. weapon_id, gun_params, "_Critical_Begin_Dist", -1)
+    Module:cache_and_update_array_value("critical_end_dist_" .. weapon_id, gun_params, "_Critical_End_Dist", -1)
+
+    -- Restore original ammo capacities
+    local ammo_types = 19
+    for i = 0, ammo_types - 1 do
+        local cache_key = "all_ammo_types_" .. weapon_id .. "_" .. i
+        if Module.old[cache_key] ~= nil then
+            Module:cache_and_update_field(cache_key, equip_shell_list[i], "<Num>k__BackingField", -1)
+            weapon:setUpAmmo(i)
+        end
+    end
 end
 
 function Module.reset()

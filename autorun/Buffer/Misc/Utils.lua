@@ -85,6 +85,37 @@ function Utils.get_player_input()
     return mouse_player_input, controller_player_input
 end
 
+-- ================== Weapon Utils ==================
+
+--- Get every shell mini param of a type inside a ShellList
+--- @param shell_list userdata The ace.user_data.ShellList to search
+--- @param param_type string The mini param type to get (e.g., "app.cShellminiParamPlGun")
+--- @return table A list of the matching mini params
+function Utils.get_shell_params(shell_list, param_type)
+    local params = {}
+    if not shell_list then return params end
+
+    local data_list = shell_list:get_field("_DataList")
+    if not data_list then return params end
+
+    for i = 0, data_list:get_Count() - 1 do
+        -- Some shells don't have a package or main param, so skip them
+        local data = data_list:get_Item(i)
+        local shell_package = data and data:get_field("_ShellPackage")
+        local main_param = shell_package and shell_package:get_field("_MainParam")
+        local mini_params = main_param and main_param:get_field("_ShellMiniParams")
+        if mini_params then
+            for j = 0, mini_params:get_Count() - 1 do
+                local mini_param = mini_params:get_Item(j)
+                if mini_param and mini_param:get_type_definition():get_full_name() == param_type then
+                    table.insert(params, mini_param)
+                end
+            end
+        end
+    end
+    return params
+end
+
 -- ================== General Utils ==================
 
 --- Get the length of a table or array-like object

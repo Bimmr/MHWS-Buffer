@@ -264,7 +264,8 @@
         "all_rapid_fire": "All rapid fire",
         "shell_level": "Shell level",
         "full_auto": "Full auto",
-        "always_critical_distance": "Always critical distance"
+        "always_critical_distance": "Always critical distance",
+        "all_ammo_types": "All ammo types"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -280,7 +281,8 @@
         "no_knockback": "No knockback",
         "shell_level": "Shell level",
         "full_auto": "Full auto",
-        "always_critical_distance": "Always critical distance"
+        "always_critical_distance": "Always critical distance",
+        "all_ammo_types": "All ammo types"
     },
 
     "charge_blade": {

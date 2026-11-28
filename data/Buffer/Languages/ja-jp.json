@@ -261,7 +261,8 @@
         "all_rapid_fire": "全弾速射",
         "shell_level": "砲撃レベル",
         "full_auto": "フルオート",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "heavy_bowgun": {
         "title": "ヘビィボウガン",
@@ -277,7 +278,8 @@
         "no_knockback": "のけぞり無効",
         "shell_level": "砲撃レベル",
         "full_auto": "フルオート",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "charge_blade": {
         "title": "チャージアックス",

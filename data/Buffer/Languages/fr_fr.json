@@ -265,7 +265,8 @@
         "all_rapid_fire": "Tir rapide pour toutes les munitions",
         "shell_level": "Niveau d'obus",
         "full_auto": "Tir automatique",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "heavy_bowgun": {
         "title": "Fusarbalète lourd",
@@ -281,7 +282,8 @@
         "no_knockback": "Sans projection",
         "shell_level": "Niveau d'obus",
         "full_auto": "Tir automatique",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
 
     "charge_blade": {

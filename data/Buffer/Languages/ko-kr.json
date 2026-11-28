@@ -261,7 +261,8 @@
         "shell_level": "탄 레벨",
         "all_rapid_fire": "모든 탄약 속사",
         "full_auto": "모든 탄약 연사",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "heavy_bowgun": {
         "title": "헤비 보우건",
@@ -277,7 +278,8 @@
         "no_knockback": "움찔 없음",
         "shell_level": "탄 레벨",
         "full_auto": "모든 탄약 연사",
-        "always_critical_distance": "Always critical distance (*)"
+        "always_critical_distance": "Always critical distance (*)",
+        "all_ammo_types": "All ammo types (*)"
     },
     "charge_blade": {
         "title": "차지 액스",
