@@ -126,9 +126,10 @@ function Module:update_cached_modifications(managed)
     local bottle_infos = managed:get_field("<BottleInfos>k__BackingField")
     Module:cache_and_update_array_toggle("bottle_infos_" .. weapon_id, bottle_infos, "<CanLoading>k__BackingField", Module.data.all_arrow_types)
 
-    -- Unlimited critical distance
-    local shell_list = managed:get_field("_ShellList")
-    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlWp11Arrow", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0 }, Module.data.always_critical_distance)
+    -- Always critical distance
+    local arrow_params = Utils.get_shell_params(managed:get_field("_ShellList"), "app.cShellminiParamPlWp11Arrow")
+    Module:cache_and_update_array_value("critical_begin_dist_" .. weapon_id, arrow_params, "_Critical_Begin_Dist", Module.data.always_critical_distance and 0.0 or -1)
+    Module:cache_and_update_array_value("critical_end_dist_" .. weapon_id, arrow_params, "_Critical_End_Dist", Module.data.always_critical_distance and 9999.0 or -1)
 end
 
 function Module.add_ui()
@@ -181,8 +182,9 @@ local function reset_weapon(weapon)
     Module:cache_and_update_array_toggle("bottle_infos_" .. weapon_id, bottle_infos, "<CanLoading>k__BackingField", false)
 
     -- Restore original critical distances
-    local shell_list = weapon:get_field("_ShellList")
-    Module:cache_and_update_shell_params("critical_distance_" .. weapon_id, shell_list, "app.cShellminiParamPlWp11Arrow", { _Critical_Begin_Dist = 0.0, _Critical_End_Dist = 9999.0 }, false)
+    local arrow_params = Utils.get_shell_params(weapon:get_field("_ShellList"), "app.cShellminiParamPlWp11Arrow")
+    Module:cache_and_update_array_value("critical_begin_dist_" .. weapon_id, arrow_params, "_Critical_Begin_Dist", -1)
+    Module:cache_and_update_array_value("critical_end_dist_" .. weapon_id, arrow_params, "_Critical_End_Dist", -1)
 end
 
 function Module.reset()
